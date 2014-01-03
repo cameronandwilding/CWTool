@@ -17,7 +17,7 @@
  * @return bool
  *  Boolean flag if the key is in the multidimensional field.
  */
-function crimson_helper_check_value_in_multidimensional_array(array $haystack, $value_key, $needle) {
+function cw_tool_check_value_in_multidimensional_array(array $haystack, $value_key, $needle) {
   array_walk($haystack, function (&$item, $idx, $key) {
     $item = isset($item[$key]) ? $item[$key] : NULL;
   }, $value_key);
@@ -30,7 +30,7 @@ function crimson_helper_check_value_in_multidimensional_array(array $haystack, $
  * @param $content_type
  *  Content type name.
  */
-function crimson_helper_delete_content_type($content_type) {
+function cw_tool_delete_content_type($content_type) {
   node_type_delete($content_type);
   variable_del('node_preview_' . $content_type);
   variable_del('comment_subject_field_' . $content_type);
@@ -47,10 +47,10 @@ function crimson_helper_delete_content_type($content_type) {
  * @param $fields_to_delete
  *  An array of field names for deletion.
  */
-function crimson_helper_delete_field_multiple($fields_to_delete = array()) {
+function cw_tool_delete_field_multiple($fields_to_delete = array()) {
   // Before we begin, we need to get rid of those pesky temp tables that hang
   // about after a field is deleted.
-  _crimson_helper_purge_deleted_fields();
+  _cw_tool_purge_deleted_fields();
 
   // Loop through each field name and delete each individually.
   foreach ($fields_to_delete as $field_name) {
@@ -59,10 +59,10 @@ function crimson_helper_delete_field_multiple($fields_to_delete = array()) {
   }
 
   // Now force a purge of all the deleted tables again.
-  _crimson_helper_purge_deleted_fields();
+  _cw_tool_purge_deleted_fields();
 }
 
-function _crimson_helper_purge_deleted_fields() {
+function _cw_tool_purge_deleted_fields() {
   $result = db_query("SHOW TABLES LIKE 'field_deleted_%'")->fetchCol();
   foreach ($result as $table) {
     db_drop_table($table);
@@ -86,7 +86,7 @@ function _crimson_helper_purge_deleted_fields() {
  * @param $terms
  *  An array of term names to add.
  */
-function crimson_helper_create_term_multiple($vocabulary, array $terms = array()) {
+function cw_tool_create_term_multiple($vocabulary, array $terms = array()) {
   // Get the vid of the vocabulary that is loaded.
   $vid = taxonomy_vocabulary_machine_name_load($vocabulary)->vid;
 
@@ -114,7 +114,7 @@ function crimson_helper_create_term_multiple($vocabulary, array $terms = array()
  * @param $component
  *  The feature component to be reverted.
  */
-function crimson_helper_revert_feature($features, $component) {
+function cw_tool_revert_feature($features, $component) {
   // Reset features cache.
   features_get_info('feature', $features, TRUE);
 
@@ -132,7 +132,7 @@ function crimson_helper_revert_feature($features, $component) {
  * @return stdClass
  *  Field collection entity object.
  */
-function crimson_helper_add_fieldset($entity, $field_name, $entity_type = 'node') {
+function cw_tool_add_fieldset($entity, $field_name, $entity_type = 'node') {
   $field_collection = entity_create('field_collection_item', array('field_name' => $field_name));
   $field_collection->setHostEntity($entity_type, $entity);
   return $field_collection;
@@ -148,7 +148,7 @@ function crimson_helper_add_fieldset($entity, $field_name, $entity_type = 'node'
  * @param string $entity_type
  *  (Optional) Entity name. Default: node.
  */
-function crimson_helper_delete_field_instance($field_name, $bundle, $entity_type = 'node') {
+function cw_tool_delete_field_instance($field_name, $bundle, $entity_type = 'node') {
   $field = field_read_instance($entity_type, $field_name, $bundle);
   field_delete_instance($field, FALSE);
 }
@@ -165,7 +165,7 @@ function crimson_helper_delete_field_instance($field_name, $bundle, $entity_type
  * @return
  *  TRUE if the file was successfully converted to PNG, FALSE otherwise.
  */
-function crimson_helper_convert_to_png($file, $type) {
+function cw_tool_convert_to_png($file, $type) {
   // Load the object of the file we want to convert
   $basename = basename($file->uri, $type);
   $new_uri = drupal_dirname($file->uri) . '/' . $basename . '.png';
@@ -195,7 +195,7 @@ function crimson_helper_convert_to_png($file, $type) {
  * @param $severity
  *  (optional) The severity of the error - watchdog error level code.
  */
-function crimson_helper_migration_watchdog($source, array $values, $severity = WATCHDOG_WARNING) {
+function cw_tool_migration_watchdog($source, array $values, $severity = WATCHDOG_WARNING) {
   $message = 'Invalid data has been provided:';
   $arguments = array();
   foreach ($values as $key => $value) {
@@ -218,7 +218,7 @@ function crimson_helper_migration_watchdog($source, array $values, $severity = W
  * @return array
  *  The values to display.
  */
-function crimson_helper_field_plain_render($field) {
+function cw_tool_field_plain_render($field) {
   $info = field_info_field($field['#field_name']);
   $type = $info['type'];
 
@@ -284,7 +284,7 @@ function crimson_helper_field_plain_render($field) {
  * @return bool
  *  Boolean flag if the user is in reference field.
  */
-function crimson_helper_is_in_reference_field(array $haystack, $value_key, $needle) {
+function cw_tool_is_in_reference_field(array $haystack, $value_key, $needle) {
   array_walk($haystack, function (&$item, $idx, $key) {
     $item = isset($item[$key]) ? $item[$key] : NULL;
   }, $value_key);
@@ -297,7 +297,7 @@ function crimson_helper_is_in_reference_field(array $haystack, $value_key, $need
  * @param $vocabulary_name
  *  The name of the vocabulary.
  */
-function crimson_helper_purge_terms($vocabulary_name) {
+function cw_tool_purge_terms($vocabulary_name) {
   $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
   $tree = taxonomy_get_tree($vocabulary->vid);
 
@@ -316,7 +316,7 @@ function crimson_helper_purge_terms($vocabulary_name) {
  * @param $terms_to_ignore
  *  The names of the terms to keep in a vocabulary.
  */
-function crimson_helper_purge_all_terms_except_listed_terms($vocabulary_name, array $terms_to_ignore = array()) {
+function cw_tool_purge_all_terms_except_listed_terms($vocabulary_name, array $terms_to_ignore = array()) {
   // Fetch vocabulary info.
   $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
 
@@ -344,7 +344,7 @@ function crimson_helper_purge_all_terms_except_listed_terms($vocabulary_name, ar
  * @param $force_delete_multiple
  *  Force deletion of multiple terms.
  */
-function crimson_helper_delete_term_multiple($vocabulary, array $terms = array(), $force_delete_multiple = FALSE) {
+function cw_tool_delete_term_multiple($vocabulary, array $terms = array(), $force_delete_multiple = FALSE) {
   foreach ($terms as $term_name) {
     $existing_terms = taxonomy_get_term_by_name($term_name, $vocabulary);
     // Check if there is more than one term and is a forced deletion or if there is only one term.
@@ -357,26 +357,10 @@ function crimson_helper_delete_term_multiple($vocabulary, array $terms = array()
 }
 
 /**
- * Return all the vehicledata field type names.
- *
- * @return array
- *  Array of field types.
- */
-function crimson_helper_vehicledata_field_types() {
-  return array(
-    'vehicledata',
-    'enginespeed',
-    'resistance',
-    'pressure',
-    'freeplay',
-  );
-}
-
-/**
  * Provides a debugging backtrace with function name and file name.
  */
-function crimson_helper_print_backtrace() {
-  $backtrace = array_map('_crimson_helper_parse_function_name', debug_backtrace());
+function cw_tool_print_backtrace() {
+  $backtrace = array_map('_cw_tool_parse_function_name', debug_backtrace());
   print_r($backtrace);
 }
 
@@ -386,7 +370,7 @@ function crimson_helper_print_backtrace() {
  * @param $element
  * @return string
  */
-function _crimson_helper_parse_function_name($element) {
+function _cw_tool_parse_function_name($element) {
   return $element['function'] . ' >> ' . $element['file'];
 }
 
@@ -400,7 +384,7 @@ function _crimson_helper_parse_function_name($element) {
  * @return array
  *  The value wrapped within an array.
  */
-function crimson_helper_store_vehicle_data_in_array($value) {
+function cw_tool_store_vehicle_data_in_array($value) {
   if (!is_array($value)) {
     return array (
       'data_type' => 'value',
@@ -410,44 +394,6 @@ function crimson_helper_store_vehicle_data_in_array($value) {
   }
 
   return $value;
-}
-
-/**
- * Returns all the technical data content types.
- *
- * At the moment we'll have to manually add new content types to this array. It
- * would be useful if we could identify the content types by looking at
- * migration classes of type TD.
- *
- * @return array
- */
-function crimson_helper_get_td_types() {
-  return array(
-    'automated_manual_transmission' => 'Automated manual transmission',
-    'automatic_transmission' => 'Automatic transmission',
-    'auxiliary_drive' => 'Auxiliary drive',
-    'axles_and_propshafts' => 'Axles and propshafts',
-    'battery' => 'Battery',
-    'body' => 'Body',
-    'brakes' => 'Brakes',
-    'camshaft' => 'Camshaft',
-    'clutch' => 'Clutch',
-    'diagnostics' => 'Diagnostics',
-    'engine' => 'Engine',
-    'engine_electrical' => 'Engine electrical',
-    'fuel_system' => 'Fuel system',
-    'ignition_system' => 'Ignition system',
-    'lubrication' => 'Lubrication',
-    'management' => 'Management',
-    'manual_transmission' => 'Manual transmission',
-    'steering' => 'Steering',
-    'suspension' => 'Suspension',
-    'timing_belts_chains_gears' => 'Timing belts chains gears',
-    'transfer_box' => 'Transfer box',
-    'tuning_and_emissions' => 'Tuning and emissions',
-    'turbocharger' => 'Turbocharger',
-    'retarder' => 'Retarder',
-  );
 }
 
 /**
@@ -463,7 +409,7 @@ function crimson_helper_get_td_types() {
  * @return boolean
  *  Whether the user has the required roles.
  */
-function crimson_helper_user_has_role($role_ids, $account = NULL, $any = TRUE) {
+function cw_tool_user_has_role($role_ids, $account = NULL, $any = TRUE) {
   if (empty($account)) {
     $account = $GLOBALS['user'];
   }
@@ -499,7 +445,7 @@ function crimson_helper_user_has_role($role_ids, $account = NULL, $any = TRUE) {
  *  The path to the file name (with correct case), or FALSE if the file doesn't
  *  exist.
  */
-function crimson_helper_file_exists_case_insensitive($file_name) {
+function cw_tool_file_exists_case_insensitive($file_name) {
   if (file_exists($file_name)) {
     return $file_name;
   }
@@ -527,7 +473,7 @@ function crimson_helper_file_exists_case_insensitive($file_name) {
  * @return int
  *  The number of taxonomies updated.
  */
-function crimson_helper_reset_taxonomy_to_alphabetical($taxonomy) {
+function cw_tool_reset_taxonomy_to_alphabetical($taxonomy) {
   $vocabularies = taxonomy_vocabulary_load_multiple(NULL, array('machine_name' => $taxonomy));
 
   $vocabulary_ids = array_keys($vocabularies);
@@ -562,7 +508,7 @@ function crimson_helper_reset_taxonomy_to_alphabetical($taxonomy) {
  *    crimson_helper_save_fields_on_entity($node, 'node', array('field_tag'));
  *  @endcode
  */
-function crimson_helper_save_fields_on_entity(stdClass $entity, $entity_type, array $field_names) {
+function cw_tool_save_fields_on_entity(stdClass $entity, $entity_type, array $field_names) {
   // Gathering info about the entity.
   list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
   $entity_info = entity_get_info($entity_type);
@@ -597,7 +543,7 @@ function crimson_helper_save_fields_on_entity(stdClass $entity, $entity_type, ar
  * @param string $vocabulary_name
  *  Vocabulary name.
  */
-function crimson_helper_purge_terms_of_vocabulary($vocabulary_name) {
+function cw_tool_purge_terms_of_vocabulary($vocabulary_name) {
   // Fetch vocabulary info.
   $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
 
@@ -620,7 +566,7 @@ function crimson_helper_purge_terms_of_vocabulary($vocabulary_name) {
  * @param string $vocabulary_name
  *  Name of the vocabulary.
  */
-function crimson_helper_delete_vocabulary($vocabulary_name) {
+function cw_tool_delete_vocabulary($vocabulary_name) {
   // Fetch vocabulary info.
   $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
 
@@ -630,7 +576,7 @@ function crimson_helper_delete_vocabulary($vocabulary_name) {
   }
 
   // Delete terms.
-  crimson_helper_purge_terms_of_vocabulary($vocabulary_name);
+  cw_tool_purge_terms_of_vocabulary($vocabulary_name);
 
   // Delete vocabulary.
   taxonomy_vocabulary_delete($vocabulary->vid);
@@ -642,9 +588,9 @@ function crimson_helper_delete_vocabulary($vocabulary_name) {
  * @param array $vocabulary_names
  *  Names of the vocabularies.
  */
-function crimson_helper_delete_vocabulary_multiple(array $vocabulary_names) {
+function cw_tool_delete_vocabulary_multiple(array $vocabulary_names) {
   foreach ($vocabulary_names as $vocabulary_name) {
-    crimson_helper_delete_vocabulary($vocabulary_name);
+    cw_tool_delete_vocabulary($vocabulary_name);
   }
 }
 
@@ -659,7 +605,7 @@ function crimson_helper_delete_vocabulary_multiple(array $vocabulary_names) {
  *  The weight set for the first menu item and increments
  *  when there is more than one menu item.
  */
-function crimson_helper_add_submenus(array $menu_items, $menu_name, $weight = 1) {
+function cw_tool_add_submenus(array $menu_items, $menu_name, $weight = 1) {
   // Create path for each link.
   foreach ($menu_items as $title => $path) {
     // Create menu items in the menu.
@@ -695,7 +641,7 @@ function crimson_helper_add_submenus(array $menu_items, $menu_name, $weight = 1)
  * @return mixed|null
  *  Field value array if exists. NULL otherwise.
  */
-function crimson_helper_get_value_in_an_object_or_array_field_collection_field($field_collection_item, $field_name) {
+function cw_tool_get_value_in_an_object_or_array_field_collection_field($field_collection_item, $field_name) {
   if (isset($field_collection_item['value'])) {
     $field_collection = entity_load_single('field_collection_item', $field_collection_item['value']);
     if (isset($field_collection->{$field_name}[LANGUAGE_NONE][0])) {
@@ -707,38 +653,4 @@ function crimson_helper_get_value_in_an_object_or_array_field_collection_field($
   }
 
   return NULL;
-}
-
-/**
- * Converts an AutoData language number into the equivalent language code for Drupal.
- * If the correct language cannot be determined then return the undefined/English code.
- * 
- * @param int $lang_num
- * @return string
- */
-function crimson_helper_lang_num_to_drupal_lang($lang_num) {
-  switch($lang_num) {
-    case 0:
-      return LANGUAGE_NONE;
-      
-    default:
-      return LANGUAGE_NONE;
-  }
-}
-
-/**
- * Converts a drupal language code into the equivalent AutoData language number
- * If the correct language cannot be determined then return the English number (0).
- * 
- * @param string $drupal_lang
- * @return integer
- */
-function crimson_helper_drupal_lang_to_lang_num($drupal_lang) {
-  switch ($drupal_lang) {
-    case LANGUAGE_NONE:
-      return 0;
-      
-    default:
-      return 0;
-  }
 }

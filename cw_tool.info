@@ -1,4 +1,3 @@
-name = Crimson Helper
-description = Crimson related global helper functions
+name = "Cameron & Wilding Tools"
+description = "General helper methods for regular Drupal development"
 core = 7.x
-package = Crimson
