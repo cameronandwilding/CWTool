@@ -1,0 +1,4 @@
+name = Crimson Helper
+description = Crimson related global helper functions
+core = 7.x
+package = Crimson
