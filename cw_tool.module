@@ -5,17 +5,27 @@
  */
 
 /**
- * Checks if a key is in a multidimensional array.
+ * Checks if a value exist (for a given key) in a multidimensional array.
+ *
+ * Example usage: check a value in a field array:
+ * Haystack:
+ * [
+ *  0: [value: 123, format: decimal],
+ *  1: [value: 456, format: decimal],
+ * ]
+ * Value key: 'value'
+ * Needle: 456
+ * Return: TRUE
  *
  * @param array $haystack
  *  An array of keys from an entity object.
  * @param $value_key
  *  The key of the value.
  * @param $needle
- *  The key to perform the access check operation on.
+ *  The value to look for.
  *
  * @return bool
- *  Boolean flag if the key is in the multidimensional field.
+ *  Boolean flag if the value is in the multidimensional-array.
  */
 function cw_tool_check_value_in_multidimensional_array(array $haystack, $value_key, $needle) {
   array_walk($haystack, function (&$item, $idx, $key) {
@@ -47,21 +57,23 @@ function cw_tool_delete_content_type($content_type) {
  * @param $fields_to_delete
  *  An array of field names for deletion.
  */
-function cw_tool_delete_field_multiple($fields_to_delete = array()) {
-  // Before we begin, we need to get rid of those pesky temp tables that hang
-  // about after a field is deleted.
+function cw_tool_delete_field_multiple(array $fields_to_delete) {
+  // Before we begin, we need to get rid of those pesky temp tables that hang about after a field is deleted.
   _cw_tool_purge_deleted_fields();
 
   // Loop through each field name and delete each individually.
   foreach ($fields_to_delete as $field_name) {
     field_delete_field($field_name);
-    watchdog(__FUNCTION__, 'Deleted the @field_name field from all content type instances.', array('@field_name' => $field_name), WATCHDOG_INFO);
+    watchdog(__FUNCTION__, 'Deleted the @field_name field from all content type instances.', array('@field_name' => $field_name));
   }
 
   // Now force a purge of all the deleted tables again.
   _cw_tool_purge_deleted_fields();
 }
 
+/**
+ * Private sub-method to erase already deleted fields.
+ */
 function _cw_tool_purge_deleted_fields() {
   $result = db_query("SHOW TABLES LIKE 'field_deleted_%'")->fetchCol();
   foreach ($result as $table) {
@@ -71,7 +83,7 @@ function _cw_tool_purge_deleted_fields() {
   db_delete('field_config')->condition('deleted', 1)->execute();
   $num_deleted = db_delete('field_config_instance')->condition('deleted', 1)->execute();
 
-  watchdog(__FUNCTION__, 'Purged :num_deleted deleted fields from the database', array(':num_deleted' => $num_deleted));
+  watchdog(__FUNCTION__, 'Purged @num_deleted deleted fields from the database', array('@num_deleted' => $num_deleted));
 }
 
 /**
@@ -108,6 +120,8 @@ function cw_tool_create_term_multiple($vocabulary, array $terms = array()) {
 
 /**
  * Reset features cache and revert the features.
+ * Useful when you want to use the component the same time you enabled the feature (eg in the same update hook).
+ * In that case the component is still not created (queued) so you need to trigger the creation manually.
  *
  * @param $features
  *  The feature to be reset and reverted.
@@ -126,13 +140,21 @@ function cw_tool_revert_feature($features, $component) {
  * Creates a new field collection entity and attach to a host entity.
  *
  * @param $entity
- *  Entity object.
+ *  Host entity object.
  * @param $field_name
- *  Field name string.
- * @return stdClass
- *  Field collection entity object.
+ *  Field name string of the field collection (aka bundle).
+ * @param $entity_type
+ *  Entity type of the host entity. Default: node.
+ *
+ * @return stdClass|FALSE
+ *  Field collection entity object - or FALSE if the operation failed.
  */
-function cw_tool_add_fieldset($entity, $field_name, $entity_type = 'node') {
+function cw_tool_add_field_collection($entity, $field_name, $entity_type = 'node') {
+  if (!module_exists('field_collection')) {
+    watchdog(__FUNCTION__, 'Module \'field_collection\' is not enabled.', array(), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
   $field_collection = entity_create('field_collection_item', array('field_name' => $field_name));
   $field_collection->setHostEntity($entity_type, $entity);
   return $field_collection;
@@ -158,11 +180,10 @@ function cw_tool_delete_field_instance($field_name, $bundle, $entity_type = 'nod
  *
  * @param $file
  *  The file that needs to be converted to png.
- *
  * @param $type
  *  The type of the file that needs to be converted to png.
  *
- * @return
+ * @return bool
  *  TRUE if the file was successfully converted to PNG, FALSE otherwise.
  */
 function cw_tool_convert_to_png($file, $type) {
@@ -171,124 +192,48 @@ function cw_tool_convert_to_png($file, $type) {
   $new_uri = drupal_dirname($file->uri) . '/' . $basename . '.png';
   // Try converting the file to png with imagemagick
   $dest = _imagemagick_convert($file->uri, $new_uri, array());
-  if ($dest) {
-    $file->uri = $new_uri;
-    $file->filename = $basename . '.png';
-    $file->filemime = 'image/png';
-    file_save($file);
-    watchdog(__FUNCTION__, 'Imagemagick converted uploaded file to png.', array(), WATCHDOG_INFO);
-    return TRUE;
-  }
-  else {
+  if (!$dest) {
     watchdog(__FUNCTION__, 'Imagemagick failed to convert the uploaded file to png.', array(), WATCHDOG_WARNING);
     return FALSE;
   }
+
+  $file->uri = $new_uri;
+  $file->filename = $basename . '.png';
+  $file->filemime = 'image/png';
+  file_save($file);
+
+  watchdog(__FUNCTION__, 'Imagemagick converted uploaded file to png.');
+  return TRUE;
 }
 
 /**
- * Helps log a message to the log when a value cannot be parsed correctly.
+ * Wrapper for watchdog to handle multiple variable logging.
  *
- * @param $source
- *  The function that was parsing the value.
- * @param $value
+ * @param $scope
+ *  Original scope - __FUNCTION__, __METHOD__ or similar.
+ * @param $values
  *  The key - value array of values that will be presented in the message.
  * @param $severity
  *  (optional) The severity of the error - watchdog error level code.
+ * @param $message
+ *  (optional) Message string.
  */
-function cw_tool_migration_watchdog($source, array $values, $severity = WATCHDOG_WARNING) {
-  $message = 'Invalid data has been provided:';
+function cw_tool_watchdog($scope, array $values, $severity = WATCHDOG_WARNING, $message = 'CW watchdog') {
   $arguments = array();
   foreach ($values as $key => $value) {
-    if ($value instanceof stdClass) {
-      continue;
+    // To be able to check objects we convert them to arrays.
+    if (is_object($value)) {
+      $value = (array) $value;
     }
-    $arguments[':' . $key] = (string) $value;
+    // Flattening arrays into strings.
+    if (is_array($value)) {
+      $value = '(string value)' . preg_replace("/[\n\t\r ]/m", '', var_export($value, TRUE));
+    }
+    $arguments[':' . $key] = str_replace(array("\n", "\r"), '{line-break}', $value);
     $message .= " $key=(:$key)";
   }
 
-  watchdog($source, $message, $arguments, $severity);
-}
-
-/**
- * Helps to fetch raw data for a field for the verification display.
- *
- * @param $field
- *  The renderable field array of the field.
- *
- * @return array
- *  The values to display.
- */
-function cw_tool_field_plain_render($field) {
-  $info = field_info_field($field['#field_name']);
-  $type = $info['type'];
-
-  $values = array();
-  switch ($type) {
-    case 'node_reference':
-      if (isset($field['#items'])) {
-        foreach($field['#items'] as $node_ref) {
-          $values[] = $node_ref['node']->title;
-        }
-      }
-      break;
-
-    case 'taxonomy_term_reference':
-      if (isset($field['#items'])) {
-        foreach($field['#items'] as $term_ref) {
-          $values[] = $term_ref['taxonomy_term']->name;
-        }
-      }
-      break;
-
-    case 'vehicledata':
-      if (isset($field['#items'])) {
-        if (module_exists('crimson_vehicledata_field')) {
-          $vdatas = crimson_vehicledata_field_vehicledata_formatter($field['#items']);
-          foreach ($vdatas as $vdata) {
-            $values[] = $vdata['#markup'];
-          }
-        }
-      }
-      // Otherwise we just return an empty array.
-      break;
-
-    case 'file':
-      if (isset($field['#items'])) {
-        foreach ($field['#items'] as $item) {
-          $values[] = $item['filename'];
-        }
-      }
-      break;
-
-    default:
-      if (isset($field['#items'])) {
-        $items = array_keys($field['#items']);
-        foreach ($items as $item) {
-          $values[] = $field[$item]['#markup'];
-        }
-      }
-  }
-  return $values;
-}
-
-/** 
- * Checks if the user id is in reference field.
- *
- * @param array $haystack
- *  An array of user uids from the entity object.
- * @param $value_key
- *  The key of the value.
- * @param $needle
- *  The user uid to perform the access check operation on.
- *
- * @return bool
- *  Boolean flag if the user is in reference field.
- */
-function cw_tool_is_in_reference_field(array $haystack, $value_key, $needle) {
-  array_walk($haystack, function (&$item, $idx, $key) {
-    $item = isset($item[$key]) ? $item[$key] : NULL;
-  }, $value_key);
-  return in_array($needle, $haystack);
+  watchdog($scope, $message, $arguments, $severity);
 }
 
 /**
@@ -375,31 +320,9 @@ function _cw_tool_parse_function_name($element) {
 }
 
 /**
- * Checks if the value is an array or not.
- * If it is not an array, store the passed value into an array.
- *
- * @param $value
- *  A single value being passed.
- *
- * @return array
- *  The value wrapped within an array.
- */
-function cw_tool_store_vehicle_data_in_array($value) {
-  if (!is_array($value)) {
-    return array (
-      'data_type' => 'value',
-      'data_value' => $value,
-      'data_source' => $value,
-    );
-  }
-
-  return $value;
-}
-
-/**
  * Determine whether a given account has the requested roles.
  * 
- * @param $roles
+ * @param $role_ids
  *  An array of Role IDs.
  * @param $account
  *  The optional user object to check. The default is to check the logged in user.
@@ -435,8 +358,7 @@ function cw_tool_user_has_role($role_ids, $account = NULL, $any = TRUE) {
 
 /**
  * Does a case insensitive search for a file.
- *
- * From http://stackoverflow.com/questions/3964793/php-case-insensitive-version-of-file-exists
+ * @see http://stackoverflow.com/questions/3964793/php-case-insensitive-version-of-file-exists
  *
  * @param $file_name
  *  The file name (including path) that we're checking exists.
@@ -467,23 +389,16 @@ function cw_tool_file_exists_case_insensitive($file_name) {
 /**
  * Resets the taxonomy (or taxonomies) to be ordered alphabetically. 
  * 
- * @param $taxonomy
- *  A taxonomy name, or an array of taxonomy machine names.
- *  
- * @return int
- *  The number of taxonomies updated.
+ * @param $vocabulary_names
+ *  A single string or array of vocabulary machine names.
  */
-function cw_tool_reset_taxonomy_to_alphabetical($taxonomy) {
-  $vocabularies = taxonomy_vocabulary_load_multiple(NULL, array('machine_name' => $taxonomy));
-
+function cw_tool_reset_taxonomy_to_alphabetical($vocabulary_names) {
+  $vocabularies = taxonomy_vocabulary_load_multiple(NULL, array('machine_name' => $vocabulary_names));
   $vocabulary_ids = array_keys($vocabularies);
-  
-  $result = db_update('taxonomy_term_data')
+  db_update('taxonomy_term_data')
     ->fields(array('weight' => 0))
     ->condition('vid', $vocabulary_ids)
     ->execute();
-  
-  return count($vocabulary_ids);
 }
 
 /**
