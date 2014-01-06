@@ -218,7 +218,7 @@ function cw_tool_convert_to_png($file, $type) {
  * @param $message
  *  (optional) Message string.
  */
-function cw_tool_watchdog($scope, array $values, $severity = WATCHDOG_WARNING, $message = 'CW watchdog') {
+function cw_tool_var_watchdog($scope, array $values, $severity = WATCHDOG_WARNING, $message = 'CW watchdog') {
   $arguments = array();
   foreach ($values as $key => $value) {
     // To be able to check objects we convert them to arrays.
