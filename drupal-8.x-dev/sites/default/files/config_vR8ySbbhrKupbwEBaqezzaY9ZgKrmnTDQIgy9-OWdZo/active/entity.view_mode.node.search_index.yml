@@ -1,0 +1,7 @@
+id: node.search_index
+uuid: 17b34a6b-401f-421a-8100-f1879cbc565a
+label: 'Search index'
+targetEntityType: node
+status: false
+cache: true
+langcode: en

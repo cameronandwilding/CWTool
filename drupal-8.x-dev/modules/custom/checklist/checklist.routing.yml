@@ -1,0 +1,15 @@
+checklist.admin:
+  path: 'admin/config/checklist'
+  defaults:
+    _content: '\Drupal\checklist\Controller\ChecklistController::checklistRender'
+    _title: 'Checklist'
+  requirements:
+    _permission: 'administer site configuration'
+
+checklist.admin.settings:
+  path: 'admin/config/checklist/settings'
+  defaults:
+    _title: 'Checklist settings'
+    _form: 'Drupal\checklist\Form\ChecklistSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

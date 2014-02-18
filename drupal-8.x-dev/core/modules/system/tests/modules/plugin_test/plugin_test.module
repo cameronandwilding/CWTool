@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Helper module for the plugin tests.
+ */
+
+/**
+ * Implements hook_plugin_test_alter().
+ */
+function plugin_test_plugin_test_alter(&$definitions) {
+  foreach ($definitions as &$definition) {
+    $definition['altered'] = TRUE;
+  }
+  $definitions['user_login']['altered_single'] = TRUE;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function plugin_test_menu() {
+  $items = array();
+  $items['plugin_definition_test'] = array(
+    'route_name' => 'plugin_test.definition',
+  );
+  return $items;
+}

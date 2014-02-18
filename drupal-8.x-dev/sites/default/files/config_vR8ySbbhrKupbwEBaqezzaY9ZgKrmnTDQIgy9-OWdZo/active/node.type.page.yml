@@ -1,0 +1,18 @@
+type: page
+uuid: f77b56af-2b34-4a2f-b7e9-2dcadfdc80d0
+name: 'Basic page'
+description: 'Use <em>basic pages</em> for your static content, such as an ''About us'' page.'
+help: ''
+has_title: true
+title_label: Title
+settings:
+  node:
+    options:
+      status: true
+      promote: false
+      sticky: false
+      revision: false
+    preview: 1
+    submitted: false
+status: true
+langcode: en

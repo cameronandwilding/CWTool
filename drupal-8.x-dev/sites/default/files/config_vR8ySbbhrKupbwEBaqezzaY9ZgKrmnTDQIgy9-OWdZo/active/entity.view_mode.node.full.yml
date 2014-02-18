@@ -1,0 +1,7 @@
+id: node.full
+uuid: faa8c4b0-64a5-458e-8e03-3ae4b4daee5b
+label: 'Full content'
+targetEntityType: node
+status: false
+cache: true
+langcode: en

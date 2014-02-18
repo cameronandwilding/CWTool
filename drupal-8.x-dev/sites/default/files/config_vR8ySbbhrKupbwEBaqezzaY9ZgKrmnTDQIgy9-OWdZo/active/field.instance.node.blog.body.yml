@@ -1,0 +1,17 @@
+id: node.blog.body
+uuid: 108eab73-a7e2-48e9-9e63-99700c76826b
+status: true
+langcode: en
+field_uuid: 8d7b1e3c-a73f-4249-8731-493bdfab6f99
+field_name: body
+entity_type: node
+bundle: blog
+label: Body
+description: ''
+required: false
+default_value: {  }
+default_value_function: ''
+settings:
+  display_summary: true
+  text_processing: true
+field_type: text_with_summary

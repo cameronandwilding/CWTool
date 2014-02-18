@@ -1,0 +1,14 @@
+name: large
+label: 'Large (480x480)'
+uuid: b05eae5c-1755-4520-b848-72614923a496
+status: true
+langcode: en
+effects:
+  ddd73aa7-4bd6-4c85-b600-bdf2b1628d1d:
+    uuid: ddd73aa7-4bd6-4c85-b600-bdf2b1628d1d
+    id: image_scale
+    weight: 0
+    data:
+      width: 480
+      height: 480
+      upscale: true

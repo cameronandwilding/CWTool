@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\checklist\Controller\ChecklistController.
+ */
+
+namespace Drupal\checklist\Controller;
+
+/**
+ * Controller routines for book routes.
+ */
+class ChecklistController {
+
+  public function checklistRender() {
+    $output = array();
+  
+
+$output['hello'] = array(
+      '#markup' => 'Hello World!',
+    );
+    return
+
+$output;
+  }
+
+}

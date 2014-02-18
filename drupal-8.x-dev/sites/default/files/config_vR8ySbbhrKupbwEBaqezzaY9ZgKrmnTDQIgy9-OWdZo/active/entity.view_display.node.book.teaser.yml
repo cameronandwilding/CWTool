@@ -1,0 +1,15 @@
+id: node.book.teaser
+uuid: ee5eb525-5793-4bfd-a500-d044703a1143
+targetEntityType: node
+bundle: book
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: -4
+    settings:
+      trim_length: 600
+hidden:
+  langcode: true
+status: true

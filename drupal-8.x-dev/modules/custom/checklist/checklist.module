@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Allows users to create checklist.
+ */
+
+/**
+* Implements hook_menu().
+*/
+function checklist_menu() {
+  $items['admin/config/checklist'] = array(
+    'title' => 'Admin page section',
+    'description' => 'The checklist admin page section',
+    'route_name' => 'checklist.admin',
+  );
+
+  $items['admin/config/checklist/settings'] = array(
+    'title' => 'Checklist settings',
+    'description' => 'The checklist admin page section',
+    'route_name' => 'checklist.admin.settings',
+  );
+
+  return $items;
+}
+?>

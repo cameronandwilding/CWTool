@@ -1,0 +1,15 @@
+id: node.blog.teaser
+uuid: 37fee193-9520-4098-a100-d807e5f76aed
+targetEntityType: node
+bundle: blog
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: -4
+    settings:
+      trim_length: 600
+hidden:
+  langcode: true
+status: true

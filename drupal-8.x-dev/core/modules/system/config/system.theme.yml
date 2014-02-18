@@ -1,0 +1,4 @@
+admin: ''
+enabled:
+  stark: 0
+default: stark

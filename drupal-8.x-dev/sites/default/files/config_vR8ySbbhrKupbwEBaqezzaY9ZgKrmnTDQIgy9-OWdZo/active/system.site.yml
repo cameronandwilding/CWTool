@@ -1,0 +1,11 @@
+uuid: 85d47a18-5749-4265-8a62-98dbc0358f73
+name: drupal8.local
+mail: test@test.com
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: node
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
