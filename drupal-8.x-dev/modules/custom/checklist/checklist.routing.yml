@@ -6,10 +6,11 @@ checklist.admin:
   requirements:
     _permission: 'administer site configuration'
 
-checklist.admin.settings:
+checklist.settings:
   path: 'admin/config/checklist/settings'
   defaults:
     _title: 'Checklist settings'
     _form: 'Drupal\checklist\Form\ChecklistSettingsForm'
   requirements:
     _permission: 'administer site configuration'
+  configure: checklist.settings

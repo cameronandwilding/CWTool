@@ -18,7 +18,7 @@ function checklist_menu() {
   $items['admin/config/checklist/settings'] = array(
     'title' => 'Checklist settings',
     'description' => 'The checklist admin page section',
-    'route_name' => 'checklist.admin.settings',
+    'route_name' => 'checklist.settings',
   );
 
   return $items;
