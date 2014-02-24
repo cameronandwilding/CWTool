@@ -25,13 +25,12 @@ class ChecklistSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
-    $active = array(0 => t('Unchecked'), 1 => t('Checked'));
+    $active = array(0 => t('Left'), 1 => t('Right'));
     $config = $this->config('checklist.settings');
 
-
-    $form['checklist_1a'] = array(
+    $form['checkbox'] = array(
       '#type' => 'radios',
-      '#title' => t('Feeding your Dog'),
+      '#title' => t('Position of the checkbox on a checklist '),
       '#options' => $active,
       '#default_value' => $config->get('checklist_default'),
     );
@@ -44,7 +43,7 @@ class ChecklistSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, array &$form_state) {
     $this->config('checklist.settings')
-        ->set('checklist_default', $form_state['values']['checklist_1a'])
+        ->set('checklist_default', $form_state['values']['checkbox'])
         ->save();
 
     parent::submitForm($form, $form_state);

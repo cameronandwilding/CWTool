@@ -10,7 +10,14 @@ checklist.settings:
   path: 'admin/config/checklist/settings'
   defaults:
     _title: 'Checklist settings'
-    _form: 'Drupal\checklist\Form\ChecklistSettingsForm'
+    _form: '\Drupal\checklist\Form\ChecklistSettingsForm'
   requirements:
     _permission: 'administer site configuration'
-  configure: checklist.settings
+
+checklist.edit:
+  path: '/checklist/{checklist}/edit'
+  defaults:
+    _entity_form: checklist.edit
+    _title: 'Editchecklist content'
+  requirements:
+    _permission: 'edit_checklist'

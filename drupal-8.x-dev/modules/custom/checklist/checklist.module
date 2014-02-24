@@ -23,4 +23,44 @@ function checklist_menu() {
 
   return $items;
 }
-?>
+
+function checklist_permission() {
+  return array(
+    'edit_checklist' => array(
+      'title' => t('Edit checklist content'),
+    ),
+    'add_checklist' => array(
+      'title' => t('Add checklist content'),
+    ),
+  );
+}
+
+/**
+ * Menu argument loader: Loads a Foo type by string.
+ *
+ * @param $name
+ *   The machine name of a Foo type to load.
+ *
+ * @return \Drupal\checklist\Entity\checklistItemType
+ *   A Foo type object or NULL if $name does not exist.
+ */
+function checklist_type_load($name) {
+  return entity_load('checklist_type', $name);
+}
+
+/**
+ * Loads a checklist item entity from the database.
+ *
+ * @param int $id
+ *   The Foo entity ID.
+ * @param bool $reset
+ *   (optional) Whether to reset the static cache. Defaults to
+ *   FALSE.
+ *
+ * @return \Drupal\checklist\Entity\checklistItemInterface|null
+ *   A fully-populated Foo entity, or NULL if the entity is not found.
+ */
+function checklist_load($id, $reset = FALSE) {
+  return entity_load('checklist_item', $id, $reset);
+}
+
