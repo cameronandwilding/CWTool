@@ -6,8 +6,8 @@
  */
 
 /**
-* Implements hook_menu().
-*/
+ * Implements hook_menu().
+ */
 function checklist_menu() {
   $items['admin/config/checklist'] = array(
     'title' => 'Admin page section',
@@ -19,6 +19,11 @@ function checklist_menu() {
     'title' => 'Checklist settings',
     'description' => 'The checklist admin page section',
     'route_name' => 'checklist.settings',
+  );
+
+  $items['checklist/add'] = array(
+    'title' => 'Checklist settings',
+    'route_name' => 'checklist.add',
   );
 
   return $items;
