@@ -15,12 +15,10 @@ checklist.settings:
     _permission: 'administer site configuration'
 
 checklist.edit:
-  path: 'admin/config/checklist/settings/{checklist}'
+  path: '/checklist/{checklist}/edit'
   defaults:
-    _entity_form: checklist.edit
+    _entity_form: 'checklist.edit'
     _title: 'Edit checklist content'
-  requirements:
-    _permission: 'edit_checklist'
 
 checklist.add:
   path: '/checklist/add'

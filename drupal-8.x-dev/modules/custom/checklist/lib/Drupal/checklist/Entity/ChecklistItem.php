@@ -4,27 +4,29 @@
  * Definition of Drupal\checklist\Entity\checklist.
  */
 namespace Drupal\checklist\Entity;
+
+use Drupal\checklist\ChecklistInterface;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageControllerInterface;
+use Drupal\Core\Field\FieldDefinition;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\checklist\ChecklistInterface;
+use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
-use \Drupal\Core\Entity\EntityInterface;
+
 /**
- * Defines the node entity class.
+ * Defines the checklist entity class.
  *
  * @EntityType(
- *   id = "checklist_item",
- *   label = @Translation("Content"),
- *   bundle_label = @Translation("Content type"),
+ *   id = "checklist",
+ *   label = @Translation("Content type"),
  *   controllers = {
- *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "storage" = "Drupal\Core\Entity\FieldableDatabaseStorageController",
+ *       "list" = "Drupal\checklist\Entity\Form\ChecklistFormController",
  *     "form" = {
  *       "add" = "Drupal\checklist\Entity\Form\ChecklistFormController",
  *       "edit" = "Drupal\checklist\Entity\Form\ChecklistFormController",
  *     },
- *     "translation" = "Drupal\node\NodeTranslationController"
  *   },
  *   base_table = "checklist_item",
  *   fieldable = TRUE,
@@ -32,27 +34,22 @@ use \Drupal\Core\Entity\EntityInterface;
  *   render_cache = FALSE,
  *   entity_keys = {
  *     "id" = "ciid",
- *     "bundle" = "type",
  *     "label" = "name",
- *     "uuid" = "uuid"
+ *     "uuid" = "uuid",
  *   },
- *   bundle_keys = {
- *     "bundle" = "type"
- *   },
- *   bundle_entity_type = "node_type",
- *   permission_granularity = "bundle",
+ *   bundle_entity_type = "checklist_type",
  *   links = {
  *     "admin-form" = "checklist.settings",
  *     "add-form" = "checklist.add",
  *   }
  * )
  */
-class ChecklistItem extends ContentEntityBase implements ChecklistInterface {
+class ChecklistItem extends ContentEntityBase implements ChecklistInterface, NodeInterface  {
   /**
    * Implements Drupal\Core\Entity\EntityInterface::id().
    */
   public function id() {
-    return $this->get('tid')->value;
+    return $this->get('ciid')->value;
   }
 
   /*
@@ -335,7 +332,6 @@ class ChecklistItem extends ContentEntityBase implements ChecklistInterface {
     $this->set('revision_uid', $uid);
     return $this;
   }
-
   public static function baseFieldDefinitions($entity_type) {
     $fields['ciid'] = FieldDefinition::create('integer')
       ->setLabel(t('Checklist ID'))
@@ -347,10 +343,15 @@ class ChecklistItem extends ContentEntityBase implements ChecklistInterface {
       ->setDescription(t('The checklist UUID.'))
       ->setReadOnly(TRUE);
 
+    $fields['vid'] = FieldDefinition::create('integer')
+      ->setLabel(t('Revision ID'))
+      ->setDescription(t('The checklist revision ID.'))
+      ->setReadOnly(TRUE);
+
     $fields['type'] = FieldDefinition::create('string')
       ->setLabel(t('Type'))
-      ->setDescription(t('The bundle of the Checklist entity.'))
-      ->setRequired(TRUE);
+      ->setDescription(t('The entity type.'))
+      ->setSetting('target_type', 'checklist_type');
 
     $fields['langcode'] = FieldDefinition::create('language')
       ->setLabel(t('Language code'))
@@ -372,7 +373,47 @@ class ChecklistItem extends ContentEntityBase implements ChecklistInterface {
       ->setLabel(t('Checkbox'))
       ->setDescription(t('Checkbox field of the checklist entity.'));
 
+    $fields['status'] = FieldDefinition::create('boolean')
+      ->setLabel(t('Publishing status'))
+      ->setDescription(t('A boolean indicating whether the node is published.'));
+
+    // @todo Convert to a "created" field in https://drupal.org/node/2145103.
+    $fields['created'] = FieldDefinition::create('integer')
+      ->setLabel(t('Created'))
+      ->setDescription(t('The time that the node was created.'));
+
+    // @todo Convert to a "changed" field in https://drupal.org/node/2145103.
+    $fields['changed'] = FieldDefinition::create('integer')
+      ->setLabel(t('Changed'))
+      ->setDescription(t('The time that the node was last edited.'))
+      ->setPropertyConstraints('value', array('EntityChanged' => array()));
+
+    $fields['promote'] = FieldDefinition::create('boolean')
+      ->setLabel(t('Promote'))
+      ->setDescription(t('A boolean indicating whether the node should be displayed on the front page.'));
+
+    $fields['sticky'] = FieldDefinition::create('boolean')
+      ->setLabel(t('Sticky'))
+      ->setDescription(t('A boolean indicating whether the node should be displayed at the top of lists in which it appears.'));
+
+    // @todo Convert to a "timestamp" field in https://drupal.org/node/2145103.
+    $fields['revision_timestamp'] = FieldDefinition::create('integer')
+      ->setLabel(t('Revision timestamp'))
+      ->setDescription(t('The time that the current revision was created.'))
+      ->setQueryable(FALSE);
+
+    $fields['revision_uid'] = FieldDefinition::create('entity_reference')
+      ->setLabel(t('Revision user ID'))
+      ->setDescription(t('The user ID of the author of the current revision.'))
+      ->setSettings(array('target_type' => 'user'))
+      ->setQueryable(FALSE);
+
+    $fields['log'] = FieldDefinition::create('string')
+      ->setLabel(t('Log'))
+      ->setDescription(t('The log entry explaining the changes in this revision.'));
+
     return $fields;
   }
+
 }
 ?>

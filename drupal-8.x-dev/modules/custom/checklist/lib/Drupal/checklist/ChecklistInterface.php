@@ -15,7 +15,7 @@ use Drupal\user\UserInterface;
 /**
  * Provides an interface defining a checklistitem entity.
  */
-interface ChecklistInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
+interface ChecklistInterface {
 
   /**
    * Returns the checklist type.

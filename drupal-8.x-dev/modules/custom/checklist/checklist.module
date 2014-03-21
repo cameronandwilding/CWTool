@@ -41,6 +41,21 @@ function checklist_permission() {
 }
 
 /**
+ * Implements hook_admin_paths().
+ */
+function checklist_admin_paths() {
+  if (\Drupal::config('checklist.settings')->get('use_admin_theme')) {
+    $paths = array(
+      'checklist/*/edit' => TRUE,
+      'checklist/*/delete' => TRUE,
+      'node/add' => TRUE,
+      'node/add/*' => TRUE,
+    );
+    return $paths;
+  }
+}
+
+/**
  * Menu argument loader: Loads a Foo type by string.
  *
  * @param $name
