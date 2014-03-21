@@ -19,11 +19,13 @@ checklist.edit:
   defaults:
     _entity_form: 'checklist.edit'
     _title: 'Edit checklist content'
+  requirements:
+    _permission: 'administer content types'
 
 checklist.add:
   path: '/checklist/add'
   defaults:
-    _title: 'Add content'
+    _title: 'Add checklist'
     _entity_form: checklist.add
   options:
     _access_mode: 'ANY'

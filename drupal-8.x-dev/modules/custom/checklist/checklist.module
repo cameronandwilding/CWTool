@@ -26,6 +26,11 @@ function checklist_menu() {
     'route_name' => 'checklist.add',
   );
 
+  $items['checklist/edit'] = array(
+    'title' => 'Checklist settings',
+    'route_name' => 'checklist.edit',
+  );
+
   return $items;
 }
 
