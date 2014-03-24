@@ -19,7 +19,7 @@ use Drupal\user\UserInterface;
  *
  * @EntityType(
  *   id = "checklist",
- *   label = @Translation("Content type"),
+ *   label = @Translation("Checklist item"),
  *   controllers = {
  *     "storage" = "Drupal\Core\Entity\FieldableDatabaseStorageController",
  *       "list" = "Drupal\checklist\Entity\Form\ChecklistFormController",
@@ -35,6 +35,7 @@ use Drupal\user\UserInterface;
  *   entity_keys = {
  *     "id" = "ciid",
  *     "label" = "name",
+ *     "revision" = "revision_id",
  *     "uuid" = "uuid",
  *   },
  *   bundle_entity_type = "checklist_type",
@@ -377,12 +378,10 @@ class ChecklistItem extends ContentEntityBase implements ChecklistInterface, Nod
       ->setLabel(t('Publishing status'))
       ->setDescription(t('A boolean indicating whether the node is published.'));
 
-    // @todo Convert to a "created" field in https://drupal.org/node/2145103.
     $fields['created'] = FieldDefinition::create('integer')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the node was created.'));
 
-    // @todo Convert to a "changed" field in https://drupal.org/node/2145103.
     $fields['changed'] = FieldDefinition::create('integer')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the node was last edited.'))
@@ -396,7 +395,6 @@ class ChecklistItem extends ContentEntityBase implements ChecklistInterface, Nod
       ->setLabel(t('Sticky'))
       ->setDescription(t('A boolean indicating whether the node should be displayed at the top of lists in which it appears.'));
 
-    // @todo Convert to a "timestamp" field in https://drupal.org/node/2145103.
     $fields['revision_timestamp'] = FieldDefinition::create('integer')
       ->setLabel(t('Revision timestamp'))
       ->setDescription(t('The time that the current revision was created.'))

@@ -1,0 +1,7 @@
+type: module
+name: Kint
+description: 'Debug wrapper functions'
+package: Development
+core: 8.x
+tags:
+ - developer

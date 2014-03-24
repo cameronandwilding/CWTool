@@ -30,7 +30,7 @@ class ChecklistSettingsForm extends ConfigFormBase {
 
     $form['checkbox'] = array(
       '#type' => 'radios',
-      '#title' => t('Position of the checkbox on a checklist '),
+      '#title' => t('Position of the checkbox on a checklist'),
       '#options' => $active,
       '#default_value' => $config->get('checklist_default'),
     );

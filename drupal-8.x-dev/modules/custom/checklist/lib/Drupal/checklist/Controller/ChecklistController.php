@@ -11,7 +11,7 @@ use Drupal\Core\Config\Entity\ConfigEntityListController;
 use Drupal\Core\Entity\EntityListControllerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Controller\ControllerBase;
-
+use Drupal\checklist\ChecklistInterface;
 
 
 
@@ -43,5 +43,4 @@ class ChecklistController extends ControllerBase {
     // You probably want a few more properties here...
     return $row + parent::buildRow($entity);
   }
-
 }

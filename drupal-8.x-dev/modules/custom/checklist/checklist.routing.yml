@@ -22,10 +22,18 @@ checklist.edit:
   requirements:
     _permission: 'administer content types'
 
+checklist.term:
+  path: '/checklist/{taxonomy_term}'
+  defaults:
+    _form: '\Drupal\checklist\Form\ChecklistSettingsForm'
+    _title: 'checklist items'
+  requirements:
+    _permission: 'administer content types'
+
 checklist.add:
   path: '/checklist/add'
   defaults:
-    _title: 'Add checklist'
+    _title: 'Add checklist item'
     _entity_form: checklist.add
   options:
     _access_mode: 'ANY'

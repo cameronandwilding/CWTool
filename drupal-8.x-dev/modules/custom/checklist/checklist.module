@@ -31,6 +31,11 @@ function checklist_menu() {
     'route_name' => 'checklist.edit',
   );
 
+  $items['checklist/%taxonomy_term'] = array(
+    'title' => 'Checklist term',
+    'route_name' => 'checklist.term',
+  );
+
   return $items;
 }
 
@@ -53,8 +58,8 @@ function checklist_admin_paths() {
     $paths = array(
       'checklist/*/edit' => TRUE,
       'checklist/*/delete' => TRUE,
-      'node/add' => TRUE,
-      'node/add/*' => TRUE,
+      'checklist/add' => TRUE,
+      'checklist/add/*' => TRUE,
     );
     return $paths;
   }
@@ -69,23 +74,50 @@ function checklist_admin_paths() {
  * @return \Drupal\checklist\Entity\checklistItemType
  *   A Foo type object or NULL if $name does not exist.
  */
+/*
 function checklist_type_load($name) {
   return entity_load('checklist_type', $name);
 }
-
+*/
 /**
  * Loads a checklist item entity from the database.
  *
  * @param int $id
- *   The Foo entity ID.
+ *   The checklist entity ID.
  * @param bool $reset
  *   (optional) Whether to reset the static cache. Defaults to
  *   FALSE.
  *
  * @return \Drupal\checklist\Entity\checklistItemInterface|null
- *   A fully-populated Foo entity, or NULL if the entity is not found.
+ *   A fully-populated checklist entity, or NULL if the entity is not found.
  */
 function checklist_load($id, $reset = FALSE) {
   return entity_load('checklist_item', $id, $reset);
 }
+
+/**
+ * Implements hook_field_formatter_settings_summary_alter().
+ */
+function checklist_field_formatter_settings_summary_alter(&$summary, $context) {
+  // Append a message to the summary when an instance of foo_formatter has
+  // mysetting set to TRUE for the current view mode.
+  if ($context['formatter']->getPluginId() == 'checklist_formatter') {
+    if ($context['formatter']->getSetting('mysetting')) {
+      $summary[] = t('My setting enabled.');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function checklist_formatter_theme() {
+  return array(
+    'checklist_link_formatter' => array(
+      'variables' => array('url' => NULL),
+      'template' => 'checklist-link-formatter',
+    ),
+  );
+}
+?>
 
