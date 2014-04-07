@@ -1,0 +1,571 @@
+<?php
+/**
+ * @file
+ * Helper functions.
+ */
+
+/**
+ * Checks if a value exist (for a given key) in a multidimensional array.
+ *
+ * Example usage: check a value in a field array:
+ * Haystack:
+ * [
+ *  0: [value: 123, format: decimal],
+ *  1: [value: 456, format: decimal],
+ * ]
+ * Value key: 'value'
+ * Needle: 456
+ * Return: TRUE
+ *
+ * @param array $haystack
+ *  An array of keys from an entity object.
+ * @param $value_key
+ *  The key of the value.
+ * @param $needle
+ *  The value to look for.
+ *
+ * @return bool
+ *  Boolean flag if the value is in the multidimensional-array.
+ */
+function cw_tool_check_value_in_multidimensional_array(array $haystack, $value_key, $needle) {
+  array_walk($haystack, function (&$item, $idx, $key) {
+    $item = isset($item[$key]) ? $item[$key] : NULL;
+  }, $value_key);
+  return in_array($needle, $haystack);
+}
+
+/**
+ * Delete a content type. Remove related variables. Rebuild node-type and menu cache.
+ *
+ * @param $content_type
+ *  Content type name.
+ */
+function cw_tool_delete_content_type($content_type) {
+  node_type_delete($content_type);
+  variable_del('node_preview_' . $content_type);
+  variable_del('comment_subject_field_' . $content_type);
+  node_types_rebuild();
+  menu_rebuild();
+}
+
+/**
+ * Removes unused fields from the Drupal database.
+ *
+ * Called in implementations of hook_update_N when a field is removed from a
+ * feature. This is a wrapper function for crimson_helper_delete_field.
+ *
+ * @param $fields_to_delete
+ *  An array of field names for deletion.
+ */
+function cw_tool_delete_field_multiple(array $fields_to_delete) {
+  // Before we begin, we need to get rid of those pesky temp tables that hang about after a field is deleted.
+  _cw_tool_purge_deleted_fields();
+
+  // Loop through each field name and delete each individually.
+  foreach ($fields_to_delete as $field_name) {
+    field_delete_field($field_name);
+    watchdog(__FUNCTION__, 'Deleted the @field_name field from all content type instances.', array('@field_name' => $field_name));
+  }
+
+  // Now force a purge of all the deleted tables again.
+  _cw_tool_purge_deleted_fields();
+}
+
+/**
+ * Private sub-method to erase already deleted fields.
+ */
+function _cw_tool_purge_deleted_fields() {
+  $result = db_query("SHOW TABLES LIKE 'field_deleted_%'")->fetchCol();
+  foreach ($result as $table) {
+    db_drop_table($table);
+  }
+
+  db_delete('field_config')->condition('deleted', 1)->execute();
+  $num_deleted = db_delete('field_config_instance')->condition('deleted', 1)->execute();
+
+  watchdog(__FUNCTION__, 'Purged @num_deleted deleted fields from the database', array('@num_deleted' => $num_deleted));
+}
+
+/**
+ * Creates taxonomy terms for the vocabulary.
+ *
+ * Called in implementations of hook_update_N when a taxonomy is created
+ * in a feature.
+ *
+ * @param $vocabulary
+ *  The vocabulary where the new terms will be created.
+ *
+ * @param $terms
+ *  An array of term names to add.
+ */
+function cw_tool_create_term_multiple($vocabulary, array $terms = array()) {
+  // Get the vid of the vocabulary that is loaded.
+  $vid = taxonomy_vocabulary_machine_name_load($vocabulary)->vid;
+
+  // Add each term to the vocabulary.
+  foreach ($terms as $term_name) {
+    // Make sure that the term doesn't already exist. It's possible that we'll
+    // need to add terms in more than one module for the emerald project. This
+    // makes sure terms don't get duplicated.
+    $pre_existing = taxonomy_get_term_by_name($term_name, $vocabulary);
+    if (!reset($pre_existing)) {
+      $term = (object) array(
+        'name' => $term_name,
+        'vid' => $vid,
+      );
+      taxonomy_term_save($term);
+    }
+  }
+}
+
+/**
+ * Reset features cache and revert the features.
+ * Useful when you want to use the component the same time you enabled the feature (eg in the same update hook).
+ * In that case the component is still not created (queued) so you need to trigger the creation manually.
+ *
+ * @param $features
+ *  The feature to be reset and reverted.
+ * @param $component
+ *  The feature component to be reverted.
+ */
+function cw_tool_revert_feature($features, $component) {
+  // Reset features cache.
+  features_get_info('feature', $features, TRUE);
+
+  // Revert taxonomy defined by the feature.
+  features_revert(array($features => array($component)));
+}
+
+/**
+ * Creates a new field collection entity and attach to a host entity.
+ *
+ * @param $entity
+ *  Host entity object.
+ * @param $field_name
+ *  Field name string of the field collection (aka bundle).
+ * @param $entity_type
+ *  Entity type of the host entity. Default: node.
+ *
+ * @return stdClass|FALSE
+ *  Field collection entity object - or FALSE if the operation failed.
+ */
+function cw_tool_add_field_collection($entity, $field_name, $entity_type = 'node') {
+  if (!module_exists('field_collection')) {
+    watchdog(__FUNCTION__, 'Module \'field_collection\' is not enabled.', array(), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  $field_collection = entity_create('field_collection_item', array('field_name' => $field_name));
+  $field_collection->setHostEntity($entity_type, $entity);
+  return $field_collection;
+}
+
+/**
+ * Delete a field instance from an entity.
+ *
+ * @param $field_name
+ *  Field name.
+ * @param $bundle
+ *  Bundle name.
+ * @param string $entity_type
+ *  (Optional) Entity name. Default: node.
+ */
+function cw_tool_delete_field_instance($field_name, $bundle, $entity_type = 'node') {
+  $field = field_read_instance($entity_type, $field_name, $bundle);
+  field_delete_instance($field, FALSE);
+}
+
+/**
+ * Converts a bitmap file to png.
+ *
+ * @param $file
+ *  The file that needs to be converted to png.
+ * @param $type
+ *  The type of the file that needs to be converted to png.
+ *
+ * @return bool
+ *  TRUE if the file was successfully converted to PNG, FALSE otherwise.
+ */
+function cw_tool_convert_to_png($file, $type) {
+  // Load the object of the file we want to convert
+  $basename = basename($file->uri, $type);
+  $new_uri = drupal_dirname($file->uri) . '/' . $basename . '.png';
+  // Try converting the file to png with imagemagick
+  $dest = _imagemagick_convert($file->uri, $new_uri, array());
+  if (!$dest) {
+    watchdog(__FUNCTION__, 'Imagemagick failed to convert the uploaded file to png.', array(), WATCHDOG_WARNING);
+    return FALSE;
+  }
+
+  $file->uri = $new_uri;
+  $file->filename = $basename . '.png';
+  $file->filemime = 'image/png';
+  file_save($file);
+
+  watchdog(__FUNCTION__, 'Imagemagick converted uploaded file to png.');
+  return TRUE;
+}
+
+/**
+ * Wrapper for watchdog to handle multiple variable logging.
+ *
+ * @param $scope
+ *  Original scope - __FUNCTION__, __METHOD__ or similar.
+ * @param $values
+ *  The key - value array of values that will be presented in the message.
+ * @param $severity
+ *  (optional) The severity of the error - watchdog error level code.
+ * @param $message
+ *  (optional) Message string.
+ */
+function cw_tool_var_watchdog($scope, array $values, $severity = WATCHDOG_WARNING, $message = 'CW watchdog') {
+  $arguments = array();
+  foreach ($values as $key => $value) {
+    // To be able to check objects we convert them to arrays.
+    if (is_object($value)) {
+      $value = (array) $value;
+    }
+    // Flattening arrays into strings.
+    if (is_array($value)) {
+      $value = '(string value)' . preg_replace("/[\n\t\r ]/m", '', var_export($value, TRUE));
+    }
+    $arguments[':' . $key] = str_replace(array("\n", "\r"), '{line-break}', $value);
+    $message .= " $key=(:$key)";
+  }
+
+  watchdog($scope, $message, $arguments, $severity);
+}
+
+/**
+ * Purges all terms from a vocabulary.
+ *
+ * @param $vocabulary_name
+ *  The name of the vocabulary.
+ */
+function cw_tool_purge_terms($vocabulary_name) {
+  $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+  $tree = taxonomy_get_tree($vocabulary->vid);
+
+  // We'll assume for now that the vocabulary is flat.
+  foreach ($tree as $term) {
+    taxonomy_term_delete($term->tid);
+  }
+}
+
+/**
+ * Purges all terms from a vocabulary except specific terms listed.
+ * Multiple terms with the same name will also be ignored when listed.
+ *
+ * @param $vocabulary_name
+ *  The name of the vocabulary.
+ * @param $terms_to_ignore
+ *  The names of the terms to keep in a vocabulary.
+ */
+function cw_tool_purge_all_terms_except_listed_terms($vocabulary_name, array $terms_to_ignore = array()) {
+  // Fetch vocabulary info.
+  $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+
+  if (!$vocabulary) {
+    watchdog(__FUNCTION__, 'Missing vocabulary: @name', array('@name' => $vocabulary_name), WATCHDOG_ERROR);
+    return;
+  }
+
+  $tree = taxonomy_get_tree($vocabulary->vid);
+  // Delete terms that are not listed as ignored.
+  foreach ($tree as $term) {
+    if (!in_array($term->name, $terms_to_ignore)) {
+      taxonomy_term_delete($term->tid);
+    }
+  }
+}
+
+/**
+ * Deletes only specific terms that exist from a vocabulary.
+ *
+ * @param $vocabulary
+ *  The name of the vocabulary.
+ * @param $terms
+ *  The names of the terms to delete from a vocabulary.
+ * @param $force_delete_multiple
+ *  Force deletion of multiple terms.
+ */
+function cw_tool_delete_term_multiple($vocabulary, array $terms = array(), $force_delete_multiple = FALSE) {
+  foreach ($terms as $term_name) {
+    $existing_terms = taxonomy_get_term_by_name($term_name, $vocabulary);
+    // Check if there is more than one term and is a forced deletion or if there is only one term.
+    if (!(count($existing_terms) > 1 && !$force_delete_multiple)) {
+      foreach ($existing_terms as $existing_term) {
+        taxonomy_term_delete($existing_term->tid);
+      }
+    }
+  }
+}
+
+/**
+ * Provides a debugging backtrace with function name and file name.
+ */
+function cw_tool_print_backtrace() {
+  $backtrace = array_map('_cw_tool_parse_function_name', debug_backtrace());
+  print_r($backtrace);
+}
+
+/**
+ * Returns the function and file name of each element in an array.
+ * 
+ * @param $element
+ * @return string
+ */
+function _cw_tool_parse_function_name($element) {
+  return $element['function'] . ' >> ' . $element['file'];
+}
+
+/**
+ * Determine whether a given account has the requested roles.
+ * 
+ * @param $role_ids
+ *  An array of Role IDs.
+ * @param $account
+ *  The optional user object to check. The default is to check the logged in user.
+ * @param $any
+ *  A boolean indication whether "any" or "all" roles are required.
+ *  
+ * @return boolean
+ *  Whether the user has the required roles.
+ */
+function cw_tool_user_has_role($role_ids, $account = NULL, $any = TRUE) {
+  if (empty($account)) {
+    $account = $GLOBALS['user'];
+  }
+  
+  if (!is_array($role_ids)) {
+    $role_ids = array($role_ids);
+  }
+  
+  $account_role_ids = array_keys($account->roles);
+  $common_role_ids = array_intersect($role_ids, $account_role_ids);
+  
+  if ($any) {
+    if (!empty($common_role_ids)) {
+      return TRUE;
+    }
+  } 
+  elseif (count($common_role_ids) == count($role_ids)) {
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Does a case insensitive search for a file.
+ * @see http://stackoverflow.com/questions/3964793/php-case-insensitive-version-of-file-exists
+ *
+ * @param $file_name
+ *  The file name (including path) that we're checking exists.
+ *
+ * @return bool $file
+ *  The path to the file name (with correct case), or FALSE if the file doesn't
+ *  exist.
+ */
+function cw_tool_file_exists_case_insensitive($file_name) {
+  if (file_exists($file_name)) {
+    return $file_name;
+  }
+
+  // Handle case insensitive requests.
+  // glob doesn't support file stream wrappers like private://, so we need to
+  // call the drupal_realpath function.
+  $directory_name = drupal_realpath(dirname($file_name));
+  $files = glob($directory_name . '/*', GLOB_NOSORT);
+  $file_name_lower_case = drupal_strtolower(basename($file_name));
+  foreach ($files as $file) {
+    if (drupal_strtolower(basename($file)) == $file_name_lower_case) {
+      return $file;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Resets the taxonomy (or taxonomies) to be ordered alphabetically. 
+ * 
+ * @param $vocabulary_names
+ *  A single string or array of vocabulary machine names.
+ */
+function cw_tool_reset_taxonomy_to_alphabetical($vocabulary_names) {
+  $vocabularies = taxonomy_vocabulary_load_multiple(NULL, array('machine_name' => $vocabulary_names));
+  $vocabulary_ids = array_keys($vocabularies);
+  db_update('taxonomy_term_data')
+    ->fields(array('weight' => 0))
+    ->condition('vid', $vocabulary_ids)
+    ->execute();
+}
+
+/**
+ * Save fields on an entity instead of saving the whole entity. 10 times faster than saving the entity in average.
+ *
+ * @param stdClass $entity
+ *  Entity.
+ * @param $entity_type
+ *  Entity type.
+ * @param array $field_names
+ *  List of field names to be saved on the entity.
+ *  These items have to be part of the entity object (either new or existing field). Only the entity has to exist in
+ *   the database before the call.
+ *  It's also possible to pass an incomplete entity without loading it from the db, if it has the id/revision/bundle
+ *   on it:
+ *  @code
+ *    $node = new stdClass();
+ *    $node->nid = 1;
+ *    $node->vid = 1;
+ *    $node->type = 'post';
+ *    $node->field_tag[LANGUAGE_NONE][0]['tid'] = 1;
+ *    crimson_helper_save_fields_on_entity($node, 'node', array('field_tag'));
+ *  @endcode
+ */
+function cw_tool_save_fields_on_entity(stdClass $entity, $entity_type, array $field_names) {
+  // Gathering info about the entity.
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+  $entity_info = entity_get_info($entity_type);
+
+  // Create dummy object to ease the process.
+  $dummy_entity = new stdClass();
+  $dummy_entity->{$entity_info['entity keys']['id']} = $id;
+
+  if ($entity_info['entity keys']['revision']) {
+    $dummy_entity->{$entity_info['entity keys']['revision']} = $vid;
+  }
+  if ($entity_info['entity keys']['bundle']) {
+    $dummy_entity->{$entity_info['entity keys']['bundle']} = $bundle;
+  }
+
+  // Attach fields to the dummy.
+  foreach ($field_names as $field_name) {
+    $dummy_entity->{$field_name} = $entity->{$field_name};
+  }
+
+  // Trigger field API hooks.
+  field_attach_presave($entity_type, $dummy_entity);
+  field_attach_update($entity_type, $dummy_entity);
+
+  // Invalidate cache for the entity.
+  entity_get_controller($entity_type)->resetCache(array($id));
+}
+
+/**
+ * Purges all terms from a vocabulary.
+ *
+ * @param string $vocabulary_name
+ *  Vocabulary name.
+ */
+function cw_tool_purge_terms_of_vocabulary($vocabulary_name) {
+  // Fetch vocabulary info.
+  $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+
+  if (!$vocabulary) {
+    watchdog(__FUNCTION__, 'Missing vocabulary: @name', array('@name' => $vocabulary_name), WATCHDOG_ERROR);
+    return;
+  }
+
+  $tree = taxonomy_get_tree($vocabulary->vid);
+
+  // We'll assume for now that the vocabulary is flat.
+  foreach ($tree as $term) {
+    taxonomy_term_delete($term->tid);
+  }
+}
+
+/**
+ * Delete a vocabulary and all the terms.
+ *
+ * @param string $vocabulary_name
+ *  Name of the vocabulary.
+ */
+function cw_tool_delete_vocabulary($vocabulary_name) {
+  // Fetch vocabulary info.
+  $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+
+  if (!$vocabulary) {
+    watchdog(__FUNCTION__, 'Missing vocabulary: @name', array('@name' => $vocabulary_name), WATCHDOG_ERROR);
+    return;
+  }
+
+  // Delete terms.
+  cw_tool_purge_terms_of_vocabulary($vocabulary_name);
+
+  // Delete vocabulary.
+  taxonomy_vocabulary_delete($vocabulary->vid);
+}
+
+/**
+ * Delete a list of vocabularies and all the terms.
+ *
+ * @param array $vocabulary_names
+ *  Names of the vocabularies.
+ */
+function cw_tool_delete_vocabulary_multiple(array $vocabulary_names) {
+  foreach ($vocabulary_names as $vocabulary_name) {
+    cw_tool_delete_vocabulary($vocabulary_name);
+  }
+}
+
+/**
+ * Adds menu items to a menu.
+ *
+ * @param array $menu_items
+ *  The menu items added.
+ * @param $menu_name
+ *  The name of the menu the menu items will be added to.
+ * @param $weight
+ *  The weight set for the first menu item and increments
+ *  when there is more than one menu item.
+ */
+function cw_tool_add_submenus(array $menu_items, $menu_name, $weight = 1) {
+  // Create path for each link.
+  foreach ($menu_items as $title => $path) {
+    // Create menu items in the menu.
+    $item = array(
+      'link_title' => $title,
+      'link_path' => $path,
+      'menu_name' => $menu_name,
+      'weight' => $weight,
+    );
+
+    menu_link_save($item);
+    $weight++;
+  }
+}
+
+/**
+ * Get the value of a field on a field collection - when the format of the field-collection data is not sure.
+ * For example this happens when you work with node objects through node-api or form-api. Node api gives you object
+ * where you can find the field collection id (and you need to load the field collection), form api gives you array
+ * where you have already all the field data:
+ *
+ * Form API:
+ *   NODE[FIELD_COLLECTION][LANGUAGE][DELTA] = array(<field data>).
+ *
+ * Node API:
+ *   NODE->[FIELD_COLLECTION][LANGUAGE][DELTA] = array(value => FIELD_COLLECTION_ID).
+ *
+ * @param $field_collection_item
+ *  The field collection item object or array.
+ * @param $field_name
+ *  Name of the field on the field collection.
+ *
+ * @return mixed|null
+ *  Field value array if exists. NULL otherwise.
+ */
+function cw_tool_get_value_in_an_object_or_array_field_collection_field($field_collection_item, $field_name) {
+  if (isset($field_collection_item['value'])) {
+    $field_collection = entity_load_single('field_collection_item', $field_collection_item['value']);
+    if (isset($field_collection->{$field_name}[LANGUAGE_NONE][0])) {
+      return $field_collection->{$field_name}[LANGUAGE_NONE][0];
+    }
+  }
+  elseif (isset($field_collection_item[$field_name][LANGUAGE_NONE][0])) {
+    return $field_collection_item[$field_name][LANGUAGE_NONE][0];
+  }
+
+  return NULL;
+}
