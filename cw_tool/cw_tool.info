@@ -1,4 +1,0 @@
-name = "Cameron & Wilding Tools"
-description = "General helper methods for regular Drupal development"
-core = 7.x
-files[] = "tests/CWToolWebTestCase.test"
