@@ -1,8 +1,0 @@
-name: Checklist
-type: module
-description: 'Allows users to create checklists.'
-version: VERSION
-core: 8.x
-dependencies:
-  - node
-configure: checklist.settings

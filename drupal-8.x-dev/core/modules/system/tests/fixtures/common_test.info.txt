@@ -1,6 +1,0 @@
-name: common_test
-type: module
-description: 'testing info file parsing'
-simple_string: 'A simple string'
-version: "VERSION"
-double_colon: dummyClassName::
