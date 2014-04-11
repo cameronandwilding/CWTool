@@ -513,7 +513,7 @@ function cw_tool_delete_vocabulary_multiple(array $vocabulary_names) {
  * Adds menu items to a menu.
  *
  * @param array $menu_items
- *  The menu items added.
+ *  The menu items added. An associative array formatted as 'link title' => 'link path'.
  * @param $menu_name
  *  The name of the menu the menu items will be added to.
  * @param $weight
@@ -576,7 +576,7 @@ function cw_tool_get_value_in_an_object_or_array_field_collection_field($field_c
  * @param array $menu
  *  The menu to be created.
  * @param array $menu_items
- *  The menu items added.
+ *  The menu items added. An associative array formatted as 'link title' => 'link path'.
  * @param $weight
  *  The weight set for the first menu item and increments
  *  when there is more than one menu item.
