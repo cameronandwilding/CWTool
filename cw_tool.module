@@ -311,7 +311,7 @@ function cw_tool_print_backtrace() {
 
 /**
  * Returns the function and file name of each element in an array.
- * 
+ *
  * @param $element
  * @return string
  */
@@ -321,14 +321,14 @@ function _cw_tool_parse_function_name($element) {
 
 /**
  * Determine whether a given account has the requested roles.
- * 
+ *
  * @param $role_ids
  *  An array of Role IDs.
  * @param $account
  *  The optional user object to check. The default is to check the logged in user.
  * @param $any
  *  A boolean indication whether "any" or "all" roles are required.
- *  
+ *
  * @return boolean
  *  Whether the user has the required roles.
  */
@@ -336,23 +336,23 @@ function cw_tool_user_has_role($role_ids, $account = NULL, $any = TRUE) {
   if (empty($account)) {
     $account = $GLOBALS['user'];
   }
-  
+
   if (!is_array($role_ids)) {
     $role_ids = array($role_ids);
   }
-  
+
   $account_role_ids = array_keys($account->roles);
   $common_role_ids = array_intersect($role_ids, $account_role_ids);
-  
+
   if ($any) {
     if (!empty($common_role_ids)) {
       return TRUE;
     }
-  } 
+  }
   elseif (count($common_role_ids) == count($role_ids)) {
     return TRUE;
   }
-  
+
   return FALSE;
 }
 
@@ -387,8 +387,8 @@ function cw_tool_file_exists_case_insensitive($file_name) {
 }
 
 /**
- * Resets the taxonomy (or taxonomies) to be ordered alphabetically. 
- * 
+ * Resets the taxonomy (or taxonomies) to be ordered alphabetically.
+ *
  * @param $vocabulary_names
  *  A single string or array of vocabulary machine names.
  */
@@ -513,7 +513,7 @@ function cw_tool_delete_vocabulary_multiple(array $vocabulary_names) {
  * Adds menu items to a menu.
  *
  * @param array $menu_items
- *  The menu items added. An associative array formatted as 'link title' => 'link path'.
+ *  The menu items added.
  * @param $menu_name
  *  The name of the menu the menu items will be added to.
  * @param $weight
@@ -576,7 +576,7 @@ function cw_tool_get_value_in_an_object_or_array_field_collection_field($field_c
  * @param array $menu
  *  The menu to be created.
  * @param array $menu_items
- *  The menu items added. An associative array formatted as 'link title' => 'link path'.
+ *  The menu items added.
  * @param $weight
  *  The weight set for the first menu item and increments
  *  when there is more than one menu item.
@@ -713,7 +713,7 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
 }
 
 /**
- * Get menu links from a given path and menu name.
+ * Gets a menu link from a given path and menu name.
  *
  * @param $path
  *  The link_path of the menu item.
@@ -721,16 +721,39 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
  *  The name of the menu the link belongs to.
  *
  * @return array
- *  An array of data from the menu_links table.
+ *  A menu link, with $item['access'] filled and link translated for rendering.
  */
 function cw_tool_get_menu_link_from_path_and_menu_name($path, $menu_name) {
-  $menu_links = db_select('menu_links', 'ml')
-    ->fields('ml')
+  $query = db_select('menu_links', 'ml')
+    ->fields('ml', array('mlid'))
     ->condition('ml.link_path', $path)
     ->condition('ml.menu_name', $menu_name)
     ->execute()
-    ->fetchAll();
-  return $menu_links;
+    ->fetchCol();
+  $mlid = current($query);
+  return menu_link_load($mlid);
+}
+
+/**
+ * Gets a menu link from a given link title and menu name.
+ *
+ * @param $link_title
+ *  The link title of the menu item.
+ * @param $menu_name
+ *  The name of the menu the link belongs to.
+ *
+ * @return array
+ *  A menu link, with $item['access'] filled and link translated for rendering.
+ */
+function cw_tool_get_menu_link_from_link_title_and_menu_name($link_title, $menu_name) {
+  $query = db_select('menu_links', 'ml')
+    ->fields('ml', array('mlid'))
+    ->condition('ml.link_title', $link_title)
+    ->condition('ml.menu_name', $menu_name)
+    ->execute()
+    ->fetchCol();
+  $mlid = current($query);
+  return menu_link_load($mlid);
 }
 
 /**
@@ -780,4 +803,52 @@ function cw_tool_create_node($title, $type, array $additional_information = arra
   // Save node and return.
   node_save($node);
   return $node;
+}
+
+/**
+ * Delete a mini panel by it's machine name.
+ *
+ * @param string $machine_name
+ *  The machine name of the mini panel.
+ *
+ * @return bool
+ *  False if mini panel not found.
+ */
+function cw_tool_delete_mini_panel_by_machine_name($machine_name) {
+  $mini_panel = panels_mini_load($machine_name);
+
+  // Panel mini load will not return anything if panel is not found.
+  if (empty($mini_panel)) {
+    return FALSE;
+  }
+
+  // Delete the mini panel.
+  panels_mini_delete($mini_panel);
+  return TRUE;
+}
+
+/**
+ * Enable a ctools page manager page.
+ *
+ * @param string $page_name
+ *  The machine name of the page.
+ * @param bool $enable
+ *  TRUE to enable the page. FALSE to disable the page.
+ *
+ * @return bool
+ *  TRUE if action complete.
+ */
+function cw_tool_enable_page_manager_page($page_name, $enable = TRUE) {
+  $page = page_manager_get_page_cache($page_name);
+
+  // Page not found.
+  if (!is_object($page)) {
+    return FALSE;
+  }
+
+  $function = ctools_plugin_get_function($page->subtask, 'enable callback');
+  // This is madness, the enable callback will expect a parameter for disabling.
+  // This is why function names need to make sense.
+  $disable = !$enable;
+  return $function($page, $disable);
 }
