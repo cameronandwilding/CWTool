@@ -713,7 +713,7 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
 }
 
 /**
- * Get menu links from a given path and menu name.
+ * Gets a menu link from a given path and menu name.
  *
  * @param $path
  *  The link_path of the menu item.
@@ -721,16 +721,39 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
  *  The name of the menu the link belongs to.
  *
  * @return array
- *  An array of data from the menu_links table.
+ *  A menu link, with $item['access'] filled and link translated for rendering.
  */
 function cw_tool_get_menu_link_from_path_and_menu_name($path, $menu_name) {
-  $menu_links = db_select('menu_links', 'ml')
-    ->fields('ml')
+  $query = db_select('menu_links', 'ml')
+    ->fields('ml', array('mlid'))
     ->condition('ml.link_path', $path)
     ->condition('ml.menu_name', $menu_name)
     ->execute()
-    ->fetchAll();
-  return $menu_links;
+    ->fetchCol();
+  $mlid = current($query);
+  return menu_link_load($mlid);
+}
+
+/**
+ * Gets a menu link from a given link title and menu name.
+ *
+ * @param $link_title
+ *  The link title of the menu item.
+ * @param $menu_name
+ *  The name of the menu the link belongs to.
+ *
+ * @return array
+ *  A menu link, with $item['access'] filled and link translated for rendering.
+ */
+function cw_tool_get_menu_link_from_link_title_and_menu_name($link_title, $menu_name) {
+  $query = db_select('menu_links', 'ml')
+    ->fields('ml', array('mlid'))
+    ->condition('ml.link_title', $link_title)
+    ->condition('ml.menu_name', $menu_name)
+    ->execute()
+    ->fetchCol();
+  $mlid = current($query);
+  return menu_link_load($mlid);
 }
 
 /**
