@@ -6,4 +6,4 @@ dependencies[] = entity
 
 files[] = "tests/CWToolWebTestCase.test"
 files[] = include/CWToolEntityWrapper.php
-files[] = include/CWToolDarwinNodeWrapper.php
+files[] = include/CWToolNodeWrapper.php

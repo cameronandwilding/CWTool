@@ -9,7 +9,7 @@
  *
  * - instantiating a node:
  * @code
- * $node = DarwinEntityWrapper::getOrCreate('node', 123, 'DarwinEntityWrapper');
+ * $node = EntityWrapper::getOrCreate('node', 123, 'EntityWrapper');
  * @endcode
  *
  * - getting the node object:
@@ -33,7 +33,7 @@
  *
  * - suggested subclassing:
  * @code
- * class MyType extends DarwinEntityWrapper {
+ * class MyType extends EntityWrapper {
  *   public static function createFromMyID($my_id) {
  *     return self::getOrCreate('my_type', $my_id, __CLASS__);
  *   }
@@ -108,7 +108,8 @@ class CWToolEntityWrapper {
    *  Entity ID.
    * @param $subclass_name
    *  Name of the class to create. Usually just __CLASS__ (See sub-classing example in the file header doc block).
-   * @return DarwinEntityWrapper
+   * @return 
+EntityWrapper
    */
   protected static function getOrCreate($entity_type, $entity_id, $subclass_name) {
     if (!isset(self::$cache[$entity_type][$entity_id]) && is_subclass_of($subclass_name, __CLASS__)) {
