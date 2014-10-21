@@ -5,5 +5,5 @@ core = 7.x
 dependencies[] = entity
 
 files[] = "tests/CWToolWebTestCase.test"
-files[] = include/CWToolEntityWrapper.php
-files[] = include/CWToolNodeWrapper.php
+files[] = include/model/CWToolEntityWrapper.php
+files[] = include/model/CWToolNodeWrapper.php
