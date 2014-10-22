@@ -18,7 +18,7 @@ class CWToolNodeWrapper extends CWToolEntityWrapper {
    * @return static
    */
   public static function fromNID($nid) {
-    return self::getOrCreate('node', $nid, get_called_class());
+    return self::getOrCreate('node', $nid);
   }
 
   /**

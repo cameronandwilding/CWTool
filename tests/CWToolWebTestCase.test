@@ -16,7 +16,7 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'CW-Tools test',
+      'name' => 'CWTools helper test',
       'description' => 'General functionality test.',
       'group' => 'CW',
     );

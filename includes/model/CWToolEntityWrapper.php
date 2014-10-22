@@ -52,9 +52,9 @@ class CWToolEntityWrapper {
   /**
    * Instance cache.
    *
-   * @var array
+   * @var CWCollection
    */
-  private static $cache = array();
+  private static $cache;
 
   /**
    * Entity type.
@@ -87,6 +87,13 @@ class CWToolEntityWrapper {
   private $drupalObject;
 
   /**
+   * Update flag.
+   *
+   * @var bool
+   */
+  private $isUpdated = FALSE;
+
+  /**
    * Constructor.
    *
    * @param string $entity_type
@@ -106,18 +113,21 @@ class CWToolEntityWrapper {
    *  Entity type string.
    * @param $entity_id
    *  Entity ID.
-   * @param $subclass_name
-   *  Name of the class to create. Usually just __CLASS__ (See sub-classing example in the file header doc block).
-   * @return 
-EntityWrapper
+   * @return EntityWrapper
    */
-  protected static function getOrCreate($entity_type, $entity_id, $subclass_name) {
-    if (!isset(self::$cache[$entity_type][$entity_id]) && is_subclass_of($subclass_name, __CLASS__)) {
-      $instance = new $subclass_name($entity_type, $entity_id);
-      self::$cache[$entity_type][$entity_id] = $instance;
+  protected static function getOrCreate($entity_type, $entity_id) {
+    // Init cache.
+    if (empty(self::$cache)) {
+      self::$cache = new CWCollection();
     }
 
-    return self::$cache[$entity_type][$entity_id];
+    $key = "$entity_type:$entity_id";
+    if (!self::$cache->keyExist($key)) {
+      $instance = new static($entity_type, $entity_id);
+      self::$cache->set($key, $instance);
+    }
+
+    return self::$cache->get($key);
   }
 
   /**
@@ -179,6 +189,43 @@ EntityWrapper
   public function __set($name, $value) {
     // Proxy magic setter towards the entity metadata wrapper.
     $this->getEntityMetadataWrapper()->__set($name, $value);
+    $this->setDirty();
+  }
+
+  public function save() {
+    entity_save($this->entityType, $this->getDrupalObject());
+    $this->setClean();
+  }
+
+  /**
+   * @return boolean
+   */
+  public function isDirty() {
+    return $this->isUpdated;
+  }
+
+  /**
+   *
+   */
+  public function setDirty() {
+    $this->isUpdated = TRUE;
+  }
+
+  /**
+   *
+   */
+  public function setClean() {
+    $this->isUpdated = FALSE;
+  }
+
+  public static function saveAllUpdatedEntities() {
+    /** @var CWToolEntityWrapper $item */
+    foreach (self::$cache as $item) {
+      dpm($item);
+      if ($item->isDirty()) {
+        $item->save();
+      }
+    }
   }
 
 }
