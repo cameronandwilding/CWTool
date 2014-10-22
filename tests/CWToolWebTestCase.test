@@ -1,7 +1,8 @@
 <?php
 /**
  * @file
- * CW-Tool tests.
+ *
+ * CWTool tests.
  */
 
 /**
@@ -25,7 +26,7 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    * Implements DrupalTestCase::setUp().
    */
   public function setUp() {
-    parent::setUp(array('cw_tool'));
+    parent::setUp(array('cw_tool', 'taxonomy'));
   }
 
   /**
@@ -87,7 +88,38 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    * @see cw_tool_create_term_multiple()
    */
   public function test_cw_tool_create_term_multiple() {
-    // @todo Implement test.
+    $vocabulary_machine_name = drupal_strtolower($this->randomName());
+    $vocabulary_to_create = (object) array(
+      'name' => $this->randomName(),
+      'machine_name' => $vocabulary_machine_name,
+    );
+    taxonomy_vocabulary_save($vocabulary_to_create);
+    $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
+    $this->assertTrue($vocabulary, 'Vocabulary exists.');
+
+    $first_term = $this->randomName();
+    $second_term = $this->randomName();
+    $third_term = $this->randomName();
+    $fourth_term = $this->randomName();
+    $terms_to_create = array(
+      $first_term,
+      $second_term,
+      $third_term,
+      $fourth_term,
+    );
+    cw_tool_create_term_multiple($vocabulary_machine_name, $terms_to_create);
+
+    $terms = taxonomy_get_term_by_name($first_term, $vocabulary_machine_name);
+    $this->assertTrue($terms, 'Term exists.');
+
+    $terms = taxonomy_get_term_by_name($second_term, $vocabulary_machine_name);
+    $this->assertTrue($terms, 'Term exists.');
+
+    $terms = taxonomy_get_term_by_name($third_term, $vocabulary_machine_name);
+    $this->assertTrue($terms, 'Term exists.');
+
+    $terms = taxonomy_get_term_by_name($fourth_term, $vocabulary_machine_name);
+    $this->assertTrue($terms, 'Term exists.');
   }
 
   /**

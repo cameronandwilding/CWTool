@@ -1,4 +1,8 @@
 name = "Cameron & Wilding Tools"
-description = "General helper methods for regular Drupal development"
+description = "General helper methods for regular Drupal 7 development"
 core = 7.x
+dependencies[] = entity
+package = "Cameron&Wilding"
 files[] = "tests/CWToolWebTestCase.test"
+files[] = includes/model/CWToolEntityWrapper.php
+files[] = includes/model/CWToolNodeWrapper.php
