@@ -6,9 +6,9 @@
  */
 
 /**
- * Class CWToolEntityWrapperTest
+ * Class CWToolEntityWrapperTestCase
  */
-class CWToolEntityWrapperTest extends DrupalWebTestCase {
+class CWToolEntityWrapperTestCase extends DrupalWebTestCase {
 
   public function getInfo() {
     return array(
@@ -30,7 +30,7 @@ class CWToolEntityWrapperTest extends DrupalWebTestCase {
       'status' => NODE_PUBLISHED,
     ));
 
-    $container = CWToolNodeWrapper::fromNID($node->nid);
+    $container = NodeModel::fromNID($node->nid);
     $this->assertTrue(!empty($container), 'Node container can be initialized.');
 
     $this->assertEqual(
@@ -58,7 +58,7 @@ class CWToolEntityWrapperTest extends DrupalWebTestCase {
       'Title exist also in drupal object.'
     );
 
-    $containerFromNodeObject = CWToolNodeWrapper::fromNode($node);
+    $containerFromNodeObject = NodeModel::fromNode($node);
     $this->assertEqual(
       $container,
       $containerFromNodeObject,

@@ -5,11 +5,5 @@ dependencies[] = entity
 package = "Cameron&Wilding"
 
 files[] = tests/CWToolWebTestCase.test
-files[] = tests/CWToolEntityWrapperTest.test
-
-files[] = includes/model/CWToolEntityWrapper.php
-files[] = includes/model/CWToolNodeWrapper.php
-
-files[] = includes/util/CWCollection.php
-
-files[] = includes/exception/CWToolCacheKeyExistException.php
+files[] = tests/CWToolEntityWrapperTestCase.test
+files[] = tests/CWToolCollectionTestCase.test

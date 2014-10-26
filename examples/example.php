@@ -1,0 +1,3 @@
+<?php
+
+$loader = new NodeLoader();

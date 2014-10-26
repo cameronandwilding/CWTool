@@ -8,7 +8,7 @@
 /**
  * Class ExampleContentTypeWrapper
  */
-class ExampleContentTypeWrapper extends CWToolNodeWrapper {
+class ExampleContentTypeWrapper extends NodeModel {
 
   const NAME = 'Blog';
 

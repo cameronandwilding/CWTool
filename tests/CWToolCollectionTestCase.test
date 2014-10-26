@@ -1,0 +1,40 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Class CWToolCollectionTestCase
+ */
+class CWToolCollectionTestCase extends DrupalUnitTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Collection test',
+      'description' => 'Collection test',
+      'group' => 'CW',
+    );
+  }
+
+  public function setUp() {
+    require_once __DIR__ . '/../src/util/CWCollection.php';
+    parent::setUp();
+  }
+
+  public function testCollection() {
+    $o1 = new stdClass();
+    $o2 = new stdClass();
+
+    $collection = new CWCollection();
+
+    $this->assertEqual(
+      0,
+      count($collection),
+      'Collection is empty'
+    );
+
+    $collection->set('o1', $o1);
+    $collection->set('o2', $o2);
+  }
+
+}
