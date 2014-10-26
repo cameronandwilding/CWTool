@@ -5,12 +5,19 @@
  * Helper functions.
  */
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/cw_tool.content.inc';
 require_once __DIR__ . '/includes/cw_tool.util.inc';
 
+/**
+ * Get the dependency injection container.
+ *
+ * @return \Symfony\Component\DependencyInjection\ContainerBuilder
+ */
 function cw_tool_get_container() {
   static $container;
 
@@ -19,13 +26,19 @@ function cw_tool_get_container() {
   }
 
   $container = new ContainerBuilder();
-  $container
-    ->register('entity-loader', 'CW\Util\EntityLocalProcessIdentityMap')
-    ->addArgument('CW\Model\EntityModel');
+  $locator = new FileLocator(array(__DIR__ . '/config'));
+  $loader = new YamlFileLoader($container, $locator);
+  $loader->load('services.yml');
 
+  $container->removeDefinition('node.controller.factory');
   $container
-    ->register('node-controller-factory', 'CW\Controller\NodeControllerFactory')
-    ->addArgument('CW\Controller\NodeController');
+    ->register('node.controller.factory', 'CW\Controller\NodeControllerFactory')
+    ->addArgument(new \Symfony\Component\DependencyInjection\Reference('entity.loader'))
+    ->addArgument('CW\Controller\NodeController')
+    ->addArgument('page')
+    ->addArgument('FoF2');
+
+  $container->compile();
 
   return $container;
 }
