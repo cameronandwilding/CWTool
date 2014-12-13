@@ -4,11 +4,12 @@ services:
     arguments:
       - 'CW\Model\EntityModel'
 
-  entity.controller.factory:
+  node.controller.factory:
     class: CW\Controller\EntityControllerFactory
     arguments:
       - @entity.loader
       - 'CW\Controller\BasicEntityController'
+      - 'node'
 
 #  entity.controller:
 #    class: CW\Controller\BasicEntityController

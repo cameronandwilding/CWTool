@@ -25,15 +25,18 @@ class EntityControllerFactory {
 
   protected $controllerClass;
 
-  public function __construct(EntityLocalProcessIdentityMap $entityModelLoader, $controllerClass) {
+  protected $entityType;
+
+  public function __construct(EntityLocalProcessIdentityMap $entityModelLoader, $controllerClass, $entityType) {
     $this->entityModelLoader = $entityModelLoader;
     // @todo add check to base class
     $this->controllerClass = $controllerClass;
+    $this->entityType = $entityType;
   }
 
-  public function initWithTypeAndId($entity_type, $entity_id) {
+  public function initWithId($entity_id) {
     /** @var EntityModel $entityModel */
-    $entityModel = $this->entityModelLoader->getFromEntityID($entity_type, $entity_id);
+    $entityModel = $this->entityModelLoader->getFromEntityID($this->entityType, $entity_id);
     $controller = new $this->controllerClass($entityModel);
     return $controller;
   }

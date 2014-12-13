@@ -102,7 +102,7 @@ class EntityModel implements IEntityModelConstructor {
   public function setDrupalEntityData($drupalEntityData) {
     $this->drupalEntityData = $drupalEntityData;
   }
-  
+
   /**
    * Save data to database.
    */
