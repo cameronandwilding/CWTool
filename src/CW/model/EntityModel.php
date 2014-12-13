@@ -1,18 +1,16 @@
 <?php
 /**
  * @file
- *
- * Basic logical abstraction of a Drupal entity. Caches loaded entities and provide a facade to access Drupal
- * behaviors and the entity metadata wrapper items.
- *
- * Examples:
- *
  */
 
 namespace CW\Model;
 
 /**
- * Class CWToolEntityWrapper
+ * Class EntityModel
+ * @package CW\Model
+ *
+ * Entity model. Provides access to the entity object and the entity metadata
+ * wrapper instance.
  */
 class EntityModel implements IEntityModelConstructor {
 
@@ -128,12 +126,17 @@ class EntityModel implements IEntityModelConstructor {
     $this->setDirty();
   }
 
+  /**
+   * Save data to database.
+   */
   public function save() {
     entity_save($this->entityType, $this->getDrupalEntityData());
     $this->setClean();
   }
 
   /**
+   * Check if object has change.
+   *
    * @return boolean
    */
   public function isDirty() {
@@ -141,14 +144,14 @@ class EntityModel implements IEntityModelConstructor {
   }
 
   /**
-   *
+   * Mark as changed.
    */
   public function setDirty() {
     $this->isUpdated = TRUE;
   }
 
   /**
-   *
+   * Mask as clean.
    */
   public function setClean() {
     $this->isUpdated = FALSE;

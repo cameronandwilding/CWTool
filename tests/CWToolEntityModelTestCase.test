@@ -8,7 +8,7 @@
 /**
  * Class CWToolEntityWrapperTestCase
  */
-class CWToolEntityWrapperTestCase extends DrupalWebTestCase {
+class CWToolEntityModelTestCase extends DrupalWebTestCase {
 
   public function getInfo() {
     return array(

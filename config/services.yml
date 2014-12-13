@@ -5,7 +5,7 @@ services:
       - 'CW\Model\EntityModel'
 
   node.controller.factory:
-    class: CW\Controller\NodeControllerFactory
+    class: CW\Controller\EntityControllerFactory
     arguments:
       - @entity.loader
-      - 'CW\Controller\NodeController'
+      - 'CW\Controller\BasicEntityController'

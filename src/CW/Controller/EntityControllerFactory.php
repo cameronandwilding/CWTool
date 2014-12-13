@@ -11,12 +11,12 @@ use CW\Model\EntityModel;
 use CW\Util\EntityLocalProcessIdentityMap;
 
 /**
- * Class NodeControllerFactory
+ * Class EntityControllerFactory
  * @package CW\Controller
  *
- * The purpose of this class to create
+ * The purpose of this class to create entity controllers.
  */
-class NodeControllerFactory {
+class EntityControllerFactory {
 
   private $defaultEntityControllerClass;
 
@@ -33,33 +33,25 @@ class NodeControllerFactory {
     }
 
     $this->defaultEntityControllerClass = $defaultEntityControllerClass;
-
     $this->entityModelLoader = $entityModelLoader;
-
-    $args = func_get_args();
-    array_shift($args); // Remove entity model loader.
-    array_shift($args); // Remove base class.
-    if (count($args) > 0) {
-      while (count($args)) {
-        $contentTypeName = array_shift($args);
-        $controllerClass = array_shift($args);
-        $this->controllerClassMap[$contentTypeName] = $controllerClass;
-      }
-    }
   }
 
-  public function get($nid) {
-    /** @var EntityModel $node */
-    $node = $this->entityModelLoader->getFromEntityID('node', $nid);
+  public function registerEntityBundleClass($entity_type, $bundle, $class) {
+    $this->controllerClassMap[$entity_type][$bundle] = $class;
+  }
 
-    $nodeType = $node->getDrupalEntityData()->type;
-    if (array_key_exists($nodeType, $this->controllerClassMap)) {
-      $controllerClass = $this->controllerClassMap[$nodeType];
+  public function get($entity_type, $entity_id) {
+    /** @var EntityModel $entityModel */
+    $entityModel = $this->entityModelLoader->getFromEntityID($entity_type, $entity_id);
+
+    list(,, $bundle) = entity_extract_ids($entity_type, $entityModel->getDrupalEntityData());
+    if (!empty($this->controllerClassMap[$entity_type][$bundle])) {
+      $controllerClass = $this->controllerClassMap[$entity_type][$bundle];
     }
     else {
       $controllerClass = $this->defaultEntityControllerClass;
     }
-    $controller = new $controllerClass($node);
+    $controller = new $controllerClass($entityModel);
 
     return $controller;
   }
