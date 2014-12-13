@@ -1,15 +1,11 @@
 services:
-  entity.loader:
-    class: CW\Util\EntityLocalProcessIdentityMap
-    arguments:
-      - 'CW\Model\EntityModel'
+  identity-map:
+    class: CW\Util\LocalProcessIdentityMap
 
   node.controller.factory:
     class: CW\Controller\EntityControllerFactory
     arguments:
-      - @entity.loader
+      - @identity-map
       - 'CW\Controller\BasicEntityController'
+      - 'CW\Model\EntityModel'
       - 'node'
-
-#  entity.controller:
-#    class: CW\Controller\BasicEntityController

@@ -40,4 +40,11 @@ abstract class AbstractEntityController {
     return $this->entityModel;
   }
 
+  /**
+   * @return \EntityDrupalWrapper
+   */
+  public function metadata() {
+    return $this->getEntityModel()->getEntityMetadataWrapper();
+  }
+
 }
