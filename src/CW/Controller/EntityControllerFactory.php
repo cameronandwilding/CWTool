@@ -18,41 +18,23 @@ use CW\Util\EntityLocalProcessIdentityMap;
  */
 class EntityControllerFactory {
 
-  private $defaultEntityControllerClass;
-
-  private $controllerClassMap = array();
-
   /**
    * @var \CW\Util\EntityLocalProcessIdentityMap
    */
   private $entityModelLoader;
 
-  public function __construct(EntityLocalProcessIdentityMap $entityModelLoader, $defaultEntityControllerClass) {
-    if (!is_subclass_of($defaultEntityControllerClass, 'CW\Controller\AbstractEntityController')) {
-      throw new \InvalidArgumentException('Class is not subclass of AbstractEntityController: ' . $defaultEntityControllerClass);
-    }
+  protected $controllerClass;
 
-    $this->defaultEntityControllerClass = $defaultEntityControllerClass;
+  public function __construct(EntityLocalProcessIdentityMap $entityModelLoader, $controllerClass) {
     $this->entityModelLoader = $entityModelLoader;
+    // @todo add check to base class
+    $this->controllerClass = $controllerClass;
   }
 
-  public function registerEntityBundleClass($entity_type, $bundle, $class) {
-    $this->controllerClassMap[$entity_type][$bundle] = $class;
-  }
-
-  public function get($entity_type, $entity_id) {
+  public function initWithTypeAndId($entity_type, $entity_id) {
     /** @var EntityModel $entityModel */
     $entityModel = $this->entityModelLoader->getFromEntityID($entity_type, $entity_id);
-
-    list(,, $bundle) = entity_extract_ids($entity_type, $entityModel->getDrupalEntityData());
-    if (!empty($this->controllerClassMap[$entity_type][$bundle])) {
-      $controllerClass = $this->controllerClassMap[$entity_type][$bundle];
-    }
-    else {
-      $controllerClass = $this->defaultEntityControllerClass;
-    }
-    $controller = new $controllerClass($entityModel);
-
+    $controller = new $this->controllerClass($entityModel);
     return $controller;
   }
 

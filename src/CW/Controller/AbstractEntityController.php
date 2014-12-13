@@ -33,4 +33,11 @@ abstract class AbstractEntityController {
     $this->entityModel = $entityModel;
   }
 
+//  protected static $factory;
+//  public static function factory() {
+//    if (empty(self::$factory)) {
+//      self::$factory = new EntityControllerFactory();
+//    }
+//  }
+
 }

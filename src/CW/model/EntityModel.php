@@ -102,30 +102,7 @@ class EntityModel implements IEntityModelConstructor {
   public function setDrupalEntityData($drupalEntityData) {
     $this->drupalEntityData = $drupalEntityData;
   }
-
-  /**
-   * Implements self::__get().
-   *
-   * @throws \Exception
-   *  Entity metadata wrapper exception.
-   */
-  public function __get($name) {
-    // Proxy magic getter towards the entity metadata wrapper.
-    return $this->getEntityMetadataWrapper()->{$name};
-  }
-
-  /**
-   * Implements self::__set().
-   *
-   * @throws \Exception
-   *  Entity metadata wrapper exception.
-   */
-  public function __set($name, $value) {
-    // Proxy magic setter towards the entity metadata wrapper.
-    $this->getEntityMetadataWrapper()->__set($name, $value);
-    $this->setDirty();
-  }
-
+  
   /**
    * Save data to database.
    */
