@@ -1,0 +1,9 @@
+services:
+  article.controller.factory:
+    class: CWExample\Controller\ArticleControllerFactory
+    arguments:
+      - @identity-map
+      - @object-loader.drupal
+      - 'CWExample\Controller\ActicleController'
+      - 'CWExample\Model\ArticleModel'
+      - 'node'

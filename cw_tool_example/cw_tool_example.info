@@ -1,0 +1,3 @@
+name = CWTool Example
+core = 7.x
+dependencies[] = cw_tool

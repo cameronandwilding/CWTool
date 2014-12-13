@@ -12,9 +12,18 @@ Helper tools for generic Drupal7 development:
 - etc
 
 
-Entity/node model containers
-----------------------------
+Entity model
+------------
 
-This module contains model containers for nodes. Class ```CWToolEntityWrapper``` for entities and ```CWToolNodeWrapper``` is specifically for nodes. Extend it for other entity types or bundles.
+Entity model is an object abstraction layer over the Drupal entity objects. It's purpose is to give a place for model properties, such as fields or computed values. Generally speaking - if it's something that has no action in it.
+ 
+Entity controller
+-----------------
 
-This model container in this form is a convenience hack to create content type model/controllers. Use them carefully and consider building clear models and controllers and application logic separation.
+Entity controller is the main handler of entities (including nodes). Controller has a model where the controller gather it's data from. Controllers are instantiated through controller factories - using the dependency injection layer. See the following example.
+
+Let's say the app has an node type - article, which you would like to create a controller for. First you subclass the basic entity controller:
+
+```php
+
+```
