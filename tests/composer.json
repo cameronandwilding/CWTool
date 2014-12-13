@@ -1,0 +1,14 @@
+{
+    "name": "cwtool/test",
+    "description": "Test package for CWTool",
+    "require": {
+        "phpunit/phpunit-mock-objects": "~2.3",
+        "phpunit/phpunit": "~4.4"
+    },
+    "authors": [
+        {
+            "name": "Cameron and Wilding",
+            "email": "info@cameronandwilding.com"
+        }
+    ]
+}

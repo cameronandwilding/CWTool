@@ -16,11 +16,12 @@ interface IEntityModelConstructor {
   /**
    * Constructor.
    *
+   * @param \CW\Model\ObjectLoader $objectLoader
    * @param string $entity_type
    *  Entity type name.
    * @param string $entity_id
    *  Entity ID.
    */
-  public function __construct($entity_type, $entity_id);
+  public function __construct(ObjectLoader $objectLoader, $entity_type, $entity_id);
 
 }

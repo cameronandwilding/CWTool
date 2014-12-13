@@ -8,6 +8,7 @@
 namespace CW\Controller;
 
 use CW\Model\EntityModel;
+use CW\Model\ObjectLoader;
 use CW\Util\LocalProcessIdentityMap;
 
 /**
@@ -29,7 +30,12 @@ class EntityControllerFactory {
 
   protected $entityType;
 
-  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, $controllerClass, $modelClass, $entityType) {
+  /**
+   * @var ObjectLoader
+   */
+  private $objectLoader;
+
+  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectLoader $objectLoader, $controllerClass, $modelClass, $entityType) {
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
     if (!is_subclass_of($controllerClass, 'CW\Controller\AbstractEntityController')) {
@@ -43,6 +49,8 @@ class EntityControllerFactory {
     $this->modelClass = $modelClass;
 
     $this->entityType = $entityType;
+
+    $this->objectLoader = $objectLoader;
   }
 
   public function initWithId($entity_id) {
@@ -54,7 +62,7 @@ class EntityControllerFactory {
       $entityModel = $this->localProcessIdentityMap->get($cacheKey);
     }
     else {
-      $entityModel = new $this->modelClass($this->entityType, $entity_id);
+      $entityModel = new $this->modelClass($this->objectLoader, $this->entityType, $entity_id);
       $this->localProcessIdentityMap->add($cacheKey, $entityModel);
     }
 

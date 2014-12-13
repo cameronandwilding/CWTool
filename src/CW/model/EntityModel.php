@@ -29,6 +29,11 @@ class EntityModel implements IEntityModelConstructor {
   public $entityID;
 
   /**
+   * @var ObjectLoader
+   */
+  public $objectLoader;
+
+  /**
    * The entity metadata wrapper object.
    * Use $this->getEntityMetadataWrapper() to access it.
    *
@@ -54,14 +59,16 @@ class EntityModel implements IEntityModelConstructor {
   /**
    * Constructor.
    *
+   * @param \CW\Model\ObjectLoader $objectLoader
    * @param string $entity_type
    *  Entity type.
    * @param string $entity_id
    *  Entity ID.
    */
-  public function __construct($entity_type, $entity_id) {
+  public function __construct(ObjectLoader $objectLoader, $entity_type, $entity_id) {
     $this->entityType = $entity_type;
     $this->entityID = $entity_id;
+    $this->objectLoader = $objectLoader;
   }
 
   /**
@@ -87,7 +94,7 @@ class EntityModel implements IEntityModelConstructor {
    */
   public function getDrupalEntityData() {
     if (!isset($this->drupalEntityData)) {
-      $this->drupalEntityData = entity_load_single($this->entityType, $this->entityID);
+      $this->drupalEntityData = $this->objectLoader->loadSingleEntity($this->entityType, $this->entityID);
     }
 
     return $this->drupalEntityData;
@@ -107,7 +114,7 @@ class EntityModel implements IEntityModelConstructor {
    * Save data to database.
    */
   public function save() {
-    entity_save($this->entityType, $this->getDrupalEntityData());
+    $this->objectLoader->save($this->entityType, $this->getDrupalEntityData());
     $this->setClean();
   }
 

@@ -2,10 +2,14 @@ services:
   identity-map:
     class: CW\Util\LocalProcessIdentityMap
 
+  object-loader.drupal:
+    class: CW\Model\DrupalObjectLoader
+
   node.controller.factory:
     class: CW\Controller\EntityControllerFactory
     arguments:
       - @identity-map
+      - @object-loader.drupal
       - 'CW\Controller\BasicEntityController'
       - 'CW\Model\EntityModel'
       - 'node'
