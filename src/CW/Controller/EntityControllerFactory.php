@@ -2,11 +2,12 @@
 /**
  * @file
  *
- * Node controller factory.
+ * Entity controller factory.
  */
 
 namespace CW\Controller;
 
+use CW\Exception\IdentityMapException;
 use CW\Model\EntityModel;
 use CW\Model\ObjectLoader;
 use CW\Util\LocalProcessIdentityMap;
@@ -20,21 +21,54 @@ use CW\Util\LocalProcessIdentityMap;
 class EntityControllerFactory {
 
   /**
+   * Identity map cache.
+   *
    * @var LocalProcessIdentityMap
    */
   private $localProcessIdentityMap;
 
+  /**
+   * Actual entity controller class to instantiate.
+   *
+   * @var string
+   */
   protected $controllerClass;
 
+  /**
+   * Corresponding entity model class.
+   *
+   * @var string
+   */
   protected $modelClass;
 
+  /**
+   * Entity type.
+   *
+   * @var string
+   */
   protected $entityType;
 
   /**
+   * Object loader that takes care of low level data loading.
+   *
    * @var ObjectLoader
    */
   private $objectLoader;
 
+  /**
+   * Constructor.
+   *
+   * @param LocalProcessIdentityMap $localProcessIdentityMap
+   *  Identity map cache.
+   * @param ObjectLoader $objectLoader
+   *  Low level data loader.
+   * @param string $controllerClass
+   *  Actual entity controller class.
+   * @param string $modelClass
+   *  Actual entity model class.
+   * @param string $entityType
+   *  Entity type.
+   */
   public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectLoader $objectLoader, $controllerClass, $modelClass, $entityType) {
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
@@ -53,6 +87,13 @@ class EntityControllerFactory {
     $this->objectLoader = $objectLoader;
   }
 
+  /**
+   * Factory method.
+   *
+   * @param mixed $entity_id
+   * @return AbstractEntityController
+   * @throws IdentityMapException
+   */
   public function initWithId($entity_id) {
     /** @var EntityModel $entityModel */
     $entityModel = NULL;

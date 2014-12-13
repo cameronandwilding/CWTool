@@ -1,9 +1,14 @@
 <?php
 /**
  * @file
+ *
+ * Entity model.
  */
 
 namespace CW\Model;
+
+use EntityMetadataWrapper;
+use Exception;
 
 /**
  * Class EntityModel
@@ -11,6 +16,7 @@ namespace CW\Model;
  *
  * Entity model. Provides access to the entity object and the entity metadata
  * wrapper instance.
+ * Should contain all model related property accessor.
  */
 class EntityModel implements IEntityModelConstructor {
 
@@ -26,7 +32,7 @@ class EntityModel implements IEntityModelConstructor {
    *
    * @var int
    */
-  public $entityID;
+  public $entityId;
 
   /**
    * @var ObjectLoader
@@ -37,7 +43,7 @@ class EntityModel implements IEntityModelConstructor {
    * The entity metadata wrapper object.
    * Use $this->getEntityMetadataWrapper() to access it.
    *
-   * @var \EntityMetadataWrapper
+   * @var EntityMetadataWrapper
    */
   private $entityMetadataWrapper;
 
@@ -59,7 +65,7 @@ class EntityModel implements IEntityModelConstructor {
   /**
    * Constructor.
    *
-   * @param \CW\Model\ObjectLoader $objectLoader
+   * @param ObjectLoader $objectLoader
    * @param string $entity_type
    *  Entity type.
    * @param string $entity_id
@@ -67,21 +73,21 @@ class EntityModel implements IEntityModelConstructor {
    */
   public function __construct(ObjectLoader $objectLoader, $entity_type, $entity_id) {
     $this->entityType = $entity_type;
-    $this->entityID = $entity_id;
+    $this->entityId = $entity_id;
     $this->objectLoader = $objectLoader;
   }
 
   /**
    * Get the entity metadata wrapper of the entity.
    *
-   * @return \EntityMetadataWrapper
+   * @return EntityMetadataWrapper
    *
-   * @throws \Exception
+   * @throws Exception
    *  Entity metadata wrapper exception.
    */
   public function getEntityMetadataWrapper() {
     if (!isset($this->entityMetadataWrapper)) {
-      $this->entityMetadataWrapper = entity_metadata_wrapper($this->entityType, $this->getDrupalEntityData());
+      $this->entityMetadataWrapper = $this->objectLoader->loadMetadata($this->entityType, $this->getEntityData());
     }
 
     return $this->entityMetadataWrapper;
@@ -92,9 +98,9 @@ class EntityModel implements IEntityModelConstructor {
    *
    * @return mixed|object
    */
-  public function getDrupalEntityData() {
+  public function getEntityData() {
     if (!isset($this->drupalEntityData)) {
-      $this->drupalEntityData = $this->objectLoader->loadSingleEntity($this->entityType, $this->entityID);
+      $this->drupalEntityData = $this->objectLoader->loadSingleEntity($this->entityType, $this->entityId);
     }
 
     return $this->drupalEntityData;
@@ -114,7 +120,7 @@ class EntityModel implements IEntityModelConstructor {
    * Save data to database.
    */
   public function save() {
-    $this->objectLoader->save($this->entityType, $this->getDrupalEntityData());
+    $this->objectLoader->save($this->entityType, $this->getEntityData());
     $this->setClean();
   }
 

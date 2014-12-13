@@ -1,6 +1,8 @@
 <?php
 /**
  * @file
+ *
+ * Identity map.
  */
 
 namespace CW\Util;
@@ -38,7 +40,7 @@ class LocalProcessIdentityMap {
    *
    * @param string $key
    * @param mixed $data
-   * @throws \CW\Exception\IdentityMapException
+   * @throws IdentityMapException
    */
   public function add($key, $data) {
     if ($this->keyExist($key)) {
@@ -48,6 +50,13 @@ class LocalProcessIdentityMap {
     $this->map[$key] = $data;
   }
 
+  /**
+   * Get item.
+   *
+   * @param string $key
+   * @return mixed
+   * @throws IdentityMapException
+   */
   public function get($key) {
     if (!$this->keyExist($key)) {
       throw new IdentityMapException('Key does not exist: ' . $key);
@@ -56,10 +65,18 @@ class LocalProcessIdentityMap {
     return $this->map[$key];
   }
 
+  /**
+   * Delete all items.
+   */
   public function deleteAll() {
     $this->map = array();
   }
 
+  /**
+   * Delete single item.
+   *
+   * @param string $key
+   */
   public function delete($key) {
     unset($this->map[$key]);
   }

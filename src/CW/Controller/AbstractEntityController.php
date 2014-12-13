@@ -1,11 +1,14 @@
 <?php
 /**
  * @file
+ *
+ * Entity controller abstraction.
  */
 
 namespace CW\Controller;
 
 use CW\Model\EntityModel;
+use EntityDrupalWrapper;
 
 /**
  * Class AbstractEntityController
@@ -19,14 +22,14 @@ abstract class AbstractEntityController {
   /**
    * The model.
    *
-   * @var \CW\Model\EntityModel
+   * @var EntityModel
    */
   protected $entityModel;
 
   /**
    * Constructor.
    *
-   * @param \CW\Model\EntityModel $entityModel
+   * @param EntityModel $entityModel
    *  The model object.
    */
   public function __construct(EntityModel $entityModel) {
@@ -34,6 +37,8 @@ abstract class AbstractEntityController {
   }
 
   /**
+   * Get the entity model.
+   *
    * @return EntityModel
    */
   public function getEntityModel() {
@@ -41,10 +46,21 @@ abstract class AbstractEntityController {
   }
 
   /**
-   * @return \EntityDrupalWrapper
+   * Get the entity metadata wrapper object.
+   *
+   * @return EntityDrupalWrapper
    */
   public function metadata() {
     return $this->getEntityModel()->getEntityMetadataWrapper();
+  }
+
+  /**
+   * Get the lowest level of data of the object (mostly Drupal - unless defined otherwise).
+   *
+   * @return object
+   */
+  public function data() {
+    return $this->getEntityModel()->getEntityData();
   }
 
 }

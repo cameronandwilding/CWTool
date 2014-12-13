@@ -1,16 +1,16 @@
 <?php
 /**
  * @file
+ *
+ * Simple entity controller.
  */
 
 namespace CW\Controller;
 
 /**
- * Class NodeController
+ * Class BasicEntityController
  * @package CW\Controller
  *
- * Basic node controller.
+ * Most basic implementation of entity controller.
  */
-class BasicEntityController extends AbstractEntityController {
-
-}
+class BasicEntityController extends AbstractEntityController { }

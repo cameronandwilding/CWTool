@@ -1,9 +1,14 @@
 <?php
 /**
  * @file
+ *
+ * Identity map exception.
  */
 
 namespace CW\Exception;
 
-class IdentityMapException extends \Exception {
-}
+/**
+ * Class IdentityMapException
+ * @package CW\Exception
+ */
+class IdentityMapException extends \Exception { }
