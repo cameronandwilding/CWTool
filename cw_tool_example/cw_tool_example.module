@@ -2,3 +2,25 @@
 /**
  * @file
  */
+
+use CW\Controller\EntityControllerFactory;
+use CW\Util\ServiceContainerDefinitionCollection;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+/**
+ * Implements hook_cw_tool_service_container_definition_alter().
+ */
+function cw_tool_example_cw_tool_service_container_definition_alter(ServiceContainerDefinitionCollection $serviceContainerDefinitionCollection) {
+  $serviceContainerDefinitionCollection->add(__DIR__ . '/config');
+}
+
+/**
+ * Implements hook_init().
+ */
+function cw_tool_example_init() {
+  /** @var EntityControllerFactory $articleFactory */
+//  $articleFactory = cw_tool_get_container()->get('article.controller.factory');
+//  $article = $articleFactory->initWithId(1);
+//  dpm($article->getTitle());
+}

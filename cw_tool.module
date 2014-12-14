@@ -25,10 +25,18 @@ function cw_tool_get_container() {
     return $container;
   }
 
+  // @todo add weight so it's sortable
+  $containerConfigs = new \CW\Util\ServiceContainerDefinitionCollection();
+  $containerConfigs->add(__DIR__ . '/config');
+  drupal_alter('cw_tool_service_container_definition', $containerConfigs);
+
   $container = new ContainerBuilder();
-  $locator = new FileLocator(array(__DIR__ . '/config'));
-  $loader = new YamlFileLoader($container, $locator);
-  $loader->load('services.yml');
+
+  foreach ($containerConfigs->getConfigs() as $containerConfig) {
+    $locator = new FileLocator(array($containerConfig));
+    $loader = new YamlFileLoader($container, $locator);
+    $loader->load('services.yml');
+  }
 
   $container->compile();
 
