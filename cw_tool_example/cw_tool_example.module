@@ -1,9 +1,12 @@
 <?php
 /**
  * @file
+ *
+ * Example usage of the cw_tool models and controllers and utils.
  */
 
 use CW\Controller\EntityControllerFactory;
+use CW\Util\EntityBatchSaver;
 use CW\Util\ServiceContainerDefinitionCollection;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -11,8 +14,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 /**
  * Implements hook_cw_tool_service_container_definition_alter().
  */
-function cw_tool_example_cw_tool_service_container_definition_alter(ServiceContainerDefinitionCollection $serviceContainerDefinitionCollection) {
-  $serviceContainerDefinitionCollection->add(__DIR__ . '/config');
+function cw_tool_example_cw_tool_service_container_definition_alter(ServiceContainerDefinitionCollection $collection) {
+  $collection->add(__DIR__ . '/config');
 }
 
 /**
@@ -20,7 +23,13 @@ function cw_tool_example_cw_tool_service_container_definition_alter(ServiceConta
  */
 function cw_tool_example_init() {
   /** @var EntityControllerFactory $articleFactory */
-  $articleFactory = cw_tool_get_container()->get('article.controller.factory');
+  $articleFactory = cw_tool_get_container()->get('cw.article.controller.factory');
   $article = $articleFactory->initWithId(1);
   drupal_set_message($article->getTitle());
+
+  $article->updateTitle();
+
+  /** @var EntityBatchSaver $nodeBatchSaver */
+  $nodeBatchSaver = cw_tool_get_container()->get('cw.node-batch-saver');
+  $nodeBatchSaver->saveAll();
 }

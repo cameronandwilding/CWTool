@@ -13,4 +13,9 @@ class ArticleController extends BasicEntityController {
     return $this->data()->title;
   }
 
+  public function updateTitle() {
+    $this->data()->title = 'Example title - ' . microtime(TRUE);
+    $this->entityModel->setDirty();
+  }
+
 }

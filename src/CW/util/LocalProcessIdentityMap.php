@@ -81,4 +81,11 @@ class LocalProcessIdentityMap {
     unset($this->map[$key]);
   }
 
+  /**
+   * @return array
+   */
+  public function getAllItems() {
+    return $this->map;
+  }
+
 }

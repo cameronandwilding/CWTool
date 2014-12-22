@@ -1,9 +1,9 @@
 services:
-  article.controller.factory:
+  cw.article.controller.factory:
     class: CW\Controller\EntityControllerFactory
     arguments:
-      - @identity-map
-      - @object-loader.drupal
+      - @cw.identity-map
+      - @cw.object-loader.drupal
       - 'CWExample\Controller\ArticleController'
       - 'CWExample\Model\ArticleModel'
       - 'node'

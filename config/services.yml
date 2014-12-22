@@ -1,15 +1,20 @@
 services:
-  identity-map:
+  cw.identity-map:
     class: CW\Util\LocalProcessIdentityMap
 
-  object-loader.drupal:
+  cw.object-loader.drupal:
     class: CW\Model\DrupalObjectLoader
 
-  node.controller.factory:
+  cw.node-controller.factory:
     class: CW\Controller\EntityControllerFactory
     arguments:
-      - @identity-map
-      - @object-loader.drupal
+      - @cw.identity-map
+      - @cw.object-loader.drupal
       - 'CW\Controller\BasicEntityController'
       - 'CW\Model\EntityModel'
       - 'node'
+
+  cw.node-batch-saver:
+    class: CW\Util\EntityBatchSaver
+    arguments:
+      - @cw.identity-map
