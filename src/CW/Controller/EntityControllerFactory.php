@@ -92,7 +92,6 @@ class EntityControllerFactory {
    *
    * @param mixed $entity_id
    * @return AbstractEntityController
-   * @throws IdentityMapException
    */
   public function initWithId($entity_id) {
     /** @var EntityModel $entityModel */

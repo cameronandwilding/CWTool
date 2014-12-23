@@ -5,9 +5,11 @@
  * Entity batch saver test.
  */
 
+use CW\Model\EntityModel;
+use CW\Util\EntityBatchSaver;
 use CW\Util\LocalProcessIdentityMap;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
 
@@ -21,15 +23,15 @@ class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
     parent::setUp();
 
     $identityMap = new LocalProcessIdentityMap();
-    $this->entityBatchSaver = new \CW\Util\EntityBatchSaver($identityMap);
+    $this->entityBatchSaver = new EntityBatchSaver($identityMap);
 
     $entityType = md5(microtime(TRUE));
     $entityId1 = rand(1, 1000);
     $entityId2 = rand(1, 1000);
 
     $this->objectLoaderMock = $this->getMock('CW\\Model\\ObjectLoader');
-    $this->entities[0] = new \CW\Model\EntityModel($this->objectLoaderMock, $entityType, $entityId1);
-    $this->entities[1] = new \CW\Model\EntityModel($this->objectLoaderMock, $entityType, $entityId2);
+    $this->entities[0] = new EntityModel($this->objectLoaderMock, $entityType, $entityId1);
+    $this->entities[1] = new EntityModel($this->objectLoaderMock, $entityType, $entityId2);
 
     $identityMap->add($entityId1, $this->entities[0]);
     $identityMap->add($entityId2, $this->entities[1]);
