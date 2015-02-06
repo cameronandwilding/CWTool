@@ -2,7 +2,7 @@ name = "Cameron & Wilding Tools"
 description = "General helper methods for regular Drupal 7 development"
 core = 7.x
 dependencies[] = entity
-package = "Cameron&Wilding"
+dependencies[] = drupal_psr3
 
 files[] = tests/CWToolWebTestCase.test
 files[] = tests/CWToolEntityWrapperTestCase.test

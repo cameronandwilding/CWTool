@@ -1,4 +1,7 @@
 services:
+  cw.logger:
+    class: Drupal\PSR3\Logger\Watchdog
+
   cw.identity-map:
     class: CW\Util\LocalProcessIdentityMap
 
