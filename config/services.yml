@@ -21,3 +21,4 @@ services:
     class: CW\Util\EntityBatchSaver
     arguments:
       - @cw.identity-map
+      - @cw.logger

@@ -19,11 +19,17 @@ class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
 
   protected $entities = array();
 
+  /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
   public function setUp() {
     parent::setUp();
 
     $identityMap = new LocalProcessIdentityMap();
-    $this->entityBatchSaver = new EntityBatchSaver($identityMap);
+    $this->logger = $this->getMock('Psr\Log\AbstractLogger');
+    $this->entityBatchSaver = new EntityBatchSaver($identityMap, $this->logger);
 
     $entityType = md5(microtime(TRUE));
     $entityId1 = rand(1, 1000);
