@@ -147,4 +147,11 @@ class EntityModel implements IEntityModelConstructor {
     $this->isUpdated = FALSE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function __toString() {
+    return '[' . get_class($this) . ', ' . $this->entityType . ', ' . $this->entityId . ']@' . spl_object_hash($this);
+  }
+
 }

@@ -5,6 +5,10 @@
  * Helper functions.
  */
 
+use CW\Controller\EntityControllerFactory;
+use CW\Controller\NodeController;
+use CW\Controller\UserController;
+use CW\Controller\UserControllerFactory;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -41,4 +45,49 @@ function cw_tool_get_container() {
   $container->compile();
 
   return $container;
+}
+
+/**
+ * @param $nid
+ * @return NodeController
+ */
+function cw_tool_get_node($nid) {
+  static $node_factory;
+
+  if (!isset($node_factory)) {
+    /** @var EntityControllerFactory $node_factory */
+    $node_factory = cw_tool_get_container()->get('cw.node-controller.factory');
+  }
+
+  return $node_factory->initWithId($nid);
+}
+
+/**
+ * @param $uid
+ * @return UserController
+ */
+function cw_tool_get_user($uid) {
+  static $user_factory;
+
+  if (!isset($user_factory)) {
+    /** @var UserControllerFactory $user_factory */
+    $user_factory = cw_tool_get_container()->get('cw.user-controller.factory');
+  }
+
+  return $user_factory->initWithId($uid);
+}
+
+/**
+ * @return UserController
+ */
+function cw_tool_get_user_current() {
+  static $current_user;
+
+  if (!isset($current_user)) {
+    /** @var UserControllerFactory $user_factory */
+    $user_factory = cw_tool_get_container()->get('cw.user-controller.factory');
+    $current_user = $user_factory->initWithCurrentUser();
+  }
+
+  return $current_user;
 }
