@@ -18,7 +18,7 @@ services:
       - 'node'
 
   cw.user-controller.factory:
-    class: CW\Controller\EntityControllerFactory
+    class: CW\Controller\UserControllerFactory
     arguments:
       - @cw.identity-map
       - @cw.object-loader.drupal

@@ -43,4 +43,11 @@ class DrupalObjectLoader extends ObjectLoader {
     return entity_metadata_wrapper($entityType, $entity);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function delete($entityType, $entityId) {
+    return entity_delete($entityType, $entityId);
+  }
+
 }

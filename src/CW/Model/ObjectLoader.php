@@ -22,7 +22,7 @@ abstract class ObjectLoader {
    * Load a single entity.
    *
    * @param string $entityType
-   * @param mixed $entityId
+   * @param int $entityId
    * @return object
    */
   abstract public function loadSingleEntity($entityType, $entityId);
@@ -44,6 +44,15 @@ abstract class ObjectLoader {
    * @return mixed
    */
   abstract public function save($entityType, $entity);
+
+  /**
+   * Delete entity.
+   *
+   * @param string $entityType
+   * @param int $entityId
+   * @return mixed
+   */
+  abstract public function delete($entityType, $entityId);
 
   /**
    * Load entity metadata wrapper.

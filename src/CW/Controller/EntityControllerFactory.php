@@ -7,7 +7,6 @@
 
 namespace CW\Controller;
 
-use CW\Exception\IdentityMapException;
 use CW\Model\EntityModel;
 use CW\Model\ObjectLoader;
 use CW\Util\LocalProcessIdentityMap;
