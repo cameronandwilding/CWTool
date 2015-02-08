@@ -1,5 +1,5 @@
 <?php
-use CW\Controller\BasicEntityController;
+use CW\Controller\NodeController;
 use CW\Model\EntityModel;
 
 /**
@@ -14,7 +14,7 @@ class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
   protected $objectLoaderMock;
 
   /**
-   * @var BasicEntityController
+   * @var NodeController
    */
   protected $controller;
 
@@ -26,7 +26,7 @@ class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
   public function setUp() {
     $loaderMock = $this->getMock('CW\Model\DrupalObjectLoader');
     $this->entityModelMock = $this->getMock('CW\Model\EntityModel', [], [$loaderMock, 'fake type', 'fake id']);
-    $this->controller = new BasicEntityController($this->entityModelMock);
+    $this->controller = new NodeController($this->entityModelMock);
   }
 
   public function testLoadModel() {

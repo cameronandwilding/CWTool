@@ -2,15 +2,17 @@
 /**
  * @file
  *
- * Simple entity controller.
+ * Simple node controller.
  */
 
 namespace CW\Controller;
 
 /**
- * Class BasicEntityController
+ * Class NodeController
  * @package CW\Controller
  *
  * Most basic implementation of entity controller.
  */
-class BasicEntityController extends AbstractEntityController { }
+class NodeController extends AbstractEntityController {
+
+}

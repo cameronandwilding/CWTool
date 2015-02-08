@@ -29,7 +29,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   /**
    * @var EntityControllerFactory
    */
-  protected $entityControllerFactory;
+  protected $nodeControllerFactory;
 
   public function setUp() {
     parent::setUp();
@@ -37,14 +37,14 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
     $this->entityType = md5(microtime(TRUE));
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
     $this->objectLoader = $this->getMock('CW\Model\DrupalObjectLoader');
-    $this->entityControllerFactory = new EntityControllerFactory(
+    $this->nodeControllerFactory = new EntityControllerFactory(
       $this->localProcessIdentityMap,
       $this->objectLoader,
-      'CW\Controller\BasicEntityController',
+      'CW\Controller\NodeController',
       'CW\Model\EntityModel',
       $this->entityType
     );
-    $this->entityControllerFactory;
+    $this->nodeControllerFactory;
   }
 
   public function testEntityInstantiation() {
@@ -66,7 +66,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
       ->with()
       ->willReturn($entity);
 
-    $model = $this->entityControllerFactory->initWithId($entityId);
+    $model = $this->nodeControllerFactory->initWithId($entityId);
     $this->assertEquals($model->getEntityModel()->entityId, $entityId);
     $this->assertEquals($model->getEntityModel()->entityType, $this->entityType);
 
@@ -82,8 +82,8 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
   public function testSameObjectInitialization() {
     $id = rand(1, PHP_INT_MAX);
-    $result_a = $this->entityControllerFactory->initWithId($id);
-    $result_b = $this->entityControllerFactory->initWithId($id);
+    $result_a = $this->nodeControllerFactory->initWithId($id);
+    $result_b = $this->nodeControllerFactory->initWithId($id);
     $this->assertEquals($result_a, $result_b);
   }
 

@@ -5,9 +5,9 @@
 
 namespace CWExample\Controller;
 
-use CW\Controller\BasicEntityController;
+use CW\Controller\NodeController;
 
-class ArticleController extends BasicEntityController {
+class ArticleController extends NodeController {
 
   public function getTitle() {
     return $this->data()->title;

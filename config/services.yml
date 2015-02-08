@@ -13,9 +13,18 @@ services:
     arguments:
       - @cw.identity-map
       - @cw.object-loader.drupal
-      - 'CW\Controller\BasicEntityController'
-      - 'CW\Model\EntityModel'
+      - 'CW\Controller\NodeController'
+      - 'CW\Model\NodeModel'
       - 'node'
+
+  cw.user-controller.factory:
+    class: CW\Controller\EntityControllerFactory
+    arguments:
+      - @cw.identity-map
+      - @cw.object-loader.drupal
+      - 'CW\Controller\UserController'
+      - 'CW\Model\UserModel'
+      - 'user'
 
   cw.node-batch-saver:
     class: CW\Util\EntityBatchSaver
