@@ -10,6 +10,8 @@ use CW\Model\UserModel;
 
 class NodeCreationParams {
 
+  const FIELD_KEY_VALUE = 'value';
+
   private $title;
 
   private $type;
@@ -117,6 +119,23 @@ class NodeCreationParams {
    */
   public function setExtraAttributes($extraAttributes) {
     $this->extraAttributes = $extraAttributes;
+  }
+
+  /**
+   * @param $fieldName
+   * @param $value
+   * @param string $fieldKey
+   * @return self
+   */
+  public function addExtraAttributeField($fieldName, $value, $fieldKey = self::FIELD_KEY_VALUE) {
+    if (empty($this->extraAttributes[$fieldName])) {
+      $this->extraAttributes[$fieldName] = array(LANGUAGE_NONE => array());
+    }
+
+    $this->extraAttributes[$fieldName][LANGUAGE_NONE][] = array($fieldKey => $value);
+
+    // For chaining;
+    return $this;
   }
 
 }

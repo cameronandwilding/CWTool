@@ -105,4 +105,11 @@ class EntityModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($entityDataFake, $this->entityModel->getEntityData());
   }
 
+  public function testStringOutput() {
+    $string_casted = (string) $this->entityModel;
+    $string_from_toString = $this->entityModel->__toString();
+    $this->assertEquals($string_casted, $string_from_toString);
+    $this->assertTrue(strpos($string_from_toString, 'EntityModel') !== FALSE);
+  }
+
 }
