@@ -11,7 +11,7 @@ class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
    */
-  protected $objectLoaderMock;
+  protected $objectHandlerMock;
 
   /**
    * @var NodeController
@@ -24,8 +24,8 @@ class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
   protected $entityModelMock;
 
   public function setUp() {
-    $loaderMock = $this->getMock('CW\Model\DrupalObjectLoader');
-    $this->entityModelMock = $this->getMock('CW\Model\EntityModel', [], [$loaderMock, 'fake type', 'fake id']);
+    $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
+    $this->entityModelMock = $this->getMock('CW\Model\EntityModel', [], [$objectHandlerMock, 'fake type', 'fake id']);
     $this->controller = new NodeController($this->entityModelMock);
   }
 

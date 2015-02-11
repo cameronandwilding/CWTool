@@ -8,7 +8,7 @@
 namespace CW\Controller;
 
 use CW\Model\EntityModel;
-use CW\Model\ObjectLoader;
+use CW\Model\ObjectHandler;
 use CW\Util\LocalProcessIdentityMap;
 
 /**
@@ -50,7 +50,7 @@ class EntityControllerFactory {
   /**
    * Object loader that takes care of low level data loading.
    *
-   * @var ObjectLoader
+   * @var ObjectHandler
    */
   private $objectLoader;
 
@@ -59,7 +59,7 @@ class EntityControllerFactory {
    *
    * @param LocalProcessIdentityMap $localProcessIdentityMap
    *  Identity map cache.
-   * @param ObjectLoader $objectLoader
+   * @param ObjectHandler $objectLoader
    *  Low level data loader.
    * @param string $controllerClass
    *  Actual entity controller class.
@@ -68,7 +68,7 @@ class EntityControllerFactory {
    * @param string $entityType
    *  Entity type.
    */
-  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectLoader $objectLoader, $controllerClass, $modelClass, $entityType) {
+  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $modelClass, $entityType) {
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
     if (!is_subclass_of($controllerClass, 'CW\Controller\AbstractEntityController')) {

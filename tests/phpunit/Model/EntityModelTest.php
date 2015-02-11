@@ -15,7 +15,7 @@ class EntityModelTest extends PHPUnit_Framework_TestCase {
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
    */
-  protected $objectLoaderMock;
+  protected $objectHandlerMock;
 
   protected $entityType;
 
@@ -27,24 +27,24 @@ class EntityModelTest extends PHPUnit_Framework_TestCase {
   protected $entityModel;
 
   public function setUp() {
-    $this->objectLoaderMock = $this->getMock('CW\Model\ObjectLoader');
+    $this->objectHandlerMock = $this->getMock('CW\Model\ObjectHandler');
     $this->entityType = md5(microtime(TRUE));
     $this->entityId = rand(1, PHP_INT_MAX);
-    $this->entityModel = new EntityModel($this->objectLoaderMock, $this->entityType, $this->entityId);
+    $this->entityModel = new EntityModel($this->objectHandlerMock, $this->entityType, $this->entityId);
   }
 
   public function testLoadModel() {
     $entityObjectFake = (object)['id' => $this->entityId, 'type' => $this->entityType, 'foo' => md5(microtime(TRUE))];
 
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadSingleEntity')
       ->with($this->equalTo($this->entityType), $this->equalTo($this->entityId))
       ->willReturn($entityObjectFake);
 
-    $this->objectLoaderMock->expects($this->never())->method('loadMetadata');
-    $this->objectLoaderMock->expects($this->never())->method('loadMultipleEntity');
-    $this->objectLoaderMock->expects($this->never())->method('save');
+    $this->objectHandlerMock->expects($this->never())->method('loadMetadata');
+    $this->objectHandlerMock->expects($this->never())->method('loadMultipleEntity');
+    $this->objectHandlerMock->expects($this->never())->method('save');
 
     $this->entityModel->getEntityData();
   }
@@ -53,35 +53,35 @@ class EntityModelTest extends PHPUnit_Framework_TestCase {
     $entityObjectFake = (object)['id' => $this->entityId, 'type' => $this->entityType, 'foo' => md5(microtime(TRUE))];
     $entityMetadataFake = (object)['bar' => md5(microtime(TRUE))];
 
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadSingleEntity')
       ->with($this->equalTo($this->entityType), $this->equalTo($this->entityId))
       ->willReturn($entityObjectFake);
 
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadMetadata')
       ->with($this->equalTo($this->entityType), $this->equalTo($entityObjectFake))
       ->willReturn($entityMetadataFake);
 
-    $this->objectLoaderMock->expects($this->never())->method('loadMultipleEntity');
-    $this->objectLoaderMock->expects($this->never())->method('save');
+    $this->objectHandlerMock->expects($this->never())->method('loadMultipleEntity');
+    $this->objectHandlerMock->expects($this->never())->method('save');
 
     $this->entityModel->getEntityMetadataWrapper();
   }
 
   public function testSave() {
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('save');
 
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadSingleEntity');
 
-    $this->objectLoaderMock->expects($this->never())->method('loadMetadata');
-    $this->objectLoaderMock->expects($this->never())->method('loadMultipleEntity');
+    $this->objectHandlerMock->expects($this->never())->method('loadMetadata');
+    $this->objectHandlerMock->expects($this->never())->method('loadMultipleEntity');
 
     $this->assertFalse($this->entityModel->isDirty());
     $this->entityModel->setClean();
@@ -95,7 +95,7 @@ class EntityModelTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testManualEntityDataSet() {
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->never())
       ->method('loadSingleEntity');
 

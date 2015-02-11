@@ -19,7 +19,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
    */
-  protected $objectLoader;
+  protected $objectHandlerMock;
 
   /**
    * @var LocalProcessIdentityMap
@@ -36,10 +36,10 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
     $this->entityType = md5(microtime(TRUE));
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
-    $this->objectLoader = $this->getMock('CW\Model\DrupalObjectLoader');
+    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $this->nodeControllerFactory = new EntityControllerFactory(
       $this->localProcessIdentityMap,
-      $this->objectLoader,
+      $this->objectHandlerMock,
       'CW\Controller\NodeController',
       'CW\Model\EntityModel',
       $this->entityType
@@ -50,17 +50,17 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   public function testEntityInstantiation() {
     $entityId = rand(1, 1000);
     $entity = (object) array();
-    $this->objectLoader
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadSingleEntity')
       ->with($this->equalTo($this->entityType), $this->equalTo($entityId))
       ->willReturn($entity);
-    $this->objectLoader
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('loadMetadata')
       ->with($this->equalTo($this->entityType), $this->equalTo($entity))
       ->willReturn($entity);
-    $this->objectLoader
+    $this->objectHandlerMock
       ->expects($this->once())
       ->method('save')
       ->with()
@@ -89,22 +89,22 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
   public function testWithInvalidControllerClass() {
     $mapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $loaderMock = $this->getMock('CW\Model\DrupalObjectLoader');
+    $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $entity_type = md5(microtime(TRUE));
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $loaderMock, 'EntityControllerFactoryTest_FakeEntityController', 'CW\Model\EntityModel', $entity_type);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', 'CW\Model\EntityModel', $entity_type);
   }
 
   public function testWithInvalidModelClass() {
     $mapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $loaderMock = $this->getMock('CW\Model\DrupalObjectLoader');
+    $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $entity_type = md5(microtime(TRUE));
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $loaderMock, 'CW\Controller\BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'CW\Controller\BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type);
   }
 
 }

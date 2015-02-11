@@ -10,13 +10,13 @@ namespace CW\Model;
 use EntityDrupalWrapper;
 
 /**
- * Class ObjectLoader
+ * Class ObjectHandler
  * @package CW\Model
  *
- * Low level object loader. Should be the system's loader, DB loader or maybe
+ * Low level object handler. Should be the system's handler, DB handler or maybe
  * some other alternative, such as cache, memcache, etc.
  */
-abstract class ObjectLoader {
+abstract class ObjectHandler {
 
   /**
    * Load a single entity.

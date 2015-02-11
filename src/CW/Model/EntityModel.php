@@ -35,7 +35,7 @@ class EntityModel implements IEntityModelConstructor {
   public $entityId;
 
   /**
-   * @var ObjectLoader
+   * @var ObjectHandler
    */
   public $objectLoader;
 
@@ -65,13 +65,13 @@ class EntityModel implements IEntityModelConstructor {
   /**
    * Constructor.
    *
-   * @param ObjectLoader $objectLoader
+   * @param ObjectHandler $objectLoader
    * @param string $entity_type
    *  Entity type.
    * @param string $entity_id
    *  Entity ID.
    */
-  public function __construct(ObjectLoader $objectLoader, $entity_type, $entity_id) {
+  public function __construct(ObjectHandler $objectLoader, $entity_type, $entity_id) {
     $this->entityType = $entity_type;
     $this->entityId = $entity_id;
     $this->objectLoader = $objectLoader;

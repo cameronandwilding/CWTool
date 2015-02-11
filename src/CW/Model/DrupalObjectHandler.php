@@ -8,12 +8,12 @@
 namespace CW\Model;
 
 /**
- * Class DrupalObjectLoader
+ * Class DrupalObjectHandler
  * @package CW\Model
  *
- * Drupal API object loader.
+ * Drupal API object handler.
  */
-class DrupalObjectLoader extends ObjectLoader {
+class DrupalObjectHandler extends ObjectHandler {
 
   /**
    * {@inheritdoc}
