@@ -5,14 +5,14 @@ services:
   cw.identity-map:
     class: CW\Util\LocalProcessIdentityMap
 
-  cw.object-loader.drupal:
-    class: CW\Model\DrupalObjectLoader
+  cw.object-handler.drupal:
+    class: CW\Model\DrupalObjectHandler
 
   cw.node-controller.factory:
-    class: CW\Controller\EntityControllerFactory
+    class: CW\Controller\NodeControllerFactory
     arguments:
       - @cw.identity-map
-      - @cw.object-loader.drupal
+      - @cw.object-handler.drupal
       - 'CW\Controller\NodeController'
       - 'CW\Model\NodeModel'
       - 'node'
@@ -21,7 +21,7 @@ services:
     class: CW\Controller\UserControllerFactory
     arguments:
       - @cw.identity-map
-      - @cw.object-loader.drupal
+      - @cw.object-handler.drupal
       - 'CW\Controller\UserController'
       - 'CW\Model\UserModel'
       - 'user'
