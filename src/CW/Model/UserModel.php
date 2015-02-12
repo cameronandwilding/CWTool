@@ -13,4 +13,6 @@ class UserModel extends EntityModel {
 
   const UID_ADMIN = 1;
 
+  const ROLE_AUTHENTICATED_USER = 'authenticated user';
+
 }

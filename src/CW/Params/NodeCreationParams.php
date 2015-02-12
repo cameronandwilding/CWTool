@@ -8,9 +8,7 @@ namespace CW\Params;
 
 use CW\Model\UserModel;
 
-class NodeCreationParams {
-
-  const FIELD_KEY_VALUE = 'value';
+class NodeCreationParams extends EntityCreationParams {
 
   private $title;
 
@@ -26,22 +24,11 @@ class NodeCreationParams {
    */
   private $uid;
 
-  /**
-   * Fields or node properties.
-   *
-   * Field example:
-   * [
-   *  'field_text' => [LANGUAGE_NONE => [['value' => 'some text']],
-   * ]
-   *
-   * @var array
-   */
-  private $extraAttributes = array();
+  public function __construct($type, $title = NULL, $language = LANGUAGE_NONE, $uid = UserModel::USER_CURRENT, array $extraAttributes = array()) {
+    parent::__construct($extraAttributes);
 
-  public function __construct($title, $type, $extraAttributes = array(), $language = LANGUAGE_NONE, $uid = UserModel::USER_CURRENT) {
-    $this->title = $title;
+    $this->title = $title ? $title : "untitled";
     $this->type = $type;
-    $this->extraAttributes = $extraAttributes;
     $this->language = $language;
     $this->uid = $uid;
   }
@@ -105,37 +92,6 @@ class NodeCreationParams {
    */
   public function setUid($uid) {
     $this->uid = $uid;
-  }
-
-  /**
-   * @return array
-   */
-  public function getExtraAttributes() {
-    return $this->extraAttributes;
-  }
-
-  /**
-   * @param array $extraAttributes
-   */
-  public function setExtraAttributes($extraAttributes) {
-    $this->extraAttributes = $extraAttributes;
-  }
-
-  /**
-   * @param $fieldName
-   * @param $value
-   * @param string $fieldKey
-   * @return self
-   */
-  public function addExtraAttributeField($fieldName, $value, $fieldKey = self::FIELD_KEY_VALUE) {
-    if (empty($this->extraAttributes[$fieldName])) {
-      $this->extraAttributes[$fieldName] = array(LANGUAGE_NONE => array());
-    }
-
-    $this->extraAttributes[$fieldName][LANGUAGE_NONE][] = array($fieldKey => $value);
-
-    // For chaining;
-    return $this;
   }
 
 }
