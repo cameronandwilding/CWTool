@@ -9,6 +9,7 @@ namespace CW\Controller;
 
 use CW\Model\EntityModel;
 use CW\Model\ObjectHandler;
+use CW\Params\EntityCreationParams;
 use CW\Util\LocalProcessIdentityMap;
 
 /**
@@ -107,6 +108,23 @@ class EntityControllerFactory {
     $controller = new $this->controllerClass($entityModel);
 
     return $controller;
+  }
+
+  public function initWithEntity($entity) {
+    list($id,,) = entity_extract_ids($this->entityType, $entity);
+    $controller = $this->initWithId($id);
+    $controller->getEntityModel()->setDrupalEntityData($entity);
+    return $controller;
+  }
+
+  public function initNew(EntityCreationParams $params) {
+    $creator = array($this->controllerClass, 'createRaw');
+    if (!is_callable($creator)) {
+      throw new Exception('Controller class does not have a createRaw method');
+    }
+
+    $entity = call_user_func($creator, $params);
+    return $this->initWithEntity($entity);
   }
 
 }
