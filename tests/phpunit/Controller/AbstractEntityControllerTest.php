@@ -1,12 +1,17 @@
 <?php
+/**
+ * @file
+ */
+
 use CW\Controller\NodeController;
-use CW\Model\EntityModel;
+
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 /**
  * @file
  */
 
-class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
+class AbstractEntityControllerTest extends PHPUnit_Framework_TestCase {
 
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
@@ -48,6 +53,13 @@ class BasicEntityControllerTest extends PHPUnit_Framework_TestCase {
       ->expects($this->once())
       ->method('getEntityMetadataWrapper');
     $this->controller->metadata();
+  }
+
+  public function testStringOutput() {
+    $string_from_cast = (string) $this->controller;
+    $string_from_toString = $this->controller->__toString();
+    $this->assertEquals($string_from_toString, $string_from_cast);
+    $this->assertTrue(strpos($string_from_toString, get_class($this->controller)) !== FALSE);
   }
 
 }

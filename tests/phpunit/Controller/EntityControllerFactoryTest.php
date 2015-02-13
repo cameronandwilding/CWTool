@@ -5,6 +5,7 @@
  * Entity container test.
  */
 
+use CW\Controller\AbstractEntityController;
 use CW\Controller\EntityControllerFactory;
 use CW\Util\LocalProcessIdentityMap;
 
@@ -14,6 +15,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
  * Class CWToolEntityModelTest
  */
 class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
+
   protected $entityType;
 
   /**
@@ -104,7 +106,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $objectHandlerMock, 'CW\Controller\BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type);
   }
 
 }
@@ -112,3 +114,5 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 class EntityControllerFactoryTest_FakeEntityController { }
 
 class EntityControllerFactoryTest_FakeEntityModel { }
+
+class EntityControllerFactoryTest_BasicEntityController extends AbstractEntityController { }

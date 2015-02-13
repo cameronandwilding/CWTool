@@ -79,10 +79,9 @@ class EntityControllerFactory {
     if (!is_subclass_of($modelClass, 'CW\Model\IEntityModelConstructor')) {
       throw new \InvalidArgumentException('Model class does not implement CW\Model\IEntityModelConstructor');
     }
+
     $this->modelClass = $modelClass;
-
     $this->entityType = $entityType;
-
     $this->objectLoader = $objectLoader;
   }
 
