@@ -3,7 +3,5 @@ description = "General helper methods for regular Drupal 7 development"
 core = 7.x
 dependencies[] = entity
 dependencies[] = drupal_psr3
-
-files[] = tests/CWToolWebTestCase.test
-files[] = tests/CWToolEntityWrapperTestCase.test
-files[] = tests/CWToolCollectionTestCase.test
+files[] = tests/drupal_web_test/CWToolWebTestCase.test
+files[] = tests/drupal_web_test/CWToolEntityWorkflowTestCase.test

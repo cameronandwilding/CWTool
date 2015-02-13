@@ -17,6 +17,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/cw_tool.content.inc';
 require_once __DIR__ . '/includes/cw_tool.util.inc';
 
+// Service names.
+define('CWTOOL_SERVICE_NODE_FACTORY', 'cw.node-controller.factory');
+define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
+
 /**
  * Get the dependency injection container.
  *

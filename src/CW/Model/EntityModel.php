@@ -37,7 +37,7 @@ class EntityModel implements IEntityModelConstructor {
   /**
    * @var ObjectHandler
    */
-  public $objectLoader;
+  public $objectHandler;
 
   /**
    * The entity metadata wrapper object.
@@ -74,7 +74,7 @@ class EntityModel implements IEntityModelConstructor {
   public function __construct(ObjectHandler $objectLoader, $entity_type, $entity_id) {
     $this->entityType = $entity_type;
     $this->entityId = $entity_id;
-    $this->objectLoader = $objectLoader;
+    $this->objectHandler = $objectLoader;
   }
 
   /**
@@ -87,7 +87,7 @@ class EntityModel implements IEntityModelConstructor {
    */
   public function getEntityMetadataWrapper() {
     if (!isset($this->entityMetadataWrapper)) {
-      $this->entityMetadataWrapper = $this->objectLoader->loadMetadata($this->entityType, $this->getEntityData());
+      $this->entityMetadataWrapper = $this->objectHandler->loadMetadata($this->entityType, $this->getEntityData());
     }
 
     return $this->entityMetadataWrapper;
@@ -100,7 +100,7 @@ class EntityModel implements IEntityModelConstructor {
    */
   public function getEntityData() {
     if (!isset($this->drupalEntityData)) {
-      $this->drupalEntityData = $this->objectLoader->loadSingleEntity($this->entityType, $this->entityId);
+      $this->drupalEntityData = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 
     return $this->drupalEntityData;
@@ -120,7 +120,7 @@ class EntityModel implements IEntityModelConstructor {
    * Save data to database.
    */
   public function save() {
-    $this->objectLoader->save($this->entityType, $this->getEntityData());
+    $this->objectHandler->save($this->entityType, $this->getEntityData());
     $this->setClean();
   }
 
@@ -145,6 +145,15 @@ class EntityModel implements IEntityModelConstructor {
    */
   public function setClean() {
     $this->isUpdated = FALSE;
+  }
+
+  /**
+   * Delete entity permanently.
+   *
+   * @return mixed
+   */
+  public function delete() {
+    return $this->objectHandler->delete($this->entityType, $this->entityId);
   }
 
   /**

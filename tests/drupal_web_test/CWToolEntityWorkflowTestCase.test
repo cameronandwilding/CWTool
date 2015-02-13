@@ -1,0 +1,132 @@
+<?php
+/**
+ * @file
+ *
+ * CWTool entity tests.
+ */
+
+use CW\Controller\NodeControllerFactory;
+use CW\Controller\UserController;
+use CW\Controller\UserControllerFactory;
+
+/**
+ * Class CWToolEntityWorkflowTestCase
+ * Entity related tests.
+ */
+class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
+
+  /**
+   * @var NodeController
+   */
+  private $nodeController;
+
+  /**
+   * @var UserController
+   */
+  private $userController;
+
+  /**
+   * Implements DrupalTestCase::getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'CWTools entity workflow test',
+      'description' => 'Entity workflow test.',
+      'group' => 'CW',
+    );
+  }
+
+  /**
+   * Implements DrupalTestCase::setUp().
+   */
+  public function setUp() {
+    parent::setUp(array('cw_tool'));
+    
+    /** @var NodeControllerFactory $nodeFactory */
+    $nodeFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_NODE_FACTORY);
+    $nodeParams = new \CW\Params\NodeCreationParams('article', 'foobar');
+    $this->nodeController = $nodeFactory->initNew($nodeParams);
+
+    /** @var UserControllerFactory $userFactory */
+    $userFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_USER_FACTORY);
+    $userParams = new \CW\Params\UserCreationParams('johndoe');
+    $userParams->addRole(\CW\Model\UserModel::ROLE_AUTHENTICATED_USER);
+    $this->userController = $userFactory->initNew($userParams);
+  }
+
+  private static function fetchNodeFromDB($nid) {
+    return db_query('
+      SELECT *
+      FROM {node}
+      WHERE nid = :nid
+    ', array(':nid' => $nid))->fetchObject();
+  }
+
+  private static function fetchUserFromDB($uid) {
+    return db_query('
+      SELECT *
+      FROM {users}
+      WHERE uid = :uid
+    ', array(':uid' => $uid))->fetchObject();
+  }
+
+  public function testNodeCreationUpdateAndDelete() {
+    // Verify the created node and node controller.
+    $this->assertEqual(get_class($this->nodeController), 'CW\Controller\NodeController');
+    $this->assertEqual(get_class($this->nodeController->getEntityModel()), 'CW\Model\NodeModel');
+    $this->assertTrue(is_object($this->nodeController->getEntityModel()));
+    $this->assertTrue(is_object($this->nodeController->data()));
+    $this->assertTrue(is_object($this->nodeController->metadata()));
+
+    // Check against DB data.
+    $nid = $this->nodeController->getEntityModel()->entityId;
+    $nodeFromDB = self::fetchNodeFromDB($nid);
+    $this->assertEqual($nodeFromDB->title, $this->nodeController->data()->title);
+    $this->assertEqual($nodeFromDB->nid, $this->nodeController->data()->nid);
+
+    // Update title and save with node API.
+    $newTitle = 'new-title';
+    $this->nodeController->data()->title = $newTitle;
+    $this->nodeController->getEntityModel()->save();
+    $nodeFromDBReload = self::fetchNodeFromDB($nid);
+    $this->assertEqual($newTitle, $nodeFromDBReload->title);
+
+    // Update title through entity metadata wrapper.
+    $newTitle = 'new-title-2';
+    $this->nodeController->metadata()->title = $newTitle;
+    $this->nodeController->metadata()->save();
+    $nodeFromDBReload2 = self::fetchNodeFromDB($nid);
+    $this->assertEqual($newTitle, $nodeFromDBReload2->title);
+
+    // Delete node.
+    $this->nodeController->getEntityModel()->delete();
+    $nodeFromDBReload3 = self::fetchNodeFromDB($nid);
+    $this->assertFalse($nodeFromDBReload3);
+  }
+
+  public function testUserCreationAndUpdate() {
+    // Verify the created node and node controller.
+    $this->assertEqual(get_class($this->userController), 'CW\Controller\UserController');
+    $this->assertEqual(get_class($this->userController->getEntityModel()), 'CW\Model\UserModel');
+    $this->assertTrue(is_object($this->userController->getEntityModel()));
+    $this->assertTrue(is_object($this->userController->data()));
+    $this->assertTrue(is_object($this->userController->metadata()));
+
+    $uid = $this->userController->getEntityModel()->entityId;
+    $userFromDB = self::fetchUserFromDB($uid);
+    $this->assertEqual('johndoe', $userFromDB->name);
+
+    // Change name through metadata wrapper.
+    $newName = 'new-name';
+    $this->userController->metadata()->name = $newName;
+    $this->userController->metadata()->save();
+    $userFromDBReload = self::fetchUserFromDB($uid);
+    $this->assertEqual($newName, $userFromDBReload->name);
+
+    // Delete.
+    $this->userController->getEntityModel()->delete();
+    $userFromDBReload2 = self::fetchUserFromDB($uid);
+    $this->assertFalse($userFromDBReload2);
+  }
+
+}
