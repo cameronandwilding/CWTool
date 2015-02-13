@@ -5,6 +5,7 @@
 
 namespace CW\Controller;
 
+use CW\Model\UserModel;
 use CW\Params\UserCreationParams;
 
 class UserController extends AbstractEntityController {
@@ -25,7 +26,7 @@ class UserController extends AbstractEntityController {
       'name' => $params->getUserName(),
       'mail' => $params->getEmail(),
       'pass' => $params->getPassword(),
-      'status' => 1,
+      'status' => UserModel::STATE_ACTIVE,
       'init' => $params->getEmail(),
       'roles' => $params->getRoles(),
     );
