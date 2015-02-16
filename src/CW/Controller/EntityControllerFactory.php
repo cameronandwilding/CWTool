@@ -12,6 +12,7 @@ use CW\Model\ObjectHandler;
 use CW\Params\EntityCreationParams;
 use CW\Util\LocalProcessIdentityMap;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class EntityControllerFactory
@@ -57,6 +58,11 @@ class EntityControllerFactory {
   private $objectLoader;
 
   /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Constructor.
    *
    * @param LocalProcessIdentityMap $localProcessIdentityMap
@@ -70,7 +76,7 @@ class EntityControllerFactory {
    * @param string $entityType
    *  Entity type.
    */
-  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $modelClass, $entityType) {
+  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $modelClass, $entityType, LoggerInterface $logger) {
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
     if (!is_subclass_of($controllerClass, 'CW\Controller\AbstractEntityController')) {
@@ -85,6 +91,7 @@ class EntityControllerFactory {
     $this->modelClass = $modelClass;
     $this->entityType = $entityType;
     $this->objectLoader = $objectLoader;
+    $this->logger = $logger;
   }
 
   /**
@@ -106,7 +113,7 @@ class EntityControllerFactory {
       $this->localProcessIdentityMap->add($cacheKey, $entityModel);
     }
 
-    $controller = new $this->controllerClass($entityModel);
+    $controller = new $this->controllerClass($entityModel, $this->logger);
 
     return $controller;
   }

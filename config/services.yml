@@ -16,6 +16,7 @@ services:
       - 'CW\Controller\NodeController'
       - 'CW\Model\NodeModel'
       - 'node'
+      - @cw.logger
 
   cw.user-controller.factory:
     class: CW\Controller\UserControllerFactory
@@ -25,6 +26,7 @@ services:
       - 'CW\Controller\UserController'
       - 'CW\Model\UserModel'
       - 'user'
+      - @cw.logger
 
   cw.node-batch-saver:
     class: CW\Util\EntityBatchSaver

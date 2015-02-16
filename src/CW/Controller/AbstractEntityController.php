@@ -9,6 +9,7 @@ namespace CW\Controller;
 
 use CW\Model\EntityModel;
 use EntityDrupalWrapper;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractEntityController
@@ -27,13 +28,19 @@ abstract class AbstractEntityController {
   protected $entityModel;
 
   /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Constructor.
    *
    * @param EntityModel $entityModel
    *  The model object.
    */
-  public function __construct(EntityModel $entityModel) {
+  public function __construct(EntityModel $entityModel, LoggerInterface $logger) {
     $this->entityModel = $entityModel;
+    $this->logger = $logger;
   }
 
   /**
