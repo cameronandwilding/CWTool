@@ -26,12 +26,18 @@ class AbstractEntityControllerTest extends PHPUnit_Framework_TestCase {
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
    */
+  protected $loggerMock;
+
+  /**
+   * @var PHPUnit_Framework_MockObject_MockObject
+   */
   protected $entityModelMock;
 
   public function setUp() {
     $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $this->entityModelMock = $this->getMock('CW\Model\EntityModel', [], [$objectHandlerMock, 'fake type', 'fake id']);
-    $this->controller = new NodeController($this->entityModelMock);
+    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
+    $this->controller = new NodeController($this->entityModelMock, $this->loggerMock);
   }
 
   public function testLoadModel() {

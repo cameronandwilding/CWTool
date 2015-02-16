@@ -33,18 +33,25 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
    */
   protected $nodeControllerFactory;
 
+  /**
+   * @var PHPUnit_Framework_MockObject_MockObject
+   */
+  protected $loggerMock;
+
   public function setUp() {
     parent::setUp();
 
     $this->entityType = md5(microtime(TRUE));
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
     $this->objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
+    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->nodeControllerFactory = new EntityControllerFactory(
       $this->localProcessIdentityMap,
       $this->objectHandlerMock,
       'CW\Controller\NodeController',
       'CW\Model\EntityModel',
-      $this->entityType
+      $this->entityType,
+      $this->loggerMock
     );
     $this->nodeControllerFactory;
   }
@@ -96,7 +103,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', 'CW\Model\EntityModel', $entity_type);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', 'CW\Model\EntityModel', $entity_type, $this->loggerMock);
   }
 
   public function testWithInvalidModelClass() {
@@ -106,7 +113,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type, $this->loggerMock);
   }
 
 }
