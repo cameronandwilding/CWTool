@@ -11,6 +11,7 @@ use CW\Model\EntityModel;
 use CW\Model\ObjectHandler;
 use CW\Params\EntityCreationParams;
 use CW\Util\LocalProcessIdentityMap;
+use Exception;
 
 /**
  * Class EntityControllerFactory
