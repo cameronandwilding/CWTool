@@ -5,36 +5,34 @@
 
 namespace CW\Controller;
 
-use CW\Model\UserModel;
 use CW\Params\UserCreationParams;
 
+/**
+ * Class UserController
+ * @package CW\Controller
+ */
 class UserController extends AbstractEntityController {
 
-  const ADMIN_UID = 1;
+  const USER_CURRENT = -1;
+  const UID_ANONYMOUS = 0;
+  const UID_ADMIN = 1;
+
+  const STATE_ACTIVE = 1;
+  const STATE_BLOCKED = 0;
+
+  const ROLE_AUTHENTICATED_USER = 'authenticated user';
 
   public function isCurrent() {
     global $user;
-    return $user->uid == $this->getEntityModel()->entityId;
+    return $user->uid == $this->entityId;
   }
 
   public function isAdmin() {
-    return $this->getEntityModel()->entityId == self::ADMIN_UID;
+    return $this->entityId == self::UID_ADMIN;
   }
 
-  public static function createRaw(UserCreationParams $params) {
-    $fields = array(
-      'name' => $params->getUserName(),
-      'mail' => $params->getEmail(),
-      'pass' => $params->getPassword(),
-      'status' => UserModel::STATE_ACTIVE,
-      'init' => $params->getEmail(),
-      'roles' => $params->getRoles(),
-    );
-
-    $fields = array_merge($fields, $params->getExtraAttributes());
-
-    $account = user_save(NULL, $fields);
-    return $account;
+  public static function getClassEntityType() {
+    return 'user';
   }
 
 }

@@ -5,8 +5,7 @@
 
 namespace CW\Params;
 
-
-use CW\Model\UserModel;
+use CW\Controller\UserController;
 
 class NodeCreationParams extends EntityCreationParams {
 
@@ -24,7 +23,7 @@ class NodeCreationParams extends EntityCreationParams {
    */
   private $uid;
 
-  public function __construct($type, $title = NULL, $language = LANGUAGE_NONE, $uid = UserModel::USER_CURRENT, array $extraAttributes = array()) {
+  public function __construct($type, $title = NULL, $language = LANGUAGE_NONE, $uid = UserController::USER_CURRENT, array $extraAttributes = array()) {
     parent::__construct($extraAttributes);
 
     $this->title = $title ? $title : "untitled";
@@ -79,7 +78,7 @@ class NodeCreationParams extends EntityCreationParams {
    * @return int
    */
   public function getUid() {
-    if ($this->uid == UserModel::USER_CURRENT) {
+    if ($this->uid == UserController::USER_CURRENT) {
       global $user;
       return $user->uid;
     }

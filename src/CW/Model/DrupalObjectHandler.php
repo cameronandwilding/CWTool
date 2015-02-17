@@ -2,7 +2,7 @@
 /**
  * @file
  *
- * Drupal object loader.
+ * Drupal object handler.
  */
 
 namespace CW\Model;

@@ -14,7 +14,6 @@ services:
       - @cw.identity-map
       - @cw.object-handler.drupal
       - 'CW\Controller\NodeController'
-      - 'CW\Model\NodeModel'
       - 'node'
       - @cw.logger
 
@@ -24,7 +23,6 @@ services:
       - @cw.identity-map
       - @cw.object-handler.drupal
       - 'CW\Controller\UserController'
-      - 'CW\Model\UserModel'
       - 'user'
       - @cw.logger
 

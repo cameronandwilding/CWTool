@@ -7,11 +7,10 @@
 
 namespace CW\Controller;
 
-use CW\Model\EntityModel;
+use CW\Factory\Creator;
 use CW\Model\ObjectHandler;
-use CW\Params\EntityCreationParams;
 use CW\Util\LocalProcessIdentityMap;
-use Exception;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -37,13 +36,6 @@ class EntityControllerFactory {
   protected $controllerClass;
 
   /**
-   * Corresponding entity model class.
-   *
-   * @var string
-   */
-  protected $modelClass;
-
-  /**
    * Entity type.
    *
    * @var string
@@ -58,7 +50,7 @@ class EntityControllerFactory {
   private $objectLoader;
 
   /**
-   * @var \Psr\Log\LoggerInterface
+   * @var LoggerInterface
    */
   protected $logger;
 
@@ -71,24 +63,18 @@ class EntityControllerFactory {
    *  Low level data loader.
    * @param string $controllerClass
    *  Actual entity controller class.
-   * @param string $modelClass
-   *  Actual entity model class.
    * @param string $entityType
    *  Entity type.
+   * @param LoggerInterface $logger
    */
-  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $modelClass, $entityType, LoggerInterface $logger) {
+  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $entityType, LoggerInterface $logger) {
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
     if (!is_subclass_of($controllerClass, 'CW\Controller\AbstractEntityController')) {
-      throw new \InvalidArgumentException('Controller class is not subclass of CW\Controller\AbstractEntityController');
+      throw new InvalidArgumentException('Controller class is not subclass of CW\Controller\AbstractEntityController');
     }
     $this->controllerClass = $controllerClass;
 
-    if (!is_subclass_of($modelClass, 'CW\Model\IEntityModelConstructor')) {
-      throw new \InvalidArgumentException('Model class does not implement CW\Model\IEntityModelConstructor');
-    }
-
-    $this->modelClass = $modelClass;
     $this->entityType = $entityType;
     $this->objectLoader = $objectLoader;
     $this->logger = $logger;
@@ -101,19 +87,16 @@ class EntityControllerFactory {
    * @return AbstractEntityController
    */
   public function initWithId($entity_id) {
-    /** @var EntityModel $entityModel */
-    $entityModel = NULL;
+    $controller = NULL;
 
     $cacheKey = 'entity:' . $this->entityType . ':' . $entity_id;
     if ($this->localProcessIdentityMap->keyExist($cacheKey)) {
-      $entityModel = $this->localProcessIdentityMap->get($cacheKey);
+      $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
     else {
-      $entityModel = new $this->modelClass($this->objectLoader, $this->entityType, $entity_id);
-      $this->localProcessIdentityMap->add($cacheKey, $entityModel);
+      $controller = new $this->controllerClass($this->objectLoader, $this->logger, $this->entityType, $entity_id);
+      $this->localProcessIdentityMap->add($cacheKey, $controller);
     }
-
-    $controller = new $this->controllerClass($entityModel, $this->logger);
 
     return $controller;
   }
@@ -121,17 +104,12 @@ class EntityControllerFactory {
   public function initWithEntity($entity) {
     list($id,,) = entity_extract_ids($this->entityType, $entity);
     $controller = $this->initWithId($id);
-    $controller->getEntityModel()->setDrupalEntityData($entity);
+    $controller->setDrupalEntity($entity);
     return $controller;
   }
 
-  public function initNew(EntityCreationParams $params) {
-    $creator = array($this->controllerClass, 'createRaw');
-    if (!is_callable($creator)) {
-      throw new Exception('Controller class does not have a createRaw method');
-    }
-
-    $entity = call_user_func($creator, $params);
+  public function initNew(Creator $creator) {
+    $entity = $creator->create();
     return $this->initWithEntity($entity);
   }
 

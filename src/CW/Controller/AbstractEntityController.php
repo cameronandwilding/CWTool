@@ -7,8 +7,10 @@
 
 namespace CW\Controller;
 
-use CW\Model\EntityModel;
-use EntityDrupalWrapper;
+use CW\Model\ObjectHandler;
+use CW\Params\EntityCreationParams;
+use EntityMetadataWrapper;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,60 +23,168 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractEntityController {
 
   /**
-   * The model.
-   *
-   * @var EntityModel
-   */
-  protected $entityModel;
-
-  /**
-   * @var \Psr\Log\LoggerInterface
+   * @var LoggerInterface
    */
   protected $logger;
 
   /**
+   * Entity type.
+   *
+   * @var string
+   */
+  protected $entityType;
+
+  /**
+   * Entity ID.
+   *
+   * @var int
+   */
+  protected $entityId;
+
+  /**
+   * @var ObjectHandler
+   */
+  protected $objectHandler;
+
+  /**
+   * The entity metadata wrapper object.
+   * Use $this->metadata() to access it.
+   *
+   * @var EntityMetadataWrapper
+   */
+  private $entityMetadataWrapper;
+
+  /**
+   * Drupal object.
+   * Use $this->entity() to access it.
+   *
+   * @var object
+   */
+  private $drupalEntityData;
+
+  /**
+   * Update flag.
+   *
+   * @var bool
+   */
+  private $isUpdated = FALSE;
+
+  /**
    * Constructor.
-   *
-   * @param EntityModel $entityModel
-   *  The model object.
    */
-  public function __construct(EntityModel $entityModel, LoggerInterface $logger) {
-    $this->entityModel = $entityModel;
+  public function __construct(ObjectHandler $objectLoader, LoggerInterface $logger, $entity_type, $entity_id) {
     $this->logger = $logger;
+    $this->entityType = $entity_type;
+    $this->entityId = $entity_id;
+    $this->objectHandler = $objectLoader;
   }
 
   /**
-   * Get the entity model.
+   * Get the entity metadata wrapper of the entity.
    *
-   * @return EntityModel
-   */
-  public function getEntityModel() {
-    return $this->entityModel;
-  }
-
-  /**
-   * Get the entity metadata wrapper object.
+   * @return EntityMetadataWrapper
    *
-   * @return EntityDrupalWrapper
+   * @throws Exception
+   *  Entity metadata wrapper exception.
    */
   public function metadata() {
-    return $this->getEntityModel()->getEntityMetadataWrapper();
+    if (!isset($this->entityMetadataWrapper)) {
+      $this->entityMetadataWrapper = $this->objectHandler->loadMetadata($this->entityType, $this->entity());
+    }
+
+    return $this->entityMetadataWrapper;
   }
 
   /**
-   * Get the lowest level of data of the object (mostly Drupal - unless defined otherwise).
+   * Get the Drupal object of the entity.
    *
-   * @return object
+   * @return mixed|object
    */
-  public function data() {
-    return $this->getEntityModel()->getEntityData();
+  public function entity() {
+    if (!isset($this->drupalEntityData)) {
+      $this->drupalEntityData = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
+    }
+
+    return $this->drupalEntityData;
+  }
+
+  /**
+   * Sets the Drupal object.
+   *
+   * @param object $drupalEntityData
+   *  Drupal object.
+   */
+  public function setDrupalEntity($drupalEntityData) {
+    $this->drupalEntityData = $drupalEntityData;
+  }
+
+  /**
+   * Save data to database.
+   */
+  public function save() {
+    $this->objectHandler->save($this->entityType, $this->entity());
+    $this->setClean();
+  }
+
+  /**
+   * Check if object has change.
+   *
+   * @return boolean
+   */
+  public function isDirty() {
+    return $this->isUpdated;
+  }
+
+  /**
+   * Mark as changed.
+   */
+  public function setDirty() {
+    $this->isUpdated = TRUE;
+  }
+
+  /**
+   * Mask as clean.
+   */
+  public function setClean() {
+    $this->isUpdated = FALSE;
+  }
+
+  /**
+   * Delete entity permanently.
+   *
+   * @return mixed
+   */
+  public function delete() {
+    return $this->objectHandler->delete($this->entityType, $this->entityId);
   }
 
   /**
    * {@inheritdoc}
    */
   public function __toString() {
-    return '[' . get_class($this) . ', ' . $this->getEntityModel() . ']@' . spl_object_hash($this);
+    return '[' . get_class($this) . ", {$this->entityType}:{$this->entityId}]@" . spl_object_hash($this);
+  }
+
+  /**
+   * @return string
+   */
+  public function getEntityType() {
+    return $this->entityType;
+  }
+
+  /**
+   * @return int
+   */
+  public function getEntityId() {
+    return $this->entityId;
+  }
+
+  public static function getClassEntityType() {
+    throw new Exception("Undefined entity type");
+  }
+
+  public static function getClassEntityBundle() {
+    throw new Exception("Undefined entity bundle");
   }
 
 }
