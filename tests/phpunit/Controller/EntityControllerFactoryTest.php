@@ -7,6 +7,7 @@
 
 use CW\Controller\AbstractEntityController;
 use CW\Controller\EntityControllerFactory;
+use CW\Test\TestCase;
 use CW\Util\LocalProcessIdentityMap;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 /**
  * Class CWToolEntityModelTest
  */
-class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
+class EntityControllerFactoryTest extends TestCase {
 
   protected $entityType;
 
@@ -41,7 +42,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   public function setUp() {
     parent::setUp();
 
-    $this->entityType = md5(microtime(TRUE));
+    $this->entityType = self::randomString();
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
     $this->objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
@@ -49,7 +50,6 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
       $this->localProcessIdentityMap,
       $this->objectHandlerMock,
       'CW\Controller\NodeController',
-      'CW\Model\EntityModel',
       $this->entityType,
       $this->loggerMock
     );
@@ -57,7 +57,7 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testEntityInstantiation() {
-    $entityId = rand(1, 1000);
+    $entityId = self::randomInt();
     $entity = (object) array();
     $this->objectHandlerMock
       ->expects($this->once())
@@ -75,22 +75,22 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
       ->with()
       ->willReturn($entity);
 
-    $model = $this->nodeControllerFactory->initWithId($entityId);
-    $this->assertEquals($model->getEntityModel()->entityId, $entityId);
-    $this->assertEquals($model->getEntityModel()->entityType, $this->entityType);
+    $controller = $this->nodeControllerFactory->initWithId($entityId);
+    $this->assertEquals($controller->getEntityId(), $entityId);
+    $this->assertEquals($controller->getEntityType(), $this->entityType);
 
-    $data = $model->data();
-    $metadata = $model->metadata();
-    $model->getEntityModel()->save();
+    $entityStored = $controller->entity();
+    $metadata = $controller->metadata();
+    $controller->save();
 
-    $dataReload = $model->data();
-    $metadataReload = $model->metadata();
-    $this->assertEquals($data, $dataReload);
+    $dataReload = $controller->entity();
+    $metadataReload = $controller->metadata();
+    $this->assertEquals($entityStored, $dataReload);
     $this->assertEquals($metadata, $metadataReload);
   }
 
   public function testSameObjectInitialization() {
-    $id = rand(1, PHP_INT_MAX);
+    $id = self::randomInt();
     $result_a = $this->nodeControllerFactory->initWithId($id);
     $result_b = $this->nodeControllerFactory->initWithId($id);
     $this->assertEquals($result_a, $result_b);
@@ -99,27 +99,15 @@ class EntityControllerFactoryTest extends PHPUnit_Framework_TestCase {
   public function testWithInvalidControllerClass() {
     $mapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
     $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
-    $entity_type = md5(microtime(TRUE));
+    $entity_type = self::randomString();
 
     $this->setExpectedException('\InvalidArgumentException');
 
-    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', 'CW\Model\EntityModel', $entity_type, $this->loggerMock);
-  }
-
-  public function testWithInvalidModelClass() {
-    $mapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
-    $entity_type = md5(microtime(TRUE));
-
-    $this->setExpectedException('\InvalidArgumentException');
-
-    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_BasicEntityController', 'EntityControllerFactoryTest_FakeEntityModel', $entity_type, $this->loggerMock);
+    new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', $entity_type, $this->loggerMock);
   }
 
 }
 
 class EntityControllerFactoryTest_FakeEntityController { }
-
-class EntityControllerFactoryTest_FakeEntityModel { }
 
 class EntityControllerFactoryTest_BasicEntityController extends AbstractEntityController { }

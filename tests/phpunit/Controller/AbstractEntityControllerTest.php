@@ -41,26 +41,54 @@ class AbstractEntityControllerTest extends TestCase {
     $this->controller = new NodeController($this->objectHandlerMock, $this->loggerMock, $this->entityType, $this->entityId);
   }
 
-//  public function testLoadModel() {
-//    $this->assertEquals(
-//      $this->entityModelMock,
-//      $this->controller->getEntityModel()
-//    );
-//  }
+  public function testLoadEntity() {
+    $entity = (object) [
+      'type' => self::randomString(),
+      'id' => self::randomInt(),
+    ];
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($entity);
+    $entityLoaded = $this->controller->entity();
+    // Second load to test if it's called once only.
+    $this->controller->entity();
+    $this->assertEquals($entity, $entityLoaded);
+  }
 
-//  public function testLoadDrupalData() {
-//    $this->entityModelMock
-//      ->expects($this->once())
-//      ->method('getEntityData');
-//    $this->controller->data();
-//  }
+  public function testEntityParams() {
+    $this->assertEquals($this->entityId, $this->controller->getEntityId());
+    $this->assertEquals($this->entityType, $this->controller->getEntityType());
+  }
 
-//  public function testLoadMetaData() {
-//    $this->entityModelMock
-//      ->expects($this->once())
-//      ->method('getEntityMetadataWrapper');
-//    $this->controller->metadata();
-//  }
+  public function testEntitySave() {
+    $this->objectHandlerMock->expects($this->once())->method('save');
+    $this->objectHandlerMock->expects($this->once())->method('loadSingleEntity');
+    $this->controller->save();
+  }
+
+  public function testEntityDelete() {
+    $this->objectHandlerMock->expects($this->once())->method('delete');
+    $this->objectHandlerMock->expects($this->never())->method('save');
+    $this->objectHandlerMock->expects($this->never())->method('loadSingleEntity');
+    $this->controller->delete();
+  }
+
+  public function testLoadEntityMetadata() {
+    $metadata = (object) [
+      'foo' => self::randomString(),
+      'bar' => self::randomInt(),
+    ];
+    $this->objectHandlerMock->expects($this->once())->method('loadSingleEntity');
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadMetadata')
+      ->willReturn($metadata);
+    $metadataLoaded = $this->controller->metadata();
+    // Second load to test if it's called once only.
+    $this->controller->metadata();
+    $this->assertEquals($metadata, $metadataLoaded);
+  }
 
   public function testStringOutput() {
     $string_from_cast = (string) $this->controller;

@@ -7,6 +7,7 @@
 
 namespace CW\Util;
 
+use CW\Controller\AbstractEntityController;
 use CW\Model\EntityModel;
 use Psr\Log\LoggerInterface;
 
@@ -21,7 +22,7 @@ class EntityBatchSaver {
   /**
    * @var LocalProcessIdentityMap
    */
-  private $entityModelIdentityMap;
+  private $entityControllerIdentityMap;
 
   /**
    * @var \Psr\Log\LoggerInterface
@@ -35,7 +36,7 @@ class EntityBatchSaver {
    *  Identity map that contains entity models.
    */
   public function __construct(LocalProcessIdentityMap $entityModelIdentityMap, LoggerInterface $logger) {
-    $this->entityModelIdentityMap = $entityModelIdentityMap;
+    $this->entityControllerIdentityMap = $entityModelIdentityMap;
     $this->logger = $logger;
   }
 
@@ -43,11 +44,11 @@ class EntityBatchSaver {
    * Save all updated entities.
    */
   public function saveAll() {
-    /** @var EntityModel $entityModel */
-    $allItems = $this->entityModelIdentityMap->getAllItems();
-    foreach ($allItems as $entityModel) {
-      if ($entityModel->isDirty()) {
-        $entityModel->save();
+    $allItems = $this->entityControllerIdentityMap->getAllItems();
+    /** @var AbstractEntityController $controller */
+    foreach ($allItems as $controller) {
+      if ($controller->isDirty()) {
+        $controller->save();
       }
     }
 
