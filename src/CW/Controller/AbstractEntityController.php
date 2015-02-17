@@ -8,7 +8,6 @@
 namespace CW\Controller;
 
 use CW\Model\ObjectHandler;
-use CW\Params\EntityCreationParams;
 use EntityMetadataWrapper;
 use Exception;
 use Psr\Log\LoggerInterface;
