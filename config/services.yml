@@ -9,7 +9,7 @@ services:
     class: CW\Model\DrupalObjectHandler
 
   cw.node-controller.factory:
-    class: CW\Controller\NodeControllerFactory
+    class: CW\Controller\EntityControllerFactory
     arguments:
       - @cw.identity-map
       - @cw.object-handler.drupal

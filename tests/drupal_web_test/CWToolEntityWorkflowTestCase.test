@@ -5,9 +5,14 @@
  * CWTool entity tests.
  */
 
-use CW\Controller\NodeControllerFactory;
+use CW\Controller\EntityControllerFactory;
+use CW\Controller\NodeController;
 use CW\Controller\UserController;
 use CW\Controller\UserControllerFactory;
+use CW\Factory\NodeCreator;
+use CW\Factory\UserCreator;
+use CW\Params\NodeCreationParams;
+use CW\Params\UserCreationParams;
 
 /**
  * Class CWToolEntityWorkflowTestCase
@@ -42,16 +47,16 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
   public function setUp() {
     parent::setUp(array('cw_tool'));
     
-    /** @var NodeControllerFactory $nodeFactory */
+    /** @var EntityControllerFactory $nodeFactory */
     $nodeFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_NODE_FACTORY);
-    $nodeParams = new \CW\Params\NodeCreationParams('article', 'foobar');
-    $this->nodeController = $nodeFactory->initNew($nodeParams);
+    $nodeParams = new NodeCreationParams('article', 'foobar');
+    $this->nodeController = $nodeFactory->initNew(new NodeCreator($nodeParams));
 
     /** @var UserControllerFactory $userFactory */
     $userFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_USER_FACTORY);
-    $userParams = new \CW\Params\UserCreationParams('johndoe');
-    $userParams->addRole(\CW\Model\UserModel::ROLE_AUTHENTICATED_USER);
-    $this->userController = $userFactory->initNew($userParams);
+    $userParams = new UserCreationParams('johndoe');
+    $userParams->addRole(UserController::ROLE_AUTHENTICATED_USER);
+    $this->userController = $userFactory->initNew(new UserCreator($userParams));
   }
 
   private static function fetchNodeFromDB($nid) {
@@ -73,21 +78,19 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
   public function testNodeCreationUpdateAndDelete() {
     // Verify the created node and node controller.
     $this->assertEqual(get_class($this->nodeController), 'CW\Controller\NodeController');
-    $this->assertEqual(get_class($this->nodeController->getEntityModel()), 'CW\Model\NodeModel');
-    $this->assertTrue(is_object($this->nodeController->getEntityModel()));
-    $this->assertTrue(is_object($this->nodeController->data()));
+    $this->assertTrue(is_object($this->nodeController->entity()));
     $this->assertTrue(is_object($this->nodeController->metadata()));
 
     // Check against DB data.
-    $nid = $this->nodeController->getEntityModel()->entityId;
+    $nid = $this->nodeController->getEntityId();
     $nodeFromDB = self::fetchNodeFromDB($nid);
-    $this->assertEqual($nodeFromDB->title, $this->nodeController->data()->title);
-    $this->assertEqual($nodeFromDB->nid, $this->nodeController->data()->nid);
+    $this->assertEqual($nodeFromDB->title, $this->nodeController->entity()->title);
+    $this->assertEqual($nodeFromDB->nid, $this->nodeController->entity()->nid);
 
     // Update title and save with node API.
     $newTitle = 'new-title';
-    $this->nodeController->data()->title = $newTitle;
-    $this->nodeController->getEntityModel()->save();
+    $this->nodeController->entity()->title = $newTitle;
+    $this->nodeController->save();
     $nodeFromDBReload = self::fetchNodeFromDB($nid);
     $this->assertEqual($newTitle, $nodeFromDBReload->title);
 
@@ -99,7 +102,7 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
     $this->assertEqual($newTitle, $nodeFromDBReload2->title);
 
     // Delete node.
-    $this->nodeController->getEntityModel()->delete();
+    $this->nodeController->delete();
     $nodeFromDBReload3 = self::fetchNodeFromDB($nid);
     $this->assertFalse($nodeFromDBReload3);
   }
@@ -107,12 +110,10 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
   public function testUserCreationAndUpdate() {
     // Verify the created node and node controller.
     $this->assertEqual(get_class($this->userController), 'CW\Controller\UserController');
-    $this->assertEqual(get_class($this->userController->getEntityModel()), 'CW\Model\UserModel');
-    $this->assertTrue(is_object($this->userController->getEntityModel()));
-    $this->assertTrue(is_object($this->userController->data()));
+    $this->assertTrue(is_object($this->userController->entity()));
     $this->assertTrue(is_object($this->userController->metadata()));
 
-    $uid = $this->userController->getEntityModel()->entityId;
+    $uid = $this->userController->getEntityId();
     $userFromDB = self::fetchUserFromDB($uid);
     $this->assertEqual('johndoe', $userFromDB->name);
 
@@ -124,7 +125,7 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
     $this->assertEqual($newName, $userFromDBReload->name);
 
     // Delete.
-    $this->userController->getEntityModel()->delete();
+    $this->userController->delete();
     $userFromDBReload2 = self::fetchUserFromDB($uid);
     $this->assertFalse($userFromDBReload2);
   }

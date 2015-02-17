@@ -5,8 +5,6 @@
 
 namespace CW\Controller;
 
-use CW\Params\UserCreationParams;
-
 class UserControllerFactory extends EntityControllerFactory {
 
   /**

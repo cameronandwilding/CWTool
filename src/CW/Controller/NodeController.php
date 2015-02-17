@@ -7,9 +7,6 @@
 
 namespace CW\Controller;
 
-use stdClass;
-use CW\Params\NodeCreationParams;
-
 /**
  * Class NodeController
  * @package CW\Controller
