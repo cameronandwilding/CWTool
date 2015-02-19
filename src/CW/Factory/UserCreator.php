@@ -31,6 +31,7 @@ class UserCreator implements Creator {
       'status' => UserController::STATE_ACTIVE,
       'init' => $this->params->getEmail(),
       'roles' => $this->params->getRoles(),
+      'timezone' => 'UTC',
     );
 
     $fields = array_merge($fields, $this->params->getExtraAttributes());
