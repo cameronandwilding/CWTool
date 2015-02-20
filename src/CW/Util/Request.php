@@ -14,11 +14,16 @@ class Request {
   /**
    * @return \CW\Util\Request
    */
-  public static function initFromGlobals() {
-    $req = new Request();
-    $req->collectGlobalGetParams();
-    $req->collectGlobalServerParams();
-    return $req;
+  public static function current() {
+    static $current;
+
+    if (empty($current)) {
+      $current = new Request();
+      $current->collectGlobalGetParams();
+      $current->collectGlobalServerParams();
+    }
+
+    return $current;
   }
 
   public function collectGlobalGetParams() {
@@ -35,6 +40,10 @@ class Request {
 
   public function getGET($key) {
     return isset($this->GETparams[$key]) ? $this->GETparams[$key] : NULL;
+  }
+
+  public function pageIsCalledFromReferencedDialog() {
+    return $this->getGET('render') === 'references-dialog';
   }
 
 }
