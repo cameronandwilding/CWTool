@@ -10,6 +10,7 @@ namespace CW\Controller;
 use CW\Factory\Creator;
 use CW\Model\ObjectHandler;
 use CW\Util\LocalProcessIdentityMap;
+use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
@@ -86,10 +87,21 @@ class EntityControllerFactory {
    * @param mixed $entity_id
    * @return AbstractEntityController
    */
-  public function initWithId($entity_id) {
+  public function initWithId($entity_id, $cache_key = NULL) {
     $controller = NULL;
 
-    $cacheKey = 'entity:' . $this->entityType . ':' . $entity_id;
+    $entity_id = (string) $entity_id;
+    $isEntityIDMissing = strlen($entity_id) == 0;
+    if ($isEntityIDMissing) {
+      if ($cache_key === NULL) {
+        throw new Exception('Missing entity id and cache key.');
+      }
+    }
+    else {
+      $cache_key = $entity_id;
+    }
+
+    $cacheKey = 'entity:' . $this->entityType . ':' . $cache_key;
     if ($this->localProcessIdentityMap->keyExist($cacheKey)) {
       $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
@@ -103,7 +115,15 @@ class EntityControllerFactory {
 
   public function initWithEntity($entity) {
     list($id,,) = entity_extract_ids($this->entityType, $entity);
-    $controller = $this->initWithId($id);
+
+    if (strlen((string) $id) == 0) {
+      $cache_key = spl_object_hash($entity);
+    }
+    else {
+      $cache_key = $id;
+    }
+
+    $controller = $this->initWithId($cache_key);
     $controller->setDrupalEntity($entity);
     return $controller;
   }
