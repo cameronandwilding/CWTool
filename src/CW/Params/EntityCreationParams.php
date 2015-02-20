@@ -62,4 +62,8 @@ class EntityCreationParams {
     return $this;
   }
 
+  public function addExtraAttribute($property, $value) {
+    $this->extraAttributes = array_merge($this->extraAttributes, array($property => $value));
+  }
+
 }
