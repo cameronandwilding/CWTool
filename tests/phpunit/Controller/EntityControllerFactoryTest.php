@@ -32,7 +32,7 @@ class EntityControllerFactoryTest extends TestCase {
   /**
    * @var EntityControllerFactory
    */
-  protected $nodeControllerFactory;
+  protected $entityControllerFactory;
 
   /**
    * @var PHPUnit_Framework_MockObject_MockObject
@@ -46,14 +46,14 @@ class EntityControllerFactoryTest extends TestCase {
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
     $this->objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
-    $this->nodeControllerFactory = new EntityControllerFactory(
+    $this->entityControllerFactory = new EntityControllerFactory(
       $this->localProcessIdentityMap,
       $this->objectHandlerMock,
-      'CW\Controller\NodeController',
+      'EntityControllerFactoryTest_BasicEntityController',
       $this->entityType,
       $this->loggerMock
     );
-    $this->nodeControllerFactory;
+    $this->entityControllerFactory;
   }
 
   public function testEntityInstantiation() {
@@ -75,7 +75,7 @@ class EntityControllerFactoryTest extends TestCase {
       ->with()
       ->willReturn($entity);
 
-    $controller = $this->nodeControllerFactory->initWithId($entityId);
+    $controller = $this->entityControllerFactory->initWithId($entityId);
     $this->assertEquals($controller->getEntityId(), $entityId);
     $this->assertEquals($controller->getEntityType(), $this->entityType);
 
@@ -91,8 +91,8 @@ class EntityControllerFactoryTest extends TestCase {
 
   public function testSameObjectInitialization() {
     $id = self::randomInt();
-    $result_a = $this->nodeControllerFactory->initWithId($id);
-    $result_b = $this->nodeControllerFactory->initWithId($id);
+    $result_a = $this->entityControllerFactory->initWithId($id);
+    $result_b = $this->entityControllerFactory->initWithId($id);
     $this->assertEquals($result_a, $result_b);
   }
 
@@ -104,6 +104,11 @@ class EntityControllerFactoryTest extends TestCase {
     $this->setExpectedException('\InvalidArgumentException');
 
     new EntityControllerFactory($mapMock, $objectHandlerMock, 'EntityControllerFactoryTest_FakeEntityController', $entity_type, $this->loggerMock);
+  }
+
+  public function testInvalidInitializationWithoutIDOrCacheKey() {
+    $this->setExpectedException('InvalidArgumentException');
+    $this->entityControllerFactory->initWithId(NULL);
   }
 
 }

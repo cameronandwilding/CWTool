@@ -3,15 +3,15 @@
  * @file
  */
 
+use CW\Controller\AbstractEntityController;
 use CW\Controller\NodeController;
 use CW\Test\TestCase;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 /**
- * @file
+ * Class AbstractEntityControllerTest
  */
-
 class AbstractEntityControllerTest extends TestCase {
 
   /**
@@ -38,7 +38,7 @@ class AbstractEntityControllerTest extends TestCase {
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    $this->controller = new NodeController($this->objectHandlerMock, $this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new TestController($this->objectHandlerMock, $this->loggerMock, $this->entityType, $this->entityId);
   }
 
   public function testLoadEntity() {
@@ -97,4 +97,44 @@ class AbstractEntityControllerTest extends TestCase {
     $this->assertTrue(strpos($string_from_toString, get_class($this->controller)) !== FALSE);
   }
 
+  public function testSettingEntityBeforeEntityLoad() {
+    $this->objectHandlerMock
+      ->expects($this->never())
+      ->method('loadSingleEntity');
+
+    $entityFake = (object)['id' => self::randomInt()];
+    $this->controller->setEntity($entityFake);
+
+    $entityFakeLoad = $this->controller->entity();
+    $this->assertEquals($entityFake, $entityFakeLoad);
+  }
+
+  public function testSettingEntityAfterEntityLoad() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity');
+
+    $entityLoaded = $this->controller->entity();
+    $entityFake = (object)['id' => self::randomInt()];
+
+    $this->assertNotEquals($entityLoaded, $entityFake);
+
+    $this->controller->setEntity($entityFake);
+
+    $entityFakeLoad = $this->controller->entity();
+    $this->assertEquals($entityFakeLoad, $entityFake);
+  }
+
+  public function testUnimplementedEntityType() {
+    $this->setExpectedException('\Exception');
+    TestController::getClassEntityType();
+  }
+
+  public function testUnimplementedEntityBundle() {
+    $this->setExpectedException('\Exception');
+    TestController::getClassEntityBundle();
+  }
+
 }
+
+class TestController extends AbstractEntityController { }

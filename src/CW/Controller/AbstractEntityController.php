@@ -31,14 +31,14 @@ abstract class AbstractEntityController {
    *
    * @var string
    */
-  protected $entityType;
+  private $entityType;
 
   /**
    * Entity ID.
    *
    * @var int
    */
-  protected $entityId;
+  private $entityId;
 
   /**
    * @var ObjectHandler
@@ -59,7 +59,7 @@ abstract class AbstractEntityController {
    *
    * @var object
    */
-  private $drupalEntityData;
+  private $entity;
 
   /**
    * Update flag.
@@ -100,21 +100,21 @@ abstract class AbstractEntityController {
    * @return mixed|object
    */
   public function entity() {
-    if (!isset($this->drupalEntityData)) {
-      $this->drupalEntityData = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
+    if (!isset($this->entity)) {
+      $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 
-    return $this->drupalEntityData;
+    return $this->entity;
   }
 
   /**
    * Sets the Drupal object.
    *
-   * @param object $drupalEntityData
+   * @param object $entity
    *  Drupal object.
    */
-  public function setDrupalEntity($drupalEntityData) {
-    $this->drupalEntityData = $drupalEntityData;
+  public function setEntity($entity) {
+    $this->entity = $entity;
   }
 
   /**
@@ -179,11 +179,11 @@ abstract class AbstractEntityController {
   }
 
   public static function getClassEntityType() {
-    throw new Exception("Undefined entity type");
+    throw new Exception('Undefined entity type');
   }
 
   public static function getClassEntityBundle() {
-    throw new Exception("Undefined entity bundle");
+    throw new Exception('Undefined entity bundle');
   }
 
 }

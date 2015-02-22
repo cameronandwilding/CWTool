@@ -130,4 +130,16 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
     $this->assertFalse($userFromDBReload2);
   }
 
+  public function testControllerLoadFromEntity() {
+    /** @var EntityControllerFactory $nodeFactory */
+    $nodeFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_NODE_FACTORY);
+    $nodeParams = new NodeCreationParams('article', 'foobar');
+    $nodeCreator = new NodeCreator($nodeParams);
+    $node = $nodeCreator->create();
+
+    $nodeController = $nodeFactory->initWithEntity($node);
+    $this->assertEqual($node, $nodeController->entity());
+    $this->assertEqual($node->nid, $nodeController->getEntityId());
+  }
+
 }

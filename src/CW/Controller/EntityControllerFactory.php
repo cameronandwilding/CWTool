@@ -48,7 +48,7 @@ class EntityControllerFactory {
    *
    * @var ObjectHandler
    */
-  private $objectLoader;
+  private $objectHandler;
 
   /**
    * @var LoggerInterface
@@ -77,7 +77,7 @@ class EntityControllerFactory {
     $this->controllerClass = $controllerClass;
 
     $this->entityType = $entityType;
-    $this->objectLoader = $objectLoader;
+    $this->objectHandler = $objectLoader;
     $this->logger = $logger;
   }
 
@@ -89,7 +89,6 @@ class EntityControllerFactory {
    * @return \CW\Controller\AbstractEntityController
    * @throws \CW\Exception\IdentityMapException
    * @throws \Exception
-   * @internal param null $cache_key
    */
   public function initWithId($entity_id, $cacheKey = NULL) {
     $controller = NULL;
@@ -99,7 +98,7 @@ class EntityControllerFactory {
     if ($cacheKey === NULL) {
       $isEntityIDMissing = strlen($entity_id) === 0;
       if ($isEntityIDMissing) {
-        throw new Exception('Missing entity id and cache key.');
+        throw new InvalidArgumentException('Missing entity id and cache key.');
       }
       $cacheKey = 'entity:' . $this->entityType . ':' . $entity_id;
     }
@@ -108,7 +107,7 @@ class EntityControllerFactory {
       $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
     else {
-      $controller = new $this->controllerClass($this->objectLoader, $this->logger, $this->entityType, $entity_id);
+      $controller = new $this->controllerClass($this->objectHandler, $this->logger, $this->entityType, $entity_id);
       $this->localProcessIdentityMap->add($cacheKey, $controller);
     }
 
@@ -127,7 +126,7 @@ class EntityControllerFactory {
     }
 
     $controller = $this->initWithId($id, $cache_key);
-    $controller->setDrupalEntity($entity);
+    $controller->setEntity($entity);
     return $controller;
   }
 
