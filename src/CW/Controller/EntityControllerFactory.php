@@ -85,23 +85,23 @@ class EntityControllerFactory {
    * Factory method.
    *
    * @param mixed $entity_id
-   * @return AbstractEntityController
+   * @param null $cacheKey
+   * @return \CW\Controller\AbstractEntityController
+   * @throws \CW\Exception\IdentityMapException
+   * @throws \Exception
+   * @internal param null $cache_key
    */
-  public function initWithId($entity_id, $cache_key = NULL) {
+  public function initWithId($entity_id, $cacheKey = NULL) {
     $controller = NULL;
 
-    $entity_id = (string) $entity_id;
-    $isEntityIDMissing = strlen($entity_id) == 0;
-    if ($isEntityIDMissing) {
-      if ($cache_key === NULL) {
+    if ($cacheKey === NULL) {
+      $isEntityIDMissing = strlen($entity_id) === 0;
+      if ($isEntityIDMissing) {
         throw new Exception('Missing entity id and cache key.');
       }
-    }
-    else {
-      $cache_key = $entity_id;
+      $cacheKey = 'entity:' . $this->entityType . ':' . $entity_id;
     }
 
-    $cacheKey = 'entity:' . $this->entityType . ':' . $cache_key;
     if ($this->localProcessIdentityMap->keyExist($cacheKey)) {
       $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
