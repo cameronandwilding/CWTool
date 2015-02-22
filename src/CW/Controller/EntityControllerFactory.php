@@ -94,6 +94,8 @@ class EntityControllerFactory {
   public function initWithId($entity_id, $cacheKey = NULL) {
     $controller = NULL;
 
+    // Sometimes ID is unavailable, so cacheKey can be provided explicitly.
+    // Otherwise it generates an automatic cache key.
     if ($cacheKey === NULL) {
       $isEntityIDMissing = strlen($entity_id) === 0;
       if ($isEntityIDMissing) {
@@ -116,14 +118,15 @@ class EntityControllerFactory {
   public function initWithEntity($entity) {
     list($id,,) = entity_extract_ids($this->entityType, $entity);
 
-    if (strlen((string) $id) == 0) {
+    // Entity can be new - without and ID - cache key is important so we use the object hash PHP provides.
+    if (strlen($id) == 0) {
       $cache_key = spl_object_hash($entity);
     }
     else {
-      $cache_key = $id;
+      $cache_key = NULL;
     }
 
-    $controller = $this->initWithId($cache_key);
+    $controller = $this->initWithId($id, $cache_key);
     $controller->setDrupalEntity($entity);
     return $controller;
   }
