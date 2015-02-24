@@ -24,11 +24,11 @@ class UserController extends AbstractEntityController {
 
   public function isCurrent() {
     global $user;
-    return $user->uid == $this->entityId;
+    return $user->uid == $this->getEntityId();
   }
 
   public function isAdmin() {
-    return $this->entityId == self::UID_ADMIN;
+    return $this->getEntityId() == self::UID_ADMIN;
   }
 
   public static function getClassEntityType() {

@@ -19,4 +19,25 @@ class NodeController extends AbstractEntityController {
     return 'node';
   }
 
+  public function fieldValue($field_name, $key = 'value', $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$field_name}[$lang][$idx][$key])) {
+      return NULL;
+    }
+    return $this->entity()->{$field_name}[$lang][$idx][$key];
+  }
+
+  public function fieldItem($field_name, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$field_name}[$lang][$idx])) {
+      return NULL;
+    }
+    return $this->entity()->{$field_name}[$lang][$idx];
+  }
+
+  public function fieldItems($field_name, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$field_name}[$lang])) {
+      return NULL;
+    }
+    return $this->entity()->{$field_name}[$lang];
+  }
+
 }
