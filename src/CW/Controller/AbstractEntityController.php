@@ -211,4 +211,16 @@ abstract class AbstractEntityController {
     $this->entity()->{$field_name}[$lang][$idx][$key] = $value;
   }
 
+  /**
+   * @param $fieldName
+   * @param \CW\Controller\EntityControllerFactory $factory
+   * @return \CW\Controller\AbstractEntityController|null
+   */
+  protected function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory) {
+    if (!($targetID = $this->fieldValue($fieldName, 'target_id'))) {
+      return NULL;
+    }
+    return $factory->initWithId($targetID);
+  }
+
 }
