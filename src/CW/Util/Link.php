@@ -56,6 +56,15 @@ class Link {
     return new static($path, NULL, array(), $fragment);
   }
 
+  /**
+   * @param $path
+   * @param array $query
+   * @return Link
+   */
+  public static function withPathAndQuery($path, array $query) {
+    return new static($path, NULL, $query);
+  }
+
   public function getDrupalURL() {
     return url($this->path, $this->getDrupalURLOptions());
   }
