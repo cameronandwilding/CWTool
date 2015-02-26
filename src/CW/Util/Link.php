@@ -65,6 +65,14 @@ class Link {
     return new static($path, NULL, $query);
   }
 
+  public static function withRequest(Request $request) {
+    return new Link(
+      $request->getDrupalPath(),
+      NULL,
+      $request->getGETWithoutDrupalPath()
+    );
+  }
+
   public function getDrupalURL() {
     return url($this->path, $this->getDrupalURLOptions());
   }
@@ -97,6 +105,16 @@ class Link {
    */
   public function setQuery($query) {
     $this->query = $query;
+    return $this;
+  }
+
+  /**
+   * @param $key
+   * @param $value
+   * @return Link
+   */
+  public function setQueryParam($key, $value) {
+    $this->query[$key] = $value;
     return $this;
   }
 

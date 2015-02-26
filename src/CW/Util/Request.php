@@ -7,9 +7,9 @@ namespace CW\Util;
 
 class Request {
 
-  protected $GETparams;
+  protected $GET;
 
-  protected $SERVERparams;
+  protected $SERVER;
 
   /**
    * @return \CW\Util\Request
@@ -27,23 +27,40 @@ class Request {
   }
 
   public function collectGlobalGetParams() {
-    $this->GETparams = $_GET;
+    $this->GET = $_GET;
   }
 
   public function collectGlobalServerParams() {
-    $this->SERVERparams = $_SERVER;
+    $this->SERVER = $_SERVER;
+  }
+
+  public function getDrupalPath() {
+    return $this->getGETParam('q');
   }
 
   public function getTime() {
-    return !empty($this->SERVERparams['REQUEST_TIME']) ? $this->SERVERparams['REQUEST_TIME'] : time();
+    return !empty($this->SERVER['REQUEST_TIME']) ? $this->SERVER['REQUEST_TIME'] : time();
   }
 
-  public function getGET($key) {
-    return isset($this->GETparams[$key]) ? $this->GETparams[$key] : NULL;
+  public function getGETParam($key) {
+    return isset($this->GET[$key]) ? $this->GET[$key] : NULL;
   }
 
   public function pageIsCalledFromReferencedDialog() {
-    return $this->getGET('render') === 'references-dialog';
+    return $this->getGETParam('render') === 'references-dialog';
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGET() {
+    return $this->GET;
+  }
+
+  public function getGETWithoutDrupalPath() {
+    $get = $this->getGET();
+    unset($get['q']);
+    return $get;
   }
 
 }
