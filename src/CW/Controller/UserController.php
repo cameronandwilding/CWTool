@@ -23,8 +23,12 @@ class UserController extends AbstractEntityController {
   const ROLE_AUTHENTICATED_USER = 'authenticated user';
 
   public function isCurrent() {
+    return self::currentUID() == $this->getEntityId();
+  }
+
+  public static function currentUID() {
     global $user;
-    return $user->uid == $this->getEntityId();
+    return $user->uid;
   }
 
   public function isAdmin() {
