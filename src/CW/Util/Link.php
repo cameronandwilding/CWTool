@@ -1,19 +1,28 @@
 <?php
 /**
  * @file
+ *
+ * Link.
  */
 
 namespace CW\Util;
 
+/**
+ * Class Link
+ * @package CW\Util
+ *
+ * Link to generate links and being able to pass them around when only partially
+ * completed.
+ */
 class Link {
 
   /**
-   * @var null
+   * @var string
    */
   private $path;
 
   /**
-   * @var null
+   * @var string
    */
   private $text;
 
@@ -23,7 +32,7 @@ class Link {
   private $query;
 
   /**
-   * @var null
+   * @var string
    */
   private $fragment;
 
@@ -48,6 +57,8 @@ class Link {
   }
 
   /**
+   * Factory.
+   *
    * @param $path
    * @param $fragment
    * @return Link
@@ -57,6 +68,8 @@ class Link {
   }
 
   /**
+   * Factory.
+   *
    * @param $path
    * @param array $query
    * @return Link
@@ -65,6 +78,12 @@ class Link {
     return new static($path, NULL, $query);
   }
 
+  /**
+   * Factory.
+   *
+   * @param \CW\Util\Request $request
+   * @return \CW\Util\Link
+   */
   public static function withRequest(Request $request) {
     return new Link(
       $request->getDrupalPath(),
@@ -73,10 +92,16 @@ class Link {
     );
   }
 
+  /**
+   * @return string
+   */
   public function getDrupalURL() {
     return url($this->path, $this->getDrupalURLOptions());
   }
 
+  /**
+   * @return string
+   */
   public function getDrupalLink() {
     return l($this->text, $this->path, $this->getDrupalURLOptions());
   }

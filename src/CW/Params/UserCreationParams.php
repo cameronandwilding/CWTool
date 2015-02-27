@@ -1,9 +1,12 @@
 <?php
 /**
  * @file
+ *
+ * User creation params.
  */
 
 namespace CW\Params;
+
 use Exception;
 
 /**
@@ -12,20 +15,25 @@ use Exception;
  */
 class UserCreationParams extends EntityCreationParams {
 
+  /**
+   * @var string
+   */
   private $userName;
 
   /**
+   * RoleID => RoleName associated array.
+   *
    * @var array
    */
   private $roles;
 
   /**
-   * @var null
+   * @var string
    */
   private $email;
 
   /**
-   * @var null
+   * @var string
    */
   private $password;
 
@@ -66,6 +74,10 @@ class UserCreationParams extends EntityCreationParams {
     $this->roles = $roles;
   }
 
+  /**
+   * @param $roleName
+   * @throws Exception
+   */
   public function addRole($roleName) {
     static $drupal_roles;
 
@@ -82,28 +94,28 @@ class UserCreationParams extends EntityCreationParams {
   }
 
   /**
-   * @return null
+   * @return string
    */
   public function getEmail() {
     return empty($this->email) ? md5(microtime(TRUE)) . '@example.com' : $this->email;
   }
 
   /**
-   * @param null $email
+   * @param string $email
    */
   public function setEmail($email) {
     $this->email = $email;
   }
 
   /**
-   * @return null
+   * @return string
    */
   public function getPassword() {
     return empty($this->password) ? user_password() : $this->password;
   }
 
   /**
-   * @param null $password
+   * @param string $password
    */
   public function setPassword($password) {
     $this->password = $password;

@@ -1,6 +1,8 @@
 <?php
 /**
  * @file
+ *
+ * Node creator.
  */
 
 namespace CW\Factory;
@@ -9,6 +11,10 @@ use CW\Controller\AbstractEntityController;
 use CW\Params\NodeCreationParams;
 use stdClass;
 
+/**
+ * Class NodeCreator
+ * @package CW\Factory
+ */
 class NodeCreator implements Creator {
 
   /**
@@ -16,11 +22,16 @@ class NodeCreator implements Creator {
    */
   private $params;
 
+  /**
+   * @param \CW\Params\NodeCreationParams $params
+   */
   public function __construct(NodeCreationParams $params) {
     $this->params = $params;
   }
 
   /**
+   * Create a node entity.
+   *
    * @return AbstractEntityController
    */
   public function create() {

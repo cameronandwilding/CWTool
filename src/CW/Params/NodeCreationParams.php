@@ -1,16 +1,28 @@
 <?php
 /**
  * @file
+ *
+ * Node creation params.
  */
 
 namespace CW\Params;
 
 use CW\Controller\UserController;
 
+/**
+ * Class NodeCreationParams
+ * @package CW\Params
+ */
 class NodeCreationParams extends EntityCreationParams {
 
+  /**
+   * @var null|string
+   */
   private $title;
 
+  /**
+   * @var string
+   */
   private $type;
 
   /**
@@ -78,12 +90,7 @@ class NodeCreationParams extends EntityCreationParams {
    * @return int
    */
   public function getUid() {
-    if ($this->uid == UserController::USER_CURRENT) {
-      global $user;
-      return $user->uid;
-    }
-
-    return $this->uid;
+    return $this->uid == UserController::USER_CURRENT ? UserController::currentUID() : $this->uid;
   }
 
   /**

@@ -1,19 +1,19 @@
 <?php
 /**
  * @file
+ *
+ * Entity creation params.
  */
 
 namespace CW\Params;
+
+use CW\Util\FieldUtil;
 
 /**
  * Class EntityCreationParams
  * @package CW\Params
  */
 class EntityCreationParams {
-
-  const FIELD_KEY_VALUE = 'value';
-
-  const FIELD_KEY_TARGET_ID = 'target_id';
 
   /**
    * Fields or node properties.
@@ -27,6 +27,10 @@ class EntityCreationParams {
    */
   private $extraAttributes = array();
 
+  /**
+   * @param array $extraAttributes
+   *  Container for any kind of entity data.
+   */
   public function __construct(array $extraAttributes = array()) {
     $this->extraAttributes = $extraAttributes;
   }
@@ -40,29 +44,40 @@ class EntityCreationParams {
 
   /**
    * @param array $extraAttributes
+   * @return $this
    */
   public function setExtraAttributes($extraAttributes) {
     $this->extraAttributes = $extraAttributes;
+    return $this;
   }
 
   /**
+   * Set's a field value.
+   *
    * @param $fieldName
    * @param $value
    * @param string $fieldKey
-   * @return self
+   * @param string $lang
+   * @return \CW\Params\EntityCreationParams
    */
-  public function addExtraAttributeField($fieldName, $value, $fieldKey = self::FIELD_KEY_VALUE) {
+  public function setField($fieldName, $value, $fieldKey = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
     if (empty($this->extraAttributes[$fieldName])) {
-      $this->extraAttributes[$fieldName] = array(LANGUAGE_NONE => array());
+      $this->extraAttributes[$fieldName] = array($lang => array());
     }
 
-    $this->extraAttributes[$fieldName][LANGUAGE_NONE][] = array($fieldKey => $value);
+    $this->extraAttributes[$fieldName][$lang][] = array($fieldKey => $value);
 
     // For chaining;
     return $this;
   }
 
-  public function addExtraAttribute($property, $value) {
+  /**
+   * Merge safe way of setting custom properties, even arrays with elements deep.
+   *
+   * @param $property
+   * @param $value
+   */
+  public function setProperty($property, $value) {
     $this->extraAttributes = array_merge($this->extraAttributes, array($property => $value));
   }
 

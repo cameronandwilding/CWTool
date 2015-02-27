@@ -13,6 +13,9 @@ namespace CW\Controller;
  */
 class UserController extends AbstractEntityController {
 
+  // Flag for current user evaluation.
+  // Used for marking the current user, especially when the execution is delayed
+  // or scheduled and the current user of the future session is intended for use.
   const USER_CURRENT = -1;
 
   const UID_ANONYMOUS = 0;

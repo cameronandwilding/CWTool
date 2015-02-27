@@ -8,7 +8,6 @@
 namespace CW\Util;
 
 use CW\Controller\AbstractEntityController;
-use CW\Model\EntityModel;
 use Psr\Log\LoggerInterface;
 
 /**

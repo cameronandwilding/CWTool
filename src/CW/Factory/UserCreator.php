@@ -1,6 +1,8 @@
 <?php
 /**
  * @file
+ *
+ * User creator.
  */
 
 namespace CW\Factory;
@@ -9,6 +11,10 @@ use CW\Controller\AbstractEntityController;
 use CW\Controller\UserController;
 use CW\Params\UserCreationParams;
 
+/**
+ * Class UserCreator
+ * @package CW\Factory
+ */
 class UserCreator implements Creator {
 
   /**
@@ -16,11 +22,16 @@ class UserCreator implements Creator {
    */
   private $params;
 
+  /**
+   * @param \CW\Params\UserCreationParams $params
+   */
   public function __construct(UserCreationParams $params) {
     $this->params = $params;
   }
 
   /**
+   * Create user object.
+   *
    * @return AbstractEntityController
    */
   public function create() {
