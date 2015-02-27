@@ -3,6 +3,7 @@
  * @file
  *
  * Identity map.
+ * @see http://martinfowler.com/eaaCatalog/identityMap.html
  */
 
 namespace CW\Util;

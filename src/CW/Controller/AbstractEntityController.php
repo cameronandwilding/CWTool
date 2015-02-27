@@ -2,12 +2,13 @@
 /**
  * @file
  *
- * Entity controller abstraction.
+ * Abstract entity controller.
  */
 
 namespace CW\Controller;
 
 use CW\Model\ObjectHandler;
+use CW\Util\FieldUtil;
 use EntityMetadataWrapper;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -16,8 +17,12 @@ use Psr\Log\LoggerInterface;
  * Class AbstractEntityController
  * @package CW\Controller
  *
- * Abstraction for entity controller. Contains the model and should be extended
- * for content specific behaviors.
+ * Provides data (Drupal) access to the data and suppose to keep data specific
+ * behavior.
+ *
+ * Use entity controllers through entity controller factories so instances are
+ * stored properly in the cache (identity object containers).
+ * @see EntityControllerFactory
  */
 abstract class AbstractEntityController {
 
@@ -41,6 +46,9 @@ abstract class AbstractEntityController {
   private $entityId;
 
   /**
+   * Data accessor, in order to eliminate coupling with Drupal entity API.
+   * Use this for entity operations (CRUD).
+   *
    * @var ObjectHandler
    */
   protected $objectHandler;
@@ -70,6 +78,11 @@ abstract class AbstractEntityController {
 
   /**
    * Constructor.
+   *
+   * @param \CW\Model\ObjectHandler $objectLoader
+   * @param \Psr\Log\LoggerInterface $logger
+   * @param $entity_type
+   * @param $entity_id
    */
   public function __construct(ObjectHandler $objectLoader, LoggerInterface $logger, $entity_type, $entity_id) {
     $this->logger = $logger;
@@ -121,6 +134,7 @@ abstract class AbstractEntityController {
    * Save data to database.
    */
   public function save() {
+    $this->logger->info('Entity has been saved {this}', array('this' => $this->__toString()));
     $this->objectHandler->save($this->entityType, $this->entity());
     $this->setClean();
   }
@@ -178,21 +192,52 @@ abstract class AbstractEntityController {
     return $this->entityId;
   }
 
+  /**
+   * Get the entity type the class represents.
+   * Throws exception if there is not.
+   *
+   * This is a helper for other services to be aware of the entity info.
+   *
+   * @throws \Exception
+   */
   public static function getClassEntityType() {
     throw new Exception('Undefined entity type');
   }
 
+  /**
+   * Get the entity bundle the class represents.
+   * Similar to:
+   * @see $this->getClassEntityType()
+   * @throws \Exception
+   */
   public static function getClassEntityBundle() {
     throw new Exception('Undefined entity bundle');
   }
 
-  public function fieldValue($field_name, $key = 'value', $idx = 0, $lang = LANGUAGE_NONE) {
+  /**
+   * Extracts the exact field value.
+   *
+   * @param $field_name
+   * @param string $key
+   * @param int $idx
+   * @param string $lang
+   * @return null|mixed
+   */
+  public function fieldValue($field_name, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$field_name}[$lang][$idx][$key])) {
       return NULL;
     }
     return $this->entity()->{$field_name}[$lang][$idx][$key];
   }
 
+  /**
+   * Extracts a whole field item (array).
+   *
+   * @param $field_name
+   * @param int $idx
+   * @param string $lang
+   * @return null
+   */
   public function fieldItem($field_name, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$field_name}[$lang][$idx])) {
       return NULL;
@@ -200,6 +245,13 @@ abstract class AbstractEntityController {
     return $this->entity()->{$field_name}[$lang][$idx];
   }
 
+  /**
+   * Gets all field items.
+   *
+   * @param $field_name
+   * @param string $lang
+   * @return null
+   */
   public function fieldItems($field_name, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$field_name}[$lang])) {
       return NULL;
@@ -207,17 +259,28 @@ abstract class AbstractEntityController {
     return $this->entity()->{$field_name}[$lang];
   }
 
-  public function setFieldValue($field_name, $value, $key = 'value', $idx = 0, $lang = LANGUAGE_NONE) {
+  /**
+   * Set a single field value.
+   *
+   * @param $field_name
+   * @param $value
+   * @param string $key
+   * @param int $idx
+   * @param string $lang
+   */
+  public function setFieldValue($field_name, $value, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
     $this->entity()->{$field_name}[$lang][$idx][$key] = $value;
   }
 
   /**
+   * Get the actual entity controller object of the entity referenced by the field.
+   *
    * @param $fieldName
    * @param \CW\Controller\EntityControllerFactory $factory
    * @return \CW\Controller\AbstractEntityController|null
    */
   protected function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory) {
-    if (!($targetID = $this->fieldValue($fieldName, 'target_id'))) {
+    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID))) {
       return NULL;
     }
     return $factory->initWithId($targetID);

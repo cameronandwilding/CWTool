@@ -15,6 +15,9 @@ namespace CW\Controller;
  */
 class NodeController extends AbstractEntityController {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getClassEntityType() {
     return 'node';
   }

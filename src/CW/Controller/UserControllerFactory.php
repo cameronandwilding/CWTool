@@ -1,18 +1,23 @@
 <?php
 /**
  * @file
+ *
+ * User controller factory.
  */
 
 namespace CW\Controller;
 
+/**
+ * Class UserControllerFactory
+ * @package CW\Controller
+ */
 class UserControllerFactory extends EntityControllerFactory {
 
   /**
    * @return UserController
    */
   public function initWithCurrentUser() {
-    global $user;
-    return parent::initWithId($user->uid);
+    return parent::initWithId(UserController::currentUID());
   }
 
 }

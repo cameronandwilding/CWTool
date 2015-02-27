@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
+ *
+ * User controller.
  */
 
 namespace CW\Controller;
-
-use CW\Params\UserCreationParams;
 
 /**
  * Class UserController
@@ -14,6 +14,7 @@ use CW\Params\UserCreationParams;
 class UserController extends AbstractEntityController {
 
   const USER_CURRENT = -1;
+
   const UID_ANONYMOUS = 0;
   const UID_ADMIN = 1;
 
@@ -22,25 +23,41 @@ class UserController extends AbstractEntityController {
 
   const ROLE_AUTHENTICATED_USER = 'authenticated user';
 
+  /**
+   * @return bool
+   */
   public function isCurrent() {
     return self::currentUID() == $this->getEntityId();
   }
 
+  /**
+   * @return mixed
+   */
   public static function currentUID() {
     global $user;
     return $user->uid;
   }
 
+  /**
+   * @return bool
+   */
   public function isAdmin() {
     return $this->getEntityId() == self::UID_ADMIN;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getClassEntityType() {
     return 'user';
   }
 
+  /**
+   * Drupal login.
+   */
   public function login() {
     global $user;
+
     // Override global user.
     $user = $this->entity();
 
