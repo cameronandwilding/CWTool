@@ -1,14 +1,28 @@
 <?php
 /**
  * @file
+ *
+ * Request.
  */
 
 namespace CW\Util;
 
+/**
+ * Class Request
+ * @package CW\Util
+ *
+ * Represents a network request coming to the server.
+ */
 class Request {
 
+  /**
+   * @var array
+   */
   protected $GET;
 
+  /**
+   * @var array
+   */
   protected $SERVER;
 
   /**
@@ -26,39 +40,61 @@ class Request {
     return $current;
   }
 
-  public function collectGlobalGetParams() {
+  /**
+   * Internally gets the GET params.
+   */
+  protected function collectGlobalGetParams() {
     $this->GET = $_GET;
   }
 
-  public function collectGlobalServerParams() {
+  /**
+   * Internally gets the SERVER params.
+   */
+  protected function collectGlobalServerParams() {
     $this->SERVER = $_SERVER;
   }
 
+  /**
+   * @return string
+   */
   public function getDrupalPath() {
     return $this->getGETParam('q');
   }
 
-  public function getTime() {
+  /**
+   * @return int
+   */
+  public function getTimestamp() {
     return !empty($this->SERVER['REQUEST_TIME']) ? $this->SERVER['REQUEST_TIME'] : time();
   }
 
+  /**
+   * @param $key
+   * @return null
+   */
   public function getGETParam($key) {
     return isset($this->GET[$key]) ? $this->GET[$key] : NULL;
   }
 
-  public function pageIsCalledFromReferencedDialog() {
+  /**
+   * @return bool
+   */
+  public function pageIsCalledFromEntityReferenceDialog() {
     return $this->getGETParam('render') === 'references-dialog';
   }
 
   /**
-   * @return mixed
+   * @return array
    */
-  public function getGET() {
+  public function getGETWithDrupalPath() {
     return $this->GET;
   }
 
-  public function getGETWithoutDrupalPath() {
-    $get = $this->getGET();
+  /**
+   * @return array
+   */
+  public function getGET() {
+    $get = $this->getGETWithDrupalPath();
     unset($get['q']);
     return $get;
   }

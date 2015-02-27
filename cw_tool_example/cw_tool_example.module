@@ -7,14 +7,15 @@
 
 use CW\Controller\EntityControllerFactory;
 use CW\Util\EntityBatchSaver;
-use CW\Util\ServiceContainerDefinitionCollection;
+use CW\Util\SimpleList;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * Implements hook_cw_tool_service_container_definition_alter().
+ * @param \CW\Util\SimpleList $collection
  */
-function cw_tool_example_cw_tool_service_container_definition_alter(ServiceContainerDefinitionCollection $collection) {
+function cw_tool_example_cw_tool_service_container_definition_alter(SimpleList $collection) {
   $collection->add(__DIR__ . '/config');
 }
 

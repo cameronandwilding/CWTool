@@ -9,6 +9,7 @@ use CW\Controller\EntityControllerFactory;
 use CW\Controller\NodeController;
 use CW\Controller\UserController;
 use CW\Controller\UserControllerFactory;
+use CW\Util\SimpleList;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -34,13 +35,13 @@ function cw_tool_get_container() {
   }
 
   // @todo add weight so it's sortable
-  $containerConfigs = new \CW\Util\ServiceContainerDefinitionCollection();
+  $containerConfigs = new SimpleList();
   $containerConfigs->add(__DIR__ . '/config');
   drupal_alter('cw_tool_service_container_definition', $containerConfigs);
 
   $container = new ContainerBuilder();
 
-  foreach ($containerConfigs->getConfigs() as $containerConfig) {
+  foreach ($containerConfigs->getAll() as $containerConfig) {
     $locator = new FileLocator(array($containerConfig));
     $loader = new YamlFileLoader($container, $locator);
     $loader->load('services.yml');

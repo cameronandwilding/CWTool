@@ -88,7 +88,7 @@ class Link {
     return new Link(
       $request->getDrupalPath(),
       NULL,
-      $request->getGETWithoutDrupalPath()
+      $request->getGET()
     );
   }
 

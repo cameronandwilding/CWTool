@@ -3,15 +3,15 @@
  * @file
  */
 
-use CW\Util\ServiceContainerDefinitionCollection;
+use CW\Util\SimpleList;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 class ServiceContainerDefinitionCollectionTest extends PHPUnit_Framework_TestCase {
 
   public function testBasic() {
-    $collection = new ServiceContainerDefinitionCollection();
-    $this->assertEmpty($collection->getConfigs());
+    $collection = new SimpleList();
+    $this->assertEmpty($collection->getAll());
 
     $configsRaw = array();
 
@@ -21,10 +21,10 @@ class ServiceContainerDefinitionCollectionTest extends PHPUnit_Framework_TestCas
       $configsRaw[] = $value;
 
       $collection->add($value);
-      $this->assertEquals($i, count($collection->getConfigs()));
+      $this->assertEquals($i, count($collection->getAll()));
     }
 
-    $collectionItems = $collection->getConfigs();
+    $collectionItems = $collection->getAll();
     for ($i = 0; $i < $count; $i++) {
       $this->assertTrue(in_array($configsRaw[$i], $collectionItems));
     }
