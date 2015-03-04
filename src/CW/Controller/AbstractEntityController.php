@@ -26,6 +26,12 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractEntityController {
 
+  // On the entity, created and changed timestamps are different sometimes, even
+  // if the entity was not updated. We need to check the updated state (being
+  // created and changed different) outside of a threshold.
+  // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD;
+  const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 5;
+
   /**
    * @var LoggerInterface
    */
