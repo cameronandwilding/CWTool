@@ -30,4 +30,8 @@ class DateUtil {
     return $date->getTimestamp();
   }
 
+  public static function dayInSeconds($n) {
+    return $n * self::DAY_IN_SECONDS;
+  }
+
 }
