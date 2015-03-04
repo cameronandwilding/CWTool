@@ -80,4 +80,8 @@ class UserController extends AbstractEntityController {
     drupal_session_regenerate();
   }
 
+  public function hasRole($roleName) {
+    return isset($this->entity()->roles) && in_array($roleName, $this->entity()->roles);
+  }
+
 }

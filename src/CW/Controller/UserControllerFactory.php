@@ -17,7 +17,7 @@ class UserControllerFactory extends EntityControllerFactory {
    * @return UserController
    */
   public function initWithCurrentUser() {
-    return parent::initWithId(UserController::currentUID());
+    return $this->initWithId(UserController::currentUID());
   }
 
 }
