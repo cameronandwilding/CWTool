@@ -7,6 +7,7 @@
 
 namespace CW\Controller;
 
+use CW\Factory\EntityControllerFactory;
 use CW\Model\ObjectHandler;
 use CW\Util\FieldUtil;
 use EntityMetadataWrapper;
@@ -282,7 +283,7 @@ abstract class AbstractEntityController {
    * Get the actual entity controller object of the entity referenced by the field.
    *
    * @param $fieldName
-   * @param \CW\Controller\EntityControllerFactory $factory
+   * @param \CW\Factory\EntityControllerFactory $factory
    * @return \CW\Controller\AbstractEntityController|null
    */
   protected function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory) {

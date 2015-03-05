@@ -5,10 +5,10 @@
  * CWTool entity tests.
  */
 
-use CW\Controller\EntityControllerFactory;
+use CW\Factory\EntityControllerFactory;
 use CW\Controller\NodeController;
 use CW\Controller\UserController;
-use CW\Controller\UserControllerFactory;
+use CW\Factory\UserControllerFactory;
 use CW\Factory\NodeCreator;
 use CW\Factory\UserCreator;
 use CW\Params\NodeCreationParams;

@@ -5,7 +5,7 @@
  * Example usage of the cw_tool models and controllers and utils.
  */
 
-use CW\Controller\EntityControllerFactory;
+use CW\Factory\EntityControllerFactory;
 use CW\Util\EntityBatchSaver;
 use CW\Util\SimpleList;
 

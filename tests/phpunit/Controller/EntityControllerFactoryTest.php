@@ -6,7 +6,7 @@
  */
 
 use CW\Controller\AbstractEntityController;
-use CW\Controller\EntityControllerFactory;
+use CW\Factory\EntityControllerFactory;
 use CW\Test\TestCase;
 use CW\Util\LocalProcessIdentityMap;
 

@@ -5,7 +5,8 @@
  * User controller factory.
  */
 
-namespace CW\Controller;
+namespace CW\Factory;
+use CW\Controller\UserController;
 
 /**
  * Class UserControllerFactory

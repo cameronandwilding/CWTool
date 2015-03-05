@@ -5,10 +5,10 @@
  * Helper functions.
  */
 
-use CW\Controller\EntityControllerFactory;
+use CW\Factory\EntityControllerFactory;
 use CW\Controller\NodeController;
 use CW\Controller\UserController;
-use CW\Controller\UserControllerFactory;
+use CW\Factory\UserControllerFactory;
 use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
 use CW\Util\SimpleList;

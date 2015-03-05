@@ -5,9 +5,8 @@
  * Entity controller factory.
  */
 
-namespace CW\Controller;
+namespace CW\Factory;
 
-use CW\Factory\Creator;
 use CW\Model\ObjectHandler;
 use CW\Util\LocalProcessIdentityMap;
 use Exception;
