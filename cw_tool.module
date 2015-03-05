@@ -9,6 +9,8 @@ use CW\Controller\EntityControllerFactory;
 use CW\Controller\NodeController;
 use CW\Controller\UserController;
 use CW\Controller\UserControllerFactory;
+use CW\Form\VariableFormGenerator;
+use CW\Manager\VariableManager;
 use CW\Util\SimpleList;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,6 +23,7 @@ require_once __DIR__ . '/includes/cw_tool.util.inc';
 // Service names.
 define('CWTOOL_SERVICE_NODE_FACTORY', 'cw.node-controller.factory');
 define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
+define('CWTOOL_SERVICE_VARIABLE_MANAGER', 'cw.variable-manager');
 
 /**
  * Get the dependency injection container.
@@ -50,6 +53,33 @@ function cw_tool_get_container() {
   $container->compile();
 
   return $container;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cw_tool_menu() {
+  return array(
+    // Admin section.
+    'admin/config/application' => array(
+      'title' => 'Application settings',
+      'description' => 'Application settings.',
+      'position' => 'left',
+      'weight' => -10,
+      'page callback' => 'system_admin_menu_block_page',
+      'access arguments' => array('access administration pages'),
+      'file' => 'system.admin.inc',
+    ),
+
+    // Variable settings page.
+    'admin/config/application/variables' => array(
+      'title' => 'Variables',
+      'description' => 'Environment app variables.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('cw_tool_core_admin_settings_form'),
+      'access arguments' => array('access administration pages'),
+    ),
+  );
 }
 
 /**
@@ -95,4 +125,12 @@ function cw_tool_get_user_current() {
   }
 
   return $current_user;
+}
+
+function cw_tool_core_admin_settings_form($form) {
+  /** @var VariableManager $variableManager */
+  $variableManager = cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_MANAGER);
+  $variableManager->collectAppVariables();
+  $variablesForm = new VariableFormGenerator($variableManager);
+  return $variablesForm->generateForm($form);
 }

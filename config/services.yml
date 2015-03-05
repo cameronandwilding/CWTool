@@ -31,3 +31,8 @@ services:
     arguments:
       - @cw.identity-map
       - @cw.logger
+
+  cw.variable-manager:
+    class: CW\Manager\VariableManager
+    arguments:
+      - @cw.logger
