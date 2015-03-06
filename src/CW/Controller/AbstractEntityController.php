@@ -222,6 +222,26 @@ abstract class AbstractEntityController {
   }
 
   /**
+   * @param $entity
+   * @return bool
+   */
+  public static function isValidEntity($entity) {
+    if (!is_object($entity)) {
+      return FALSE;
+    }
+
+    try {
+      $bundleExpected = static::getClassEntityBundle();
+      $entityType = static::getClassEntityType();
+      list(,, $bundle) = entity_extract_ids($entityType, $entity);
+      return $bundle == $bundleExpected;
+    }
+    catch (Exception $e) {
+      return FALSE;
+    }
+  }
+
+  /**
    * Extracts the exact field value.
    *
    * @param $field_name
