@@ -6,24 +6,16 @@
 namespace CW\Manager;
 
 use CW\Params\Variable;
+use CW\Util\LoggerObject;
 use Exception;
 use Psr\Log\LoggerInterface;
 
-class VariableManager {
-
-  /**
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
+class VariableManager extends LoggerObject {
 
   /**
    * @var Variable[]
    */
   protected $variables = array();
-
-  public function __construct(LoggerInterface $logger) {
-    $this->logger = $logger;
-  }
 
   public function addVariable(Variable $variable) {
     $this->variables[] = $variable;
@@ -46,6 +38,7 @@ class VariableManager {
       throw new Exception('Variable manager app var collection has been run already.');
     }
 
+    // @todo should be injected, eg IVariableCollector
     module_invoke_all('cw_tool_app_variables', $this);
     $runCompletedFlag = TRUE;
   }

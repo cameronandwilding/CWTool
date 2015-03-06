@@ -5,29 +5,31 @@
  * Abstract controller template.
  */
 
-namespace CW\Template;
-
-use CW\Controller\AbstractEntityController;
+namespace CW\Controller;
 
 /**
  * Class AbstractControllerTemplate
- * @package CW\Template
+ * @package CW\Controller
  *
  * Abstract controller templates are used to group theming methods related to
  * a controller.
  */
-abstract class AbstractControllerTemplate {
+abstract class ControllerContainer implements ControllerAware {
 
   /**
    * @var AbstractEntityController
    */
-  protected $controller;
+  private $controller;
 
   /**
    * @param \CW\Controller\AbstractEntityController $controller
    */
   public function __construct(AbstractEntityController $controller) {
     $this->controller = $controller;
+  }
+
+  public function getController() {
+    return $this->controller;
   }
 
 }
