@@ -31,7 +31,7 @@ abstract class AbstractEntityController {
   // if the entity was not updated. We need to check the updated state (being
   // created and changed different) outside of a threshold.
   // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD;
-  const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 5;
+  const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 2;
 
   /**
    * @var LoggerInterface
