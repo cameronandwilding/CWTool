@@ -33,7 +33,7 @@ class ArrayUtil {
    * @param $not_found_value
    * @return mixed
    */
-  public static function mapTranslate($map, $key, $not_found_value) {
+  public static function mapTranslate($map, $key, $not_found_value = NULL) {
     return array_key_exists($key, $map) ? $map[$key] : $not_found_value;
   }
 
