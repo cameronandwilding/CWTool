@@ -5,12 +5,9 @@
  * Helper functions.
  */
 
-use CW\Factory\EntityControllerFactory;
-use CW\Controller\NodeController;
-use CW\Controller\UserController;
-use CW\Factory\UserControllerFactory;
 use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
+use CW\Util\CronTimer;
 use CW\Util\SimpleList;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,6 +21,8 @@ require_once __DIR__ . '/includes/cw_tool.util.inc';
 define('CWTOOL_SERVICE_NODE_FACTORY', 'cw.node-controller.factory');
 define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
 define('CWTOOL_SERVICE_VARIABLE_MANAGER', 'cw.variable-manager');
+define('CWTOOL_SERVICE_VARIABLE_ADAPTER', 'cw.variable-adapter');
+define('CWTOOL_SERVICE_CRON_TIMER', 'cw.cron-timer');
 
 /**
  * Get the dependency injection container.
@@ -82,55 +81,17 @@ function cw_tool_menu() {
   );
 }
 
-/**
- * @param $nid
- * @return NodeController
- */
-function cw_tool_get_node($nid) {
-  static $node_factory;
-
-  if (!isset($node_factory)) {
-    /** @var EntityControllerFactory $node_factory */
-    $node_factory = cw_tool_get_container()->get('cw.node-controller.factory');
-  }
-
-  return $node_factory->initWithId($nid);
-}
-
-/**
- * @param $uid
- * @return UserController
- */
-function cw_tool_get_user($uid) {
-  static $user_factory;
-
-  if (!isset($user_factory)) {
-    /** @var UserControllerFactory $user_factory */
-    $user_factory = cw_tool_get_container()->get('cw.user-controller.factory');
-  }
-
-  return $user_factory->initWithId($uid);
-}
-
-/**
- * @return UserController
- */
-function cw_tool_get_user_current() {
-  static $current_user;
-
-  if (!isset($current_user)) {
-    /** @var UserControllerFactory $user_factory */
-    $user_factory = cw_tool_get_container()->get('cw.user-controller.factory');
-    $current_user = $user_factory->initWithCurrentUser();
-  }
-
-  return $current_user;
-}
-
 function cw_tool_core_admin_settings_form($form) {
   /** @var VariableManager $variableManager */
   $variableManager = cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_MANAGER);
   $variableManager->collectAppVariables();
   $variablesForm = new VariableFormGenerator($variableManager);
   return $variablesForm->generateForm($form);
+}
+
+/**
+ * @return CronTimer
+ */
+function cw_tool_cron_timer() {
+  return cw_tool_get_container()->get(CWTOOL_SERVICE_CRON_TIMER);
 }

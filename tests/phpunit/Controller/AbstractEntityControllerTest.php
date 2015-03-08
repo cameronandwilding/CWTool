@@ -7,8 +7,6 @@ use CW\Controller\AbstractEntityController;
 use CW\Controller\NodeController;
 use CW\Test\TestCase;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
 /**
  * Class AbstractEntityControllerTest
  */

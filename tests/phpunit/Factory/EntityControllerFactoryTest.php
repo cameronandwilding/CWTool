@@ -10,8 +10,6 @@ use CW\Factory\EntityControllerFactory;
 use CW\Test\TestCase;
 use CW\Util\LocalProcessIdentityMap;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
 /**
  * Class CWToolEntityModelTest
  */

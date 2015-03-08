@@ -10,8 +10,6 @@ use CW\Test\TestCase;
 use CW\Util\EntityBatchSaver;
 use CW\Util\LocalProcessIdentityMap;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
 class EntityBatchSaverTest extends TestCase {
 
   /**

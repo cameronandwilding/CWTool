@@ -5,8 +5,6 @@
 
 use CW\Util\SimpleList;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
 class ServiceContainerDefinitionCollectionTest extends PHPUnit_Framework_TestCase {
 
   public function testBasic() {

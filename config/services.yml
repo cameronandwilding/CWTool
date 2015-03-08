@@ -36,3 +36,11 @@ services:
     class: CW\Manager\VariableManager
     arguments:
       - @cw.logger
+
+  cw.variable-adapter:
+    class: CW\Adapter\DrupalVariableAdapter
+
+  cw.cron-timer:
+    class: CW\Util\CronTimer
+    arguments:
+      - @cw.variable-adapter
