@@ -15,11 +15,14 @@ namespace CW\Controller;
  */
 class NodeController extends AbstractEntityController {
 
+  // Entity type.
+  const TYPE_NODE = 'node';
+
   /**
    * {@inheritdoc}
    */
   public static function getClassEntityType() {
-    return 'node';
+    return self::TYPE_NODE;
   }
 
 }

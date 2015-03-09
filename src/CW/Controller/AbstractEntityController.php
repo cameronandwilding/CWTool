@@ -10,6 +10,7 @@ namespace CW\Controller;
 use CW\Factory\EntityControllerFactory;
 use CW\Model\ObjectHandler;
 use CW\Util\FieldUtil;
+use CW\Util\LoggerObject;
 use EntityMetadataWrapper;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -25,7 +26,7 @@ use Psr\Log\LoggerInterface;
  * stored properly in the cache (identity object containers).
  * @see EntityControllerFactory
  */
-abstract class AbstractEntityController {
+abstract class AbstractEntityController extends LoggerObject {
 
   // On the entity, created and changed timestamps are different sometimes, even
   // if the entity was not updated. We need to check the updated state (being
@@ -33,13 +34,10 @@ abstract class AbstractEntityController {
   // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD;
   const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 2;
 
+  // Param const for:
+  /** @see $this->entity() */
   const RELOAD_FORCE = TRUE;
   const RELOAD_IGNORE = FALSE;
-
-  /**
-   * @var LoggerInterface
-   */
-  protected $logger;
 
   /**
    * Entity type.
@@ -91,11 +89,12 @@ abstract class AbstractEntityController {
    *
    * @param \CW\Model\ObjectHandler $objectLoader
    * @param \Psr\Log\LoggerInterface $logger
-   * @param $entity_type
-   * @param $entity_id
+   * @param string $entity_type
+   * @param int|string $entity_id
    */
   public function __construct(ObjectHandler $objectLoader, LoggerInterface $logger, $entity_type, $entity_id) {
-    $this->logger = $logger;
+    parent::__construct($logger);
+
     $this->entityType = $entity_type;
     $this->entityId = $entity_id;
     $this->objectHandler = $objectLoader;
@@ -121,6 +120,7 @@ abstract class AbstractEntityController {
    * Get the Drupal object of the entity.
    *
    * @param bool $forceReload
+   *  self::RELOAD_*
    * @return mixed|object
    */
   public function entity($forceReload = self::RELOAD_IGNORE) {

@@ -104,6 +104,8 @@ $userController = cw_tool_get_container->get('my-user-controller-factory')->init
 $nodeController = cw_tool_get_container->get('my-node-controller-factory')->initWithEntity($node);
 ```
 
+**Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the node factory.)
+
 
 Entity creators
 ---------------
@@ -120,6 +122,19 @@ $articleParams->setProperty('status', NODE_NOT_PUBLISHED);
 $nodeFactory = cw_tool_get_container()->get('my-node-controller-factory');
 $nodeController = $nodeFactory->initNew(new NodeCreator($articleParams));
 ```
+
+Variable manager
+----------------
+
+Application variables are managed with the variable manager. Hook can be implemented to collect:
+
+```php
+function hook_cw_tool_app_variables(\CW\Manager\VariableManager $variableManager) {
+  $variableManager->addVariable(new \CW\Params\Variable('myVar', 'My variable'));
+}
+```
+
+All application variables should be added in this hook in order to have their presence on the admin UI.
 
 
 General development guidelines
@@ -140,6 +155,10 @@ For extra behavior (such as controller rendered output, forms, ets) there should
 **Services over static classes**
 
 When new class needed to wrap a functionality, a new service is preferred. Usually they contain a logger.
+
+**Param objects over arrays**
+
+Avoid using arrays as argument. Make a parameter object instead.
 
 
 Helper functions

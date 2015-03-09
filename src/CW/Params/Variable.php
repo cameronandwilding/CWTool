@@ -7,23 +7,27 @@ namespace CW\Params;
 
 class Variable {
 
+  // Variable types.
   const TYPE_SHORT_STRING = 'string';
   const TYPE_LONG_TEXT = 'text';
 
+  /**
+   * @var string
+   */
   protected $machineName;
 
   /**
-   * @var null
+   * @var string
    */
   protected $label;
 
   /**
-   * @var null
+   * @var mixed
    */
   protected $value;
 
   /**
-   * @var null
+   * @var string
    */
   protected $description;
 
@@ -32,6 +36,13 @@ class Variable {
    */
   private $type;
 
+  /**
+   * @param $machineName
+   * @param string $label
+   * @param string $description
+   * @param mixed $value
+   * @param string $type
+   */
   public function __construct($machineName, $label = NULL, $description = NULL, $value = NULL, $type = self::TYPE_SHORT_STRING) {
     $this->machineName = $machineName;
     $this->label = $label;
@@ -41,56 +52,56 @@ class Variable {
   }
 
   /**
-   * @return mixed
+   * @return string
    */
   public function getMachineName() {
     return $this->machineName;
   }
 
   /**
-   * @param mixed $machineName
+   * @param string $machineName
    */
   public function setMachineName($machineName) {
     $this->machineName = $machineName;
   }
 
   /**
-   * @return null
+   * @return string
    */
   public function getLabel() {
     return $this->label ? $this->label : $this->machineName;
   }
 
   /**
-   * @param null $label
+   * @param string $label
    */
   public function setLabel($label) {
     $this->label = $label;
   }
 
   /**
-   * @return null
+   * @return mixed
    */
   public function getValue() {
     return variable_get($this->getMachineName(), $this->value);
   }
 
   /**
-   * @param null $value
+   * @param mixed $value
    */
   public function setValue($value) {
     $this->value = $value;
   }
 
   /**
-   * @return null
+   * @return string
    */
   public function getDescription() {
     return $this->description;
   }
 
   /**
-   * @param null $description
+   * @param string $description
    */
   public function setDescription($description) {
     $this->description = $description;

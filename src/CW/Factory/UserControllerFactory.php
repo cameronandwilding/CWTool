@@ -6,6 +6,7 @@
  */
 
 namespace CW\Factory;
+
 use CW\Controller\UserController;
 
 /**

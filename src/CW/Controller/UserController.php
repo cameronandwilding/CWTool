@@ -18,13 +18,19 @@ class UserController extends AbstractEntityController {
   // or scheduled and the current user of the future session is intended for use.
   const USER_CURRENT = -1;
 
+  // Basic user IDs.
   const UID_ANONYMOUS = 0;
   const UID_ADMIN = 1;
 
+  // User states.
   const STATE_ACTIVE = 1;
   const STATE_BLOCKED = 0;
 
+  // Role name.
   const ROLE_AUTHENTICATED_USER = 'authenticated user';
+
+  // Entity type.
+  const TYPE_USER = 'user';
 
   /**
    * @return bool
@@ -52,7 +58,7 @@ class UserController extends AbstractEntityController {
    * {@inheritdoc}
    */
   public static function getClassEntityType() {
-    return 'user';
+    return self::TYPE_USER;
   }
 
   /**
@@ -80,15 +86,29 @@ class UserController extends AbstractEntityController {
     drupal_session_regenerate();
   }
 
+  /**
+   * @param string $roleName
+   * @return bool
+   */
   public function hasRole($roleName) {
     return isset($this->entity()->roles) && in_array($roleName, $this->entity()->roles);
   }
 
+  /**
+   * User entity exist in GLOBAL user object - but that's incomplete sometimes
+   * as it does not contain fields or other properties.
+   * It is "incomplete" when not loaded through the full entity load process.
+   *
+   * @return bool
+   */
   protected function isUserEntityIncomplete() {
     $entity = parent::entity();
     return isset($entity->sid);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function entity($forceReload = self::RELOAD_IGNORE) {
     // Flag to make sure it's reloaded only once at max.
     static $realEntityLoadedFlag = FALSE;

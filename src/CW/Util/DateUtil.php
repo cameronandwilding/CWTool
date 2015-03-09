@@ -21,7 +21,8 @@ class DateUtil {
   /**
    * Extracts the timestamp (using timezone) from ISO date fields.
    *
-   * @param $value
+   * @param array $value
+   *  Entity field value fetched via field_get_items().
    * @return int
    */
   public static function getTimestampFromISODateFieldValue($value) {
@@ -30,6 +31,10 @@ class DateUtil {
     return $date->getTimestamp();
   }
 
+  /**
+   * @param int $n
+   * @return int
+   */
   public static function dayInSeconds($n) {
     return $n * self::DAY_IN_SECONDS;
   }

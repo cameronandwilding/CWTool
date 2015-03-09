@@ -9,6 +9,7 @@ namespace CW\Factory;
 
 use CW\Model\ObjectHandler;
 use CW\Util\LocalProcessIdentityMap;
+use CW\Util\LoggerObject;
 use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -24,7 +25,8 @@ use Psr\Log\LoggerInterface;
  * The factory doesn't care about the entity type or bundle - in case you need
  * type validation you have to add it to the subclass.
  */
-class EntityControllerFactory {
+class EntityControllerFactory extends LoggerObject {
+
   const ABSTRACT_ENTITY_CONTROLLER_CLASS = 'CW\Controller\AbstractEntityController';
 
   /**
@@ -56,11 +58,6 @@ class EntityControllerFactory {
   private $objectHandler;
 
   /**
-   * @var LoggerInterface
-   */
-  protected $logger;
-
-  /**
    * Constructor.
    *
    * @param LocalProcessIdentityMap $localProcessIdentityMap
@@ -74,6 +71,8 @@ class EntityControllerFactory {
    * @param LoggerInterface $logger
    */
   public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $entityType, LoggerInterface $logger) {
+    parent::__construct($logger);
+
     $this->localProcessIdentityMap = $localProcessIdentityMap;
 
     if (!is_subclass_of($controllerClass, self::ABSTRACT_ENTITY_CONTROLLER_CLASS)) {
@@ -83,7 +82,6 @@ class EntityControllerFactory {
 
     $this->entityType = $entityType;
     $this->objectHandler = $objectLoader;
-    $this->logger = $logger;
   }
 
   /**

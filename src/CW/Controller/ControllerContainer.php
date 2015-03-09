@@ -2,7 +2,7 @@
 /**
  * @file
  *
- * Abstract controller template.
+ * Abstract controller container.
  */
 
 namespace CW\Controller;
@@ -11,8 +11,10 @@ namespace CW\Controller;
  * Class AbstractControllerTemplate
  * @package CW\Controller
  *
- * Abstract controller templates are used to group theming methods related to
- * a controller.
+ * Controller container is a class that has an entity controller as the main
+ * object.
+ *
+ * @todo consider making it a trait
  */
 abstract class ControllerContainer implements ControllerAware {
 
@@ -28,6 +30,9 @@ abstract class ControllerContainer implements ControllerAware {
     $this->controller = $controller;
   }
 
+  /**
+   * @return \CW\Controller\AbstractEntityController
+   */
   public function getController() {
     return $this->controller;
   }

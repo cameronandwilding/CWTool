@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
  *
  * Saves a batch of updated entities using identity map storage.
  */
-class EntityBatchSaver {
+class EntityBatchSaver extends LoggerObject {
 
   /**
    * @var LocalProcessIdentityMap
@@ -24,19 +24,16 @@ class EntityBatchSaver {
   private $entityControllerIdentityMap;
 
   /**
-   * @var \Psr\Log\LoggerInterface
-   */
-  private $logger;
-
-  /**
    * Constructor.
    *
    * @param LocalProcessIdentityMap $entityModelIdentityMap
    *  Identity map that contains entity models.
+   * @param \Psr\Log\LoggerInterface $logger
    */
   public function __construct(LocalProcessIdentityMap $entityModelIdentityMap, LoggerInterface $logger) {
+    parent::__construct($logger);
+
     $this->entityControllerIdentityMap = $entityModelIdentityMap;
-    $this->logger = $logger;
   }
 
   /**
