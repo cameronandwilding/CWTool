@@ -55,27 +55,27 @@ Entity controllers and factories
 --------------------------------
 
 ```
-┌──────────────┐                                          
+┌──────────────────────┐                                          
 │                      │                                          
 │ Service container    │                                          
 │                      │                                          
-└──────────────┘                                          
+└──────────────────────┘                                          
             │                                                     
             │                                                     
             ▼                                                     
-┌──────────────┐   ┌───▶ Logger                           
+┌──────────────────────┐   ┌───▶ Logger                           
 │                      │   ├───▶ Controller                       
-│ Controller factory   ├──┼───▶ IdentityMap                      
+│ Controller factory   ├───┼───▶ IdentityMap                      
 │                      │   └───▶ Entity type information          
-└──────────────┘                                          
+└──────────────────────┘                                          
             │                                                     
             │                                                     
             ▼                                                     
-┌──────────────┐                                          
+┌──────────────────────┐                                          
 │                      │                       ID: #              
 │ Concrete controller  │─────▶ initWithID(#) : TYPE: #            
 │                      │                       Entity: @{...}     
-└──────────────┘                                          
+└──────────────────────┘                                          
 ```
 
 
