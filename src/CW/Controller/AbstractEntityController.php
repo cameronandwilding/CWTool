@@ -125,6 +125,10 @@ abstract class AbstractEntityController extends LoggerObject {
    */
   public function entity($forceReload = self::RELOAD_IGNORE) {
     if ($forceReload === self::RELOAD_FORCE || !isset($this->entity)) {
+      if (empty($this->entityId)) {
+        return NULL;
+      }
+
       $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 

@@ -102,3 +102,19 @@ function cw_tool_cron_timer() {
 function cw_tool_variable_adapter() {
   return cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_ADAPTER);
 }
+
+/**
+ * CWTool form validator proxy for registered validator.
+ *
+ * @param array $form
+ * @param array $form_state
+ */
+function cw_tool_form_util_validate($form, $form_state) {
+  if (!isset($form['#cw_tool']['validation'])) {
+    return;
+  }
+
+  foreach ($form['#cw_tool']['validation'] as $callback) {
+    call_user_func($callback, $form, $form_state);
+  }
+}
