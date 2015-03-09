@@ -122,6 +122,26 @@ $nodeController = $nodeFactory->initNew(new NodeCreator($articleParams));
 ```
 
 
+General development guidelines
+------------------------------
+
+**Use entities via their controllers**
+
+Entities should have their own controller, and loaded with the controller factory.
+
+**Controller should contain the minimum necessary behavior**
+
+Controllers suppose to contain data access and minimum business logic. Controller should not generate themed output. Controller should not sanitize it's content.
+
+Controller should hold the field names (as constants), property or state constants.
+
+For extra behavior (such as controller rendered output, forms, ets) there should be a dedicated class implementing ControllerAware or ControllerContainer.
+
+**Services over static classes**
+
+When new class needed to wrap a functionality, a new service is preferred. Usually they contain a logger.
+
+
 Helper functions
 ----------------
 
