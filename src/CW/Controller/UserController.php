@@ -89,13 +89,13 @@ class UserController extends AbstractEntityController {
     return isset($entity->sid);
   }
 
-  public function entity($forceReload = self::FORCE_RELOAD) {
+  public function entity($forceReload = self::RELOAD_IGNORE) {
     // Flag to make sure it's reloaded only once at max.
     static $realEntityLoadedFlag = FALSE;
 
     if (!$realEntityLoadedFlag && $this->isUserEntityIncomplete()) {
       $realEntityLoadedFlag = TRUE;
-      return parent::entity(self::FORCE_RELOAD);
+      return parent::entity(self::RELOAD_FORCE);
     }
 
     return parent::entity($forceReload);

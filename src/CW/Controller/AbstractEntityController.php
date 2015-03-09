@@ -33,7 +33,8 @@ abstract class AbstractEntityController {
   // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD;
   const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 2;
 
-  const FORCE_RELOAD = TRUE;
+  const RELOAD_FORCE = TRUE;
+  const RELOAD_IGNORE = FALSE;
 
   /**
    * @var LoggerInterface
@@ -122,8 +123,8 @@ abstract class AbstractEntityController {
    * @param bool $forceReload
    * @return mixed|object
    */
-  public function entity($forceReload = self::FORCE_RELOAD) {
-    if ($forceReload || !isset($this->entity)) {
+  public function entity($forceReload = self::RELOAD_IGNORE) {
+    if ($forceReload === self::RELOAD_FORCE || !isset($this->entity)) {
       $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 
