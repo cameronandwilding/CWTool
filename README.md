@@ -5,34 +5,34 @@ Install
 -------
 
 * copy the module into the modules folder
-** even better if you add it as a git submodule
+    * even better if you add it as a git submodule
 * update composer dependencies:
-** ```composer update``` in the module folder
+    * ```composer update``` in the module folder
 * enable cw_tool module
-** ```drush en cw_tool```
+    * ```drush en cw_tool```
 
 
 Main features
 -------------
 
-- dependency injection layer
-- drupal variable adapter
-- entity controllers and factories
-- entity creators
-- site variable and its form handlers
-- drupal object handler (entity crud) adaptor
-- generic model interface
-- utilities
- - array util
- - cron timer
- - date util
- - entity batch saver
- - field util
- - form util
- - link abstraction
- - identity map
- - request object
- - list data type
+* dependency injection layer
+* drupal variable adapter
+* entity controllers and factories
+* entity creators
+* site variable and its form handlers
+* drupal object handler (entity crud) adapter
+* generic model interface
+* utilities
+    * array util
+    * cron timer
+    * date util
+    * entity batch saver
+    * field util
+    * form util
+    * link abstraction
+    * identity map
+    * request object
+    * list data type
 
 
 Dependency injection layer
@@ -78,6 +78,48 @@ Entity controllers and factories
 └──────────────────────┘
 ```
 
+Entity controllers are created through factories in order to provide common functionalities, such as caching. The entity controller factory is usually defined in the service container, such as this for nodes:
+
+```
+  cw.node-controller.factory:
+    class: CW\Factory\EntityControllerFactory
+    arguments:
+      - @cw.identity-map
+      - @cw.object-handler.drupal
+      - 'CW\Controller\NodeController'
+      - 'node'
+      - @cw.logger
+```
+
+An entity controller factory must define the controller class and the entity type. Accessing the factory is through the service container:
+
+```php
+cw_tool_get_container->get('my-controller-factory');
+```
+
+And then accessing the concrete entity is either passing the ID or the whole object:
+
+```php
+$userController = cw_tool_get_container->get('my-user-controller-factory')->initWithId(123);
+$nodeController = cw_tool_get_container->get('my-node-controller-factory')->initWithEntity($node);
+```
+
+
+Entity creators
+---------------
+
+Entity creators are handy when creating new specialized entities, sort of like a content factory. There are already creators for node and user entity types and can be created more (by implementing the Creator interface) if necessary.
+
+Example:
+
+```php
+$articleParams = new NodeCreationParams('article', 'Main title');
+$articleParams->setField('field_subtitle', 'My subtitle');
+$articleParams->setProperty('status', NODE_NOT_PUBLISHED);
+
+$nodeFactory = cw_tool_get_container()->get('my-node-controller-factory');
+$nodeController = $nodeFactory->initNew(new NodeCreator($articleParams));
+```
 
 
 Helper functions
@@ -85,10 +127,10 @@ Helper functions
 
 Helper tools for generic Drupal7 development (simple functions in the includes):
 
-- update hook helpers
- - menu related updates
- - Field API crud
- - features
-- field collection helpers
-- taxonomy
-- etc
+* update hook helpers
+    * menu related updates
+    * Field API crud
+    * features
+* field collection helpers
+* taxonomy
+* etc
