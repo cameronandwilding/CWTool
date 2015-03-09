@@ -26,6 +26,12 @@ class FormUtil {
     $form['#after_build'][] = $hook;
   }
 
+  /**
+   * Registers a validation callback for the form.
+   *
+   * @param $form
+   * @param $callable
+   */
   public static function registerValidationCallback(&$form, $callable) {
     if (!isset($form['#validate'])) {
       $form['#validate'] = array();
