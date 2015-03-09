@@ -95,3 +95,10 @@ function cw_tool_core_admin_settings_form($form) {
 function cw_tool_cron_timer() {
   return cw_tool_get_container()->get(CWTOOL_SERVICE_CRON_TIMER);
 }
+
+/**
+ * @return \CW\Adapter\VariableAdapter
+ */
+function cw_tool_variable_adapter() {
+  return cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_ADAPTER);
+}
