@@ -84,4 +84,21 @@ class UserController extends AbstractEntityController {
     return isset($this->entity()->roles) && in_array($roleName, $this->entity()->roles);
   }
 
+  protected function isUserEntityIncomplete() {
+    $entity = parent::entity();
+    return isset($entity->sid);
+  }
+
+  public function entity($forceReload = self::FORCE_RELOAD) {
+    // Flag to make sure it's reloaded only once at max.
+    static $realEntityLoadedFlag = FALSE;
+
+    if (!$realEntityLoadedFlag && $this->isUserEntityIncomplete()) {
+      $realEntityLoadedFlag = TRUE;
+      return parent::entity(self::FORCE_RELOAD);
+    }
+
+    return parent::entity($forceReload);
+  }
+
 }
