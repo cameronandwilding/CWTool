@@ -4,12 +4,12 @@ CW Tool
 Install
 -------
 
-- copy the module into the modules folder
-  - even better if you add it as a git submodule
-- update composer dependencies:
-  - ```composer update``` in the module folder
-- enable cw_tool module
-  - ```drush en cw_tool```
+* copy the module into the modules folder
+** even better if you add it as a git submodule
+* update composer dependencies:
+** ```composer update``` in the module folder
+* enable cw_tool module
+** ```drush en cw_tool```
 
 
 Main features
