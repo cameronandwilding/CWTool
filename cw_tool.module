@@ -8,6 +8,7 @@
 use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
 use CW\Util\CronTimer;
+use CW\Util\FormUtil;
 use CW\Util\SimpleList;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -109,12 +110,14 @@ function cw_tool_variable_adapter() {
  * @param array $form
  * @param array $form_state
  */
-function cw_tool_form_util_validate($form, $form_state) {
-  if (!isset($form['#cw_tool']['validation'])) {
-    return;
-  }
+function cw_tool_form_util_validate(&$form, &$form_state) {
+  FormUtil::callHook(FormUtil::HOOK_VALIDATE, $form, $form_state);
+}
 
-  foreach ($form['#cw_tool']['validation'] as $callback) {
-    call_user_func($callback, $form, $form_state);
-  }
+function cw_tool_form_util_submit(&$form, &$form_state) {
+  FormUtil::callHook(FormUtil::HOOK_SUBMIT, $form, $form_state);
+}
+
+function cw_tool_form_util_after_build($form, $form_state) {
+  return FormUtil::callAfterBuildHook($form, $form_state);
 }

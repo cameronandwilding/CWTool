@@ -312,13 +312,34 @@ abstract class AbstractEntityController extends LoggerObject {
    *
    * @param $fieldName
    * @param \CW\Factory\EntityControllerFactory $factory
+   * @param int $idx
+   * @param string $lang
    * @return \CW\Controller\AbstractEntityController|null
    */
-  protected function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory) {
-    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID))) {
+  public function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang))) {
       return NULL;
     }
     return $factory->initWithId($targetID);
+  }
+
+  /**
+   * @param $fieldName
+   * @param \CW\Factory\EntityControllerFactory $factory
+   * @param string $lang
+   * @return AbstractEntityController[]
+   */
+  public function getAllControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$fieldName}[$lang])) {
+      return array();
+    }
+
+    $controllers = array();
+    foreach (array_keys($this->entity()->{$fieldName}[$lang]) as $idx) {
+      $controllers[] = $this->getControllerFromEntityReferenceField($fieldName, $factory, $idx, $lang);
+    }
+
+    return array_filter($controllers);
   }
 
 }
