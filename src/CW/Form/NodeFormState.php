@@ -5,10 +5,18 @@
 
 namespace CW\Form;
 
+use CW\Controller\AbstractEntityController;
 use CW\Factory\EntityControllerFactory;
 use CW\Util\FieldUtil;
-use CW\Util\FormUtil;
 
+/**
+ * Class NodeFormState
+ * @package CW\Form
+ *
+ * Form state accessor of a node form.
+ *
+ * @todo make a FieldAccessor interface
+ */
 class NodeFormState extends FormState {
 
   public function fieldValue($fieldName, $valueKey = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE, $idx = 0) {
@@ -33,6 +41,25 @@ class NodeFormState extends FormState {
     }
 
     return $entityControllerFactory->initWithId($targetID);
+  }
+
+  /**
+   * @param string $fieldName
+   * @param \CW\Factory\EntityControllerFactory $entityControllerFactory
+   * @param string $lang
+   * @return AbstractEntityController[]
+   */
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $lang = LANGUAGE_NONE) {
+    if (!isset($this->formState[self::VALUES_KEY][$fieldName][$lang])) {
+      return array();
+    }
+
+    $controllers = array();
+    foreach (array_keys($this->formState[self::VALUES_KEY][$fieldName][$lang]) as $idx) {
+      $controllers[] = $this->fieldReferencedEntityController($fieldName, $entityControllerFactory, $lang, $idx);
+    }
+
+    return array_filter($controllers);
   }
 
 }
