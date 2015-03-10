@@ -1,6 +1,8 @@
 <?php
 /**
  * @file
+ *
+ * Node form state.
  */
 
 namespace CW\Form;
@@ -19,6 +21,13 @@ use CW\Util\FieldUtil;
  */
 class NodeFormState extends FormState {
 
+  /**
+   * @param string $fieldName
+   * @param string $valueKey
+   * @param string $lang
+   * @param int $idx
+   * @return mixed
+   */
   public function fieldValue($fieldName, $valueKey = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE, $idx = 0) {
     if (!isset($this->formState[self::VALUES_KEY][$fieldName][$lang][$idx][$valueKey])) {
       return NULL;
@@ -27,6 +36,12 @@ class NodeFormState extends FormState {
     return $this->formState[self::VALUES_KEY][$fieldName][$lang][$idx][$valueKey];
   }
 
+  /**
+   * @param string $fieldName
+   * @param string $lang
+   * @param int $idx
+   * @return array
+   */
   public function fieldItem($fieldName, $lang = LANGUAGE_NONE, $idx = 0) {
     if (!isset($this->formState[self::VALUES_KEY][$fieldName][$lang][$idx])) {
       return NULL;
@@ -35,6 +50,13 @@ class NodeFormState extends FormState {
     return $this->formState[self::VALUES_KEY][$fieldName][$lang][$idx];
   }
 
+  /**
+   * @param string $fieldName
+   * @param \CW\Factory\EntityControllerFactory $entityControllerFactory
+   * @param string $lang
+   * @param int $idx
+   * @return \CW\Controller\AbstractEntityController|null
+   */
   public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $lang = LANGUAGE_NONE, $idx = 0) {
     if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $lang, $idx))) {
       return NULL;
