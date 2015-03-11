@@ -58,13 +58,13 @@ class FormUtil {
    * @param array $form
    * @param array $form_state
    */
-  public static function callHook($hook, &$form, $form_state) {
+  public static function callHook($hook, &$form, &$form_state) {
     if (!isset($form[self::FORM_HOOK_KEY][$hook])) {
       return;
     }
 
     foreach ($form[self::FORM_HOOK_KEY][$hook] as $callback) {
-      call_user_func($callback, $form, $form_state);
+      call_user_func_array($callback, array(&$form, &$form_state));
     }
   }
 
@@ -81,7 +81,7 @@ class FormUtil {
     }
 
     foreach ($form[self::FORM_HOOK_KEY][self::HOOK_AFTER_BUILD] as $callback) {
-      $form = call_user_func($callback, $form, $form_state);
+      $form = call_user_func_array($callback, array(&$form, &$form_state));
     }
 
     return $form;
