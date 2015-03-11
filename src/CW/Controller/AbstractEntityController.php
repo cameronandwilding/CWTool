@@ -342,4 +342,14 @@ abstract class AbstractEntityController extends LoggerObject {
     return array_filter($controllers);
   }
 
+  /**
+   * Get a property of the entity object.
+   *
+   * @param string $key
+   * @return mixed
+   */
+  public function property($key) {
+    return isset($this->entity()->{$key}) ? $this->entity()->{$key} : NULL;
+  }
+
 }
