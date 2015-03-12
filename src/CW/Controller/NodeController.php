@@ -25,4 +25,11 @@ class NodeController extends AbstractEntityController {
     return self::TYPE_NODE;
   }
 
+  /**
+   * @return bool
+   */
+  public function isPublished() {
+    return $this->property('status') == NODE_PUBLISHED;
+  }
+
 }
