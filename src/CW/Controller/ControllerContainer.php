@@ -37,4 +37,14 @@ abstract class ControllerContainer implements ControllerAware {
     return $this->controller;
   }
 
+  /**
+   * Factory helper.
+   *
+   * @param \CW\Controller\AbstractEntityController $controller
+   * @return static
+   */
+  public static function factory(AbstractEntityController $controller) {
+    return new static($controller);
+  }
+
 }
