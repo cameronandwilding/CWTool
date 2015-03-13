@@ -16,6 +16,7 @@ interface Validator {
 
   /**
    * @return bool
+   * @todo might not need boolean return
    */
   public function validate();
 
