@@ -39,4 +39,8 @@ class DateUtil {
     return $n * self::DAY_IN_SECONDS;
   }
 
+  public static function firstSecondOfDayInTimestamp($timestamp) {
+    return strtotime(date('Y-m-d', $timestamp));
+  }
+
 }

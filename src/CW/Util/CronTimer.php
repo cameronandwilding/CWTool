@@ -57,6 +57,14 @@ class CronTimer {
 
   /**
    * @param string $cronKey
+   * @return int
+   */
+  public function getLastRunTimestamp($cronKey) {
+    return $this->variableAdapter->get($this->getCacheKey($cronKey), 0);
+  }
+
+  /**
+   * @param string $cronKey
    * @return string
    */
   protected function getCacheKey($cronKey) {
