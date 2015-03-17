@@ -121,4 +121,11 @@ class UserController extends AbstractEntityController {
     return parent::entity($forceReload);
   }
 
+  /**
+   * @return string
+   */
+  public function getMail() {
+    return $this->property('mail');
+  }
+
 }
