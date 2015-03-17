@@ -266,6 +266,26 @@ abstract class AbstractEntityController extends LoggerObject {
   }
 
   /**
+   * Extract all the values of field items.
+   *
+   * @param string $field_name
+   * @param string $key
+   * @param string $lang
+   * @return array
+   */
+  public function multiFieldValues($field_name, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$field_name}[$lang])) {
+      return array();
+    }
+
+    $values = array();
+    foreach ($this->entity()->{$field_name}[$lang] as $idx => $item) {
+      $values[] = $this->fieldValue($field_name, $key, $idx, $lang);
+    }
+    return $values;
+  }
+
+  /**
    * Extracts a whole field item (array).
    *
    * @param $field_name
