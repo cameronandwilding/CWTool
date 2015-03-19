@@ -42,6 +42,11 @@ class Link {
   private $absolute;
 
   /**
+   * @var bool
+   */
+  private $isFormatHtml = FALSE;
+
+  /**
    * @param null $path
    * @param null $text
    * @param array $query
@@ -162,6 +167,15 @@ class Link {
   }
 
   /**
+   * @param boolean $html
+   * @return $this
+   */
+  public function setOutputFormatToHtml() {
+    $this->isFormatHtml = TRUE;
+    return $this;
+  }
+
+  /**
    * @return array
    */
   private function getDrupalURLOptions() {
@@ -169,6 +183,7 @@ class Link {
       'query' => $this->query,
       'fragment' => $this->fragment,
       'absolute' => $this->absolute,
+      'html' => $this->isFormatHtml,
     );
   }
 
