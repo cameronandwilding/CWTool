@@ -44,7 +44,7 @@ class Link {
   /**
    * @var bool
    */
-  private $html;
+  private $isFormatHtml = FALSE;
 
   /**
    * @param null $path
@@ -170,8 +170,8 @@ class Link {
    * @param boolean $html
    * @return $this
    */
-  public function setHtml($html) {
-    $this->html = $html;
+  public function setOutputFormatToHtml() {
+    $this->isFormatHtml = TRUE;
     return $this;
   }
 
@@ -183,7 +183,7 @@ class Link {
       'query' => $this->query,
       'fragment' => $this->fragment,
       'absolute' => $this->absolute,
-      'html' => $this->html,
+      'html' => $this->isFormatHtml,
     );
   }
 
