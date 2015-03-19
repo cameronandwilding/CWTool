@@ -317,14 +317,31 @@ abstract class AbstractEntityController extends LoggerObject {
   /**
    * Set a single field value.
    *
-   * @param $field_name
-   * @param $value
+   * @param string $field_name
+   * @param mixed $value
    * @param string $key
    * @param int $idx
    * @param string $lang
    */
   public function setFieldValue($field_name, $value, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
     $this->entity()->{$field_name}[$lang][$idx][$key] = $value;
+  }
+
+  /**
+   * Updates a field with multiple values.
+   * Be careful as it's removing the previous values and only keeping the new
+   * ones.
+   *
+   * @param string $field_name
+   * @param array $values
+   * @param string $key
+   * @param string $lang
+   */
+  public function setMultiFieldValues($field_name, array $values, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
+    $this->entity()->{$field_name}[$lang] = array();
+    foreach ($values as $value) {
+      $this->entity()->{$field_name}[$lang][] = array($key => $value);
+    }
   }
 
   /**
