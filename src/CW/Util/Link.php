@@ -47,18 +47,24 @@ class Link {
   private $isFormatHtml = FALSE;
 
   /**
+   * @var array
+   */
+  private $attributes;
+
+  /**
    * @param null $path
    * @param null $text
    * @param array $query
    * @param null $fragment
    * @param bool $absolute
    */
-  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE) {
+  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = FALSE) {
     $this->path = $path;
     $this->text = $text;
     $this->query = $query;
     $this->fragment = $fragment;
     $this->absolute = $absolute;
+    $this->attributes = $attributes;
   }
 
   /**
@@ -176,6 +182,15 @@ class Link {
   }
 
   /**
+   * @param array $attribute
+   * @return $this
+   */
+  public function setAttributes($attribute) {
+    $this->attributes = $attribute;
+    return $this;
+  }
+
+  /**
    * @return array
    */
   private function getDrupalURLOptions() {
@@ -184,6 +199,7 @@ class Link {
       'fragment' => $this->fragment,
       'absolute' => $this->absolute,
       'html' => $this->isFormatHtml,
+      'attributes' => $this->attributes
     );
   }
 
