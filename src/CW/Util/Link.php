@@ -57,6 +57,7 @@ class Link {
    * @param array $query
    * @param null $fragment
    * @param bool $absolute
+   * @param array $attributes
    */
   public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = array()) {
     $this->path = $path;
