@@ -49,17 +49,7 @@ class Link {
   /**
    * @var array
    */
-  private $attributes;
-
-  /**
-   * @var array
-   */
-  private $class;
-
-  /**
-   * @var string
-   */
-  private $id;
+  private $attributes = array();
 
   /**
    * @param null $path
@@ -68,15 +58,13 @@ class Link {
    * @param null $fragment
    * @param bool $absolute
    */
-  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = array(), $class = array(), $id = NULL) {
+  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = array()) {
     $this->path = $path;
     $this->text = $text;
     $this->query = $query;
     $this->fragment = $fragment;
     $this->absolute = $absolute;
     $this->attributes = $attributes;
-    $this->class = $class;
-    $this->id = $id;
   }
 
   /**
@@ -197,18 +185,17 @@ class Link {
    * @param array $attribute
    * @return $this
    */
-  private function setAttributes(array $attribute) {
-    $this->attributes = array_merge($this->attributes, $attribute);
+  private function setAttributes(array $attributes) {
+    $this->attributes = array_merge($this->attributes, $attributes);
     return $this;
   }
 
   /**
-   * @param array $class
+   * @param string[] $class
    * @return $this
    */
-  public function setClass(array $class) {
-    $this->class = array_merge($this->class, $class);
-    $this->setAttributes(array('class' => $this->class));
+  public function setClass(array $classes) {
+    $this->setAttributes(array('class' => $classes));
     return $this;
   }
 
