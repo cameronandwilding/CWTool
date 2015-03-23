@@ -52,19 +52,31 @@ class Link {
   private $attributes;
 
   /**
+   * @var array
+   */
+  private $class;
+
+  /**
+   * @var string
+   */
+  private $id;
+
+  /**
    * @param null $path
    * @param null $text
    * @param array $query
    * @param null $fragment
    * @param bool $absolute
    */
-  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = FALSE) {
+  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = array(), $class = array(), $id = NULL) {
     $this->path = $path;
     $this->text = $text;
     $this->query = $query;
     $this->fragment = $fragment;
     $this->absolute = $absolute;
     $this->attributes = $attributes;
+    $this->class = $class;
+    $this->id = $id;
   }
 
   /**
@@ -185,8 +197,27 @@ class Link {
    * @param array $attribute
    * @return $this
    */
-  public function setAttributes($attribute) {
-    $this->attributes = $attribute;
+  private function setAttributes(array $attribute) {
+    $this->attributes = array_merge($this->attributes, $attribute);
+    return $this;
+  }
+
+  /**
+   * @param array $class
+   * @return $this
+   */
+  public function setClass(array $class) {
+    $this->class = array_merge($this->class, $class);
+    $this->setAttributes(array('class' => $this->class));
+    return $this;
+  }
+
+  /**
+   * @param string $id
+   * @return $this
+   */
+  public function setId($id) {
+    $this->setAttributes(array('id' => $id));
     return $this;
   }
 
@@ -199,7 +230,7 @@ class Link {
       'fragment' => $this->fragment,
       'absolute' => $this->absolute,
       'html' => $this->isFormatHtml,
-      'attributes' => $this->attributes
+      'attributes' => $this->attributes,
     );
   }
 
