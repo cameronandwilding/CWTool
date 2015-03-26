@@ -26,6 +26,11 @@ class Request {
   protected $SERVER;
 
   /**
+   * @var array
+   */
+  protected $POST;
+
+  /**
    * @return \CW\Util\Request
    */
   public static function current() {
@@ -35,6 +40,7 @@ class Request {
       $current = new Request();
       $current->collectGlobalGetParams();
       $current->collectGlobalServerParams();
+      $current->collectGlobalPostParams();
     }
 
     return $current;
@@ -52,6 +58,13 @@ class Request {
    */
   protected function collectGlobalServerParams() {
     $this->SERVER = $_SERVER;
+  }
+
+  /**
+   * Internally gets the POST params.
+   */
+  protected function collectGlobalPostParams() {
+    $this->POST = $_POST;
   }
 
   /**
@@ -97,6 +110,14 @@ class Request {
     $get = $this->getGETWithDrupalPath();
     unset($get['q']);
     return $get;
+  }
+
+  /**
+   * @param string $key
+   * @return null|string
+   */
+  public function getPOSTParam($key) {
+    return isset($this->POST[$key]) ? $this->POST[$key] : NULL;
   }
 
 }
