@@ -59,7 +59,7 @@ class Link {
    * @param bool $absolute
    * @param array $attributes
    */
-  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, $attributes = array()) {
+  public function __construct($path = NULL, $text = NULL, array $query = array(), $fragment = NULL, $absolute = FALSE, array $attributes = array()) {
     $this->path = $path;
     $this->text = $text;
     $this->query = $query;
@@ -174,7 +174,6 @@ class Link {
   }
 
   /**
-   * @param boolean $html
    * @return $this
    */
   public function setOutputFormatToHtml() {
@@ -183,7 +182,7 @@ class Link {
   }
 
   /**
-   * @param array $attribute
+   * @param array $attributes
    * @return $this
    */
   private function setAttributes(array $attributes) {
@@ -192,7 +191,7 @@ class Link {
   }
 
   /**
-   * @param string[] $class
+   * @param string[] $classes
    * @return $this
    */
   public function setClass(array $classes) {
