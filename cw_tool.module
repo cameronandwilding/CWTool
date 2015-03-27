@@ -24,6 +24,7 @@ define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
 define('CWTOOL_SERVICE_VARIABLE_MANAGER', 'cw.variable-manager');
 define('CWTOOL_SERVICE_VARIABLE_ADAPTER', 'cw.variable-adapter');
 define('CWTOOL_SERVICE_CRON_TIMER', 'cw.cron-timer');
+define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
 
 /**
  * Get the dependency injection container.
@@ -102,6 +103,13 @@ function cw_tool_cron_timer() {
  */
 function cw_tool_variable_adapter() {
   return cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_ADAPTER);
+}
+
+/**
+ * @return \Psr\Log\LoggerInterface
+ */
+function cw_tool_logger() {
+  return cw_tool_get_container()->get(CWTOOL_SERVICE_LOGGER);
 }
 
 /**
