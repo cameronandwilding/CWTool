@@ -16,8 +16,8 @@ abstract class NodeFormValidator extends FormValidator {
    */
   protected $formState;
 
-  public function __construct($form_state) {
-    $this->formState = new NodeFormState($form_state);
+  public function __construct(NodeFormState $formState) {
+    $this->formState = $formState;
   }
 
 }

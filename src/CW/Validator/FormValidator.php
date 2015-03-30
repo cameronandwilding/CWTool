@@ -25,10 +25,10 @@ abstract class FormValidator implements Validator {
   protected $formState;
 
   /**
-   * @param array $form_state
+   * @param FormState $formState
    */
-  public function __construct($form_state) {
-    $this->formState = new FormState($form_state);
+  public function __construct(FormState $formState) {
+    $this->formState = $formState;
   }
 
 }

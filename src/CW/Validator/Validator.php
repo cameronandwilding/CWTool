@@ -15,8 +15,9 @@ namespace CW\Validator;
 interface Validator {
 
   /**
-   * @return bool
-   * @todo might not need boolean return
+   * Validate a state.
+   * Preferred error handling is changing global state (by setting form error)
+   * or firing an exception.
    */
   public function validate();
 
