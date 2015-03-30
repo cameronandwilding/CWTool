@@ -7,6 +7,7 @@
 
 namespace CW\Controller;
 
+use CW\Adapter\FieldAccessor;
 use CW\Factory\EntityControllerFactory;
 use CW\Model\ObjectHandler;
 use CW\Util\FieldUtil;
@@ -26,7 +27,7 @@ use Psr\Log\LoggerInterface;
  * stored properly in the cache (identity object containers).
  * @see EntityControllerFactory
  */
-abstract class AbstractEntityController extends LoggerObject {
+abstract class AbstractEntityController extends LoggerObject implements FieldAccessor {
 
   // On the entity, created and changed timestamps are different sometimes, even
   // if the entity was not updated. We need to check the updated state (being
@@ -250,19 +251,13 @@ abstract class AbstractEntityController extends LoggerObject {
   }
 
   /**
-   * Extracts the exact field value.
-   *
-   * @param $field_name
-   * @param string $key
-   * @param int $idx
-   * @param string $lang
-   * @return null|mixed
+   * {@inheritdoc}
    */
-  public function fieldValue($field_name, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$field_name}[$lang][$idx][$key])) {
+  public function fieldValue($fieldName, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$fieldName}[$lang][$idx][$key])) {
       return NULL;
     }
-    return $this->entity()->{$field_name}[$lang][$idx][$key];
+    return $this->entity()->{$fieldName}[$lang][$idx][$key];
   }
 
   /**
@@ -286,32 +281,27 @@ abstract class AbstractEntityController extends LoggerObject {
   }
 
   /**
-   * Extracts a whole field item (array).
-   *
-   * @param $field_name
-   * @param int $idx
-   * @param string $lang
-   * @return null
+   * {@inheritdoc}
    */
-  public function fieldItem($field_name, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$field_name}[$lang][$idx])) {
+  public function fieldItem($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$fieldName}[$lang][$idx])) {
       return NULL;
     }
-    return $this->entity()->{$field_name}[$lang][$idx];
+    return $this->entity()->{$fieldName}[$lang][$idx];
   }
 
   /**
    * Gets all field items.
    *
-   * @param $field_name
+   * @param $fieldName
    * @param string $lang
    * @return null
    */
-  public function fieldItems($field_name, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$field_name}[$lang])) {
+  public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
+    if (!isset($this->entity()->{$fieldName}[$lang])) {
       return NULL;
     }
-    return $this->entity()->{$field_name}[$lang];
+    return $this->entity()->{$fieldName}[$lang];
   }
 
   /**
@@ -345,35 +335,26 @@ abstract class AbstractEntityController extends LoggerObject {
   }
 
   /**
-   * Get the actual entity controller object of the entity referenced by the field.
-   *
-   * @param $fieldName
-   * @param \CW\Factory\EntityControllerFactory $factory
-   * @param int $idx
-   * @param string $lang
-   * @return \CW\Controller\AbstractEntityController|null
+   * {@inheritdoc}
    */
-  public function getControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang))) {
       return NULL;
     }
-    return $factory->initWithId($targetID);
+    return $entityControllerFactory->initWithId($targetID);
   }
 
   /**
-   * @param $fieldName
-   * @param \CW\Factory\EntityControllerFactory $factory
-   * @param string $lang
-   * @return AbstractEntityController[]
+   * {@inheritdoc}
    */
-  public function getAllControllerFromEntityReferenceField($fieldName, EntityControllerFactory $factory, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
       return array();
     }
 
     $controllers = array();
     foreach (array_keys($this->entity()->{$fieldName}[$lang]) as $idx) {
-      $controllers[] = $this->getControllerFromEntityReferenceField($fieldName, $factory, $idx, $lang);
+      $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $idx, $lang);
     }
 
     return array_filter($controllers);
