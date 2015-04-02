@@ -13,7 +13,7 @@ namespace CW\Model;
  *
  * Drupal API object handler.
  */
-class DrupalObjectHandler extends ObjectHandler {
+class DrupalObjectHandler implements ObjectHandler {
 
   /**
    * {@inheritdoc}

@@ -370,4 +370,12 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     return isset($this->entity()->{$key}) ? $this->entity()->{$key} : NULL;
   }
 
+  /**
+   * @param string $key
+   * @param mixed $value
+   */
+  public function setProperty($key, $value) {
+    $this->entity()->{$key} = $value;
+  }
+
 }

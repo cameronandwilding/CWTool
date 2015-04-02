@@ -2,7 +2,7 @@
 /**
  * @file
  *
- * Object loader.
+ * Object handler.
  */
 
 namespace CW\Model;
@@ -16,7 +16,7 @@ use EntityDrupalWrapper;
  * Low level object handler. Should be the system's handler, DB handler or maybe
  * some other alternative, such as cache, memcache, etc.
  */
-abstract class ObjectHandler {
+interface ObjectHandler {
 
   /**
    * Load a single entity.
@@ -25,7 +25,7 @@ abstract class ObjectHandler {
    * @param int $entityId
    * @return object
    */
-  abstract public function loadSingleEntity($entityType, $entityId);
+  public function loadSingleEntity($entityType, $entityId);
 
   /**
    * Load multiple entities.
@@ -34,7 +34,7 @@ abstract class ObjectHandler {
    * @param array $entityIds
    * @return object[]
    */
-  abstract public function loadMultipleEntity($entityType, array $entityIds);
+  public function loadMultipleEntity($entityType, array $entityIds);
 
   /**
    * Save entity data.
@@ -43,7 +43,7 @@ abstract class ObjectHandler {
    * @param object $entity
    * @return mixed
    */
-  abstract public function save($entityType, $entity);
+  public function save($entityType, $entity);
 
   /**
    * Delete entity.
@@ -52,7 +52,7 @@ abstract class ObjectHandler {
    * @param int $entityId
    * @return mixed
    */
-  abstract public function delete($entityType, $entityId);
+  public function delete($entityType, $entityId);
 
   /**
    * Load entity metadata wrapper.
@@ -61,6 +61,6 @@ abstract class ObjectHandler {
    * @param object $entity
    * @return EntityDrupalWrapper
    */
-  abstract public function loadMetadata($entityType, $entity);
+  public function loadMetadata($entityType, $entity);
 
 }

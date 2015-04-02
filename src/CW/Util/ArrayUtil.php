@@ -37,4 +37,22 @@ class ArrayUtil {
     return array_key_exists($key, $map) ? $map[$key] : $not_found_value;
   }
 
+  /**
+   * Filters an array to a selection of keys.
+   * It preserves the keys.
+   *
+   * @param array $array
+   *  Input array with keys and values.
+   * @param array $keys
+   *  Keys to filter to.
+   * @return array
+   */
+  public static function filterKeys(array $array, array $keys) {
+    $out = array();
+    foreach ($keys as $key) {
+      $out[$key] = $array[$key];
+    }
+    return $out;
+  }
+
 }
