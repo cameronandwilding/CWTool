@@ -1,5 +1,2 @@
 vendor
-composer.lock
 cache
-cacert.pem
-
