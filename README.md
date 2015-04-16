@@ -4,6 +4,7 @@ CW Tool
 Install
 -------
 
+
 * copy the module into the modules folder
     * even better if you add it as a git submodule
 * update composer dependencies:
@@ -14,6 +15,7 @@ Install
 
 Main features
 -------------
+
 
 * dependency injection layer
 * drupal variable adapter
@@ -38,6 +40,7 @@ Main features
 Dependency injection layer
 --------------------------
 
+
 CWTool is using Symfony's service container for dependency injection. It reads the defined yaml files to collect the services and make them enable for the service container. For a service yaml file example look at the cw_tool/config/services.yml file.
 
 In order to pick up services defined by other modules there is a hook to define:
@@ -53,6 +56,7 @@ Check the services.yml file in cw_tool in order to get familiar with the availab
 
 Entity controllers and factories
 --------------------------------
+
 
 ```
 ┌──────────────────────┐
@@ -104,11 +108,12 @@ $userController = cw_tool_get_container->get('my-user-controller-factory')->init
 $nodeController = cw_tool_get_container->get('my-node-controller-factory')->initWithEntity($node);
 ```
 
-**Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the node factory.)
+**Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the generic node factory or blog node factory.)
 
 
 Entity creators
 ---------------
+
 
 Entity creators are handy when creating new specialized entities, sort of like a content factory. There are already creators for node and user entity types and can be created more (by implementing the Creator interface) if necessary.
 
@@ -123,8 +128,10 @@ $nodeFactory = cw_tool_get_container()->get('my-node-controller-factory');
 $nodeController = $nodeFactory->initNew(new NodeCreator($articleParams));
 ```
 
+
 Variable manager
 ----------------
+
 
 Application variables are managed with the variable manager. Hook can be implemented to collect:
 
@@ -140,6 +147,7 @@ All application variables should be added in this hook in order to have their pr
 General development guidelines
 ------------------------------
 
+
 **Use entities via their controllers**
 
 Entities should have their own controller, and loaded with the controller factory.
@@ -154,7 +162,7 @@ For extra behavior (such as controller rendered output, forms, ets) there should
 
 **Services over static classes**
 
-When new class needed to wrap a functionality, a new service is preferred. Usually they contain a logger.
+When new class needed to wrap a functionality, a new service is preferred. Usually they contain a logger at least.
 
 **Param objects over arrays**
 
