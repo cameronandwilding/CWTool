@@ -54,8 +54,10 @@ class DateUtil {
    * 130 -> 2 minutes,
    * 1900800 -> 3 weeks.
    *
-   * @param $seconds
-   * @return null|string
+   * @param int $seconds
+   *  Quantity, not the timestamp.
+   * @return array
+   *  [int, string] - quantity and unit name (eg, [3, weeks]).
    */
   public static function formatSecondsWithDynamicRanges($seconds) {
     $seconds = abs($seconds);
@@ -73,11 +75,11 @@ class DateUtil {
     foreach ($ranges as $range) {
       list($name, $divider, $limit) = $range;
       if ($seconds <= $limit) {
-        return t('@num @name', array('@num' => round($seconds / $divider), '@name' => $name));
+        return array(round($seconds / $divider), $name);
       }
     }
 
-    return NULL;
+    return array($seconds, 'seconds');
   }
 
 }
