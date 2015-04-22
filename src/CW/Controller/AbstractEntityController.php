@@ -214,6 +214,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    *
    * This is a helper for other services to be aware of the entity info.
    *
+   * @return string
    * @throws \Exception
    */
   public static function getClassEntityType() {
@@ -224,6 +225,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * Get the entity bundle the class represents.
    * Similar to:
    * @see $this->getClassEntityType()
+   *
+   * @return string
    * @throws \Exception
    */
   public static function getClassEntityBundle() {
