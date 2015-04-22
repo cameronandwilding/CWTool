@@ -43,4 +43,35 @@ class DateUtil {
     return strtotime(date('Y-m-d', $timestamp));
   }
 
+  /**
+   * Returns a nice date format using range detection, such as:
+   * 3 -> 3 seconds,
+   * 130 -> 2 minutes,
+   * 1900800 -> 3 weeks.
+   *
+   * @param $seconds
+   * @return null|string
+   */
+  public static function formatSecondsWithDynamicRanges($seconds) {
+    $seconds = abs($seconds);
+
+    $ranges = array(
+      array('seconds', 1, 90),
+      array('minutes', 60, 5400),
+      array('hours', 3600, 129600),
+      array('days', 86400, 907200),
+      array('weeks', 604800, 3888000),
+      array('months', 2592000, 30758400),
+      array('years', 30758400, PHP_INT_MAX),
+    );
+
+    foreach ($ranges as list($name, $divider, $limit)) {
+      if ($seconds <= $limit) {
+        return t('@num @name', array('@num' => round($seconds / $divider), '@name' => $name));
+      }
+    }
+
+    return NULL;
+  }
+
 }
