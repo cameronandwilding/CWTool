@@ -16,6 +16,7 @@ use DateTimeZone;
  */
 class DateUtil {
 
+  // One day in seconds.
   const DAY_IN_SECONDS = 86400;
 
   /**
@@ -39,6 +40,10 @@ class DateUtil {
     return $n * self::DAY_IN_SECONDS;
   }
 
+  /**
+   * @param int $timestamp
+   * @return int
+   */
   public static function firstSecondOfDayInTimestamp($timestamp) {
     return strtotime(date('Y-m-d', $timestamp));
   }
@@ -65,7 +70,8 @@ class DateUtil {
       array('years', 30758400, PHP_INT_MAX),
     );
 
-    foreach ($ranges as list($name, $divider, $limit)) {
+    foreach ($ranges as $range) {
+      list($name, $divider, $limit) = $range;
       if ($seconds <= $limit) {
         return t('@num @name', array('@num' => round($seconds / $divider), '@name' => $name));
       }

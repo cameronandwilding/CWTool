@@ -294,11 +294,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
-   * Gets all field items.
-   *
-   * @param $fieldName
-   * @param string $lang
-   * @return null
+   * {@inheritdoc}
    */
   public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
@@ -308,14 +304,10 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
-   * @param string $fieldName
-   * @param \CW\Factory\EntityControllerFactory $entityFactory
-   * @param int $idx
-   * @param string $language
-   * @return \CW\Controller\FileController|null
+   * {@inheritdoc}
    */
-  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $language = LANGUAGE_NONE) {
-    $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $language);
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
     if (empty($fid)) {
       return NULL;
     }

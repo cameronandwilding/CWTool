@@ -82,4 +82,15 @@ class NodeFormState extends FormState implements FieldAccessor {
     return array_filter($controllers);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang))) {
+      return NULL;
+    }
+
+    return $entityFactory->initWithId($fid);
+  }
+
 }

@@ -54,7 +54,7 @@ interface FieldAccessor {
    * Get the referenced entity controller referenced in the field.
    *
    * @param string $fieldName
-   * @param \CW\Factory\EntityControllerFactory $entityControllerFactory
+   * @param EntityControllerFactory $entityControllerFactory
    * @param int $idx
    * @param string $lang
    * @return AbstractEntityController|NULL
@@ -67,10 +67,21 @@ interface FieldAccessor {
    * generic.
    *
    * @param string $fieldName
-   * @param \CW\Factory\EntityControllerFactory $entityControllerFactory
+   * @param EntityControllerFactory $entityControllerFactory
    * @param string $lang
    * @return AbstractEntityController[]
    */
   public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $lang = LANGUAGE_NONE);
+
+  /**
+   * Get the referenced file controller.
+   *
+   * @param string $fieldName
+   * @param EntityControllerFactory $entityFactory
+   * @param int $idx
+   * @param string $lang
+   * @return mixed
+   */
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
 }
