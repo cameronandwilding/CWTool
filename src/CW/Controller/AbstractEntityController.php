@@ -307,7 +307,14 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     return $this->entity()->{$fieldName}[$lang];
   }
 
-  public function fieldReferencedFile($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $language = LANGUAGE_NONE) {
+  /**
+   * @param string $fieldName
+   * @param \CW\Factory\EntityControllerFactory $entityFactory
+   * @param int $idx
+   * @param string $language
+   * @return \CW\Controller\FileController|null
+   */
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $language = LANGUAGE_NONE) {
     $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $language);
     if (empty($fid)) {
       return NULL;
