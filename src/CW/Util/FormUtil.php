@@ -117,4 +117,8 @@ class FormUtil {
     self::registerCallback($form, self::HOOK_AFTER_BUILD, $callback);
   }
 
+  public static function getFieldLabel(&$form, $field) {
+    return $form[$field][LANGUAGE_NONE]['#title'];
+  }
+
 }
