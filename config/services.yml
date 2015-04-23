@@ -26,6 +26,15 @@ services:
       - 'user'
       - @cw.logger
 
+  cw.file-controller.factory:
+    class: CW\Factory\EntityControllerFactory
+    arguments:
+      - @cw.identity-map
+      - @cw.object-handler.drupal
+      - 'CW\Controller\FileController'
+      - 'file'
+      - @cw.logger
+
   cw.node-batch-saver:
     class: CW\Util\EntityBatchSaver
     arguments:

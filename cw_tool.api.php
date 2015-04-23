@@ -7,6 +7,7 @@
 
 /**
  * Chance to add service.yml file folders to include to main page load.
+ * The yml file name expected to be: services.yml
  *
  * @param \CW\Util\SimpleList $collection
  */

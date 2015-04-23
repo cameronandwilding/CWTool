@@ -214,6 +214,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    *
    * This is a helper for other services to be aware of the entity info.
    *
+   * @return string
    * @throws \Exception
    */
   public static function getClassEntityType() {
@@ -224,6 +225,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * Get the entity bundle the class represents.
    * Similar to:
    * @see $this->getClassEntityType()
+   *
+   * @return string
    * @throws \Exception
    */
   public static function getClassEntityBundle() {
@@ -291,17 +294,25 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
-   * Gets all field items.
-   *
-   * @param $fieldName
-   * @param string $lang
-   * @return null
+   * {@inheritdoc}
    */
   public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
       return NULL;
     }
     return $this->entity()->{$fieldName}[$lang];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
+    if (empty($fid)) {
+      return NULL;
+    }
+
+    return $entityFactory->initWithId($fid);
   }
 
   /**
