@@ -32,4 +32,14 @@ class NodeController extends AbstractEntityController {
     return $this->property('status') == NODE_PUBLISHED;
   }
 
+  /**
+   * Get the relative path of the content. (Not transformed.)
+   * Drupal's url can turn it to the transformed version.
+   *
+   * @return string
+   */
+  public function getPath() {
+    return 'node/' . $this->getEntityId();
+  }
+
 }
