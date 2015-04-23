@@ -123,7 +123,7 @@ class FormUtil {
    * @return string
    */
   public static function getFieldLabel(&$form, $field_name) {
-    if (empty($form[$field_name][$form[$field_name]['#language']]['#title'])) {
+    if (!isset($form[$field_name][$form[$field_name]['#language']]['#title'])) {
       return NULL;
     }
 
