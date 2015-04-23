@@ -118,7 +118,7 @@ class FormUtil {
   }
 
   public static function getFieldLabel(&$form, $field) {
-    return $form[$field][LANGUAGE_NONE]['#title'];
+    return $form[$field][$form[$field]['#language']]['#title'];
   }
 
 }
