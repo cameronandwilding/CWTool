@@ -42,4 +42,24 @@ class NodeController extends AbstractEntityController {
     return 'node/' . $this->getEntityId();
   }
 
+  /**
+   * Render node view.
+   *
+   * @param string $viewMode
+   * @param null $langCode
+   * @return string
+   */
+  public function render($viewMode = 'full', $langCode = NULL) {
+    if (!$this->entity()) {
+      return NULL;
+    }
+
+    $nodeView = node_view($this->entity(), $viewMode, $langCode);
+    if (empty($nodeView)) {
+      return NULL;
+    }
+
+    return render($nodeView);
+  }
+
 }

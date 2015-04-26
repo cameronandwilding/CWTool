@@ -389,4 +389,49 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     $this->entity()->{$key} = $value;
   }
 
+  /**
+   * Render a field of the entity.
+   *
+   * @param string $fieldName
+   * @param $display
+   *   Can be either:
+   *   - The name of a view mode. The field will be displayed according to the
+   *     display settings specified for this view mode in the $instance
+   *     definition for the field in the entity's bundle.
+   *     If no display settings are found for the view mode, the settings for
+   *     the 'default' view mode will be used.
+   *   - An array of display settings, as found in the 'display' entry of
+   *     $instance definitions. The following key/value pairs are allowed:
+   *     - label: (string) Position of the label. The default 'field' theme
+   *       implementation supports the values 'inline', 'above' and 'hidden'.
+   *       Defaults to 'above'.
+   *     - type: (string) The formatter to use. Defaults to the
+   *       'default_formatter' for the field type, specified in
+   *       hook_field_info(). The default formatter will also be used if the
+   *       requested formatter is not available.
+   *     - settings: (array) Settings specific to the formatter. Defaults to the
+   *       formatter's default settings, specified in
+   *       hook_field_formatter_info().
+   *     - weight: (float) The weight to assign to the renderable element.
+   *       Defaults to 0.
+   * @param $langcode
+   *   (Optional) The language the field values are to be shown in. The site's
+   *   current language fallback logic will be applied no values are available
+   *   for the language. If no language is provided the current language will be
+   *   used.
+   * @return string
+   *  HTML.
+   *
+   * @see field_view_field()
+   */
+  public function fieldRender($fieldName, $display = array(), $langcode = NULL) {
+    $fieldView = field_view_field($this->getEntityType(), $this->entity(), $fieldName, $display, $langcode);
+
+    if (empty($fieldView)) {
+      return NULL;
+    }
+
+    return render($fieldView);
+  }
+
 }
