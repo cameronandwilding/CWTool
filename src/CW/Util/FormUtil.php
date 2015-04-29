@@ -117,8 +117,18 @@ class FormUtil {
     self::registerCallback($form, self::HOOK_AFTER_BUILD, $callback);
   }
 
-  public static function getFieldLabel(&$form, $field) {
-    return $form[$field][$form[$field]['#language']]['#title'];
+  /**
+   * @param array $form
+   * @param string $field_name
+   * @return string
+   */
+  public static function getFieldLabel(&$form, $field_name) {
+    $lang = $form[$field_name]['#language'];
+    if (!isset($form[$field_name][$lang]['#title'])) {
+      return NULL;
+    }
+
+    return $form[$field_name][$lang]['#title'];
   }
 
 }
