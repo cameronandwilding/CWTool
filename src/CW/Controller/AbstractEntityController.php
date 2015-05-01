@@ -3,6 +3,9 @@
  * @file
  *
  * Abstract entity controller.
+ *
+ * @defgroup cwentity Entity controllers
+ * @{
  */
 
 namespace CW\Controller;
@@ -435,3 +438,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
 }
+
+/**
+ * @}
+ */

@@ -3,6 +3,9 @@
  * @file
  *
  * Simple node controller.
+ *
+ * @addtogroup cwentity
+ * @{
  */
 
 namespace CW\Controller;
@@ -63,3 +66,7 @@ class NodeController extends AbstractEntityController {
   }
 
 }
+
+/**
+ * @}
+ */

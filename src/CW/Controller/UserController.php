@@ -3,6 +3,9 @@
  * @file
  *
  * User controller.
+ *
+ * @addtogroup cwentity
+ * @{
  */
 
 namespace CW\Controller;
@@ -129,3 +132,7 @@ class UserController extends AbstractEntityController {
   }
 
 }
+
+/**
+ * @}
+ */

@@ -3,6 +3,9 @@
  * @file
  *
  * File controller.
+ *
+ * @addtogroup cwentity
+ * @{
  */
 
 namespace CW\Controller;
@@ -13,6 +16,7 @@ namespace CW\Controller;
  */
 class FileController extends AbstractEntityController {
 
+  // Entity type.
   const ENTITY_TYPE = 'file';
 
   /**
@@ -23,3 +27,7 @@ class FileController extends AbstractEntityController {
   }
 
 }
+
+/**
+ * @}
+ */
