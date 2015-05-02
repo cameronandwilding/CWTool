@@ -181,3 +181,13 @@ Helper tools for generic Drupal7 development (simple functions in the includes):
 * field collection helpers
 * taxonomy
 * etc
+
+
+Documentation
+-------------
+
+Execute Doxygen generator:
+
+```doxygen Doxygen```
+
+The Doxygen binary is a requirement.
