@@ -437,6 +437,39 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     return render($fieldView);
   }
 
+  /**
+   * Returns the parent controllers that are referencing the instance
+   * controller (~reverse reference finder).
+   *
+   * @param string $fieldName
+   *  Field on the parent entity that referencing this.
+   * @param string $entityType
+   *  Entity type of the parent entity.
+   * @param $bundle
+   *  Entity bunde of the parent entity.
+   * @param \CW\Factory\EntityControllerFactory $factory
+   *  Entity factory for the parents.
+   * @return AbstractEntityController[]
+   */
+  public function fieldReferencedParentEntityControllers($fieldName, $entityType, $bundle, EntityControllerFactory $factory) {
+    $efq = new \EntityFieldQuery();
+    $efq->entityCondition('entity_type', $entityType);
+    $efq->entityCondition('bundle', $bundle);
+    $efq->fieldCondition($fieldName, FieldUtil::KEY_TARGET_ID, $this->getEntityId());
+    $result = $efq->execute();
+
+    if (empty($result[$entityType])) {
+      return array();
+    }
+
+    $ctrls = array();
+    foreach ($result[$entityType] as $entityID => $record) {
+      $ctrls[] = $factory->initWithId($entityID);
+    }
+
+    return $ctrls;
+  }
+
 }
 
 /**
