@@ -446,7 +446,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @param string $entityType
    *  Entity type of the parent entity.
    * @param $bundle
-   *  Entity bunde of the parent entity.
+   *  Entity bundle of the parent entity.
    * @param \CW\Factory\EntityControllerFactory $factory
    *  Entity factory for the parents.
    * @return AbstractEntityController[]
