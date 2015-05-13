@@ -120,4 +120,19 @@ class Request {
     return isset($this->POST[$key]) ? $this->POST[$key] : NULL;
   }
 
+  /**
+   * @param string $key
+   * @return null|string
+   */
+  public function getSERVERParam($key) {
+    return isset($this->SERVER[$key]) ? $this->SERVER[$key] : NULL;
+  }
+
+  /**
+   * @param $index
+   * @return null|string
+   */
+  public function getDrupalPathArgument($index) {
+    return arg($index, $this->getDrupalPath());
+  }
 }
