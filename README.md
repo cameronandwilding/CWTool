@@ -191,3 +191,9 @@ Execute Doxygen generator:
 ```doxygen Doxygen```
 
 The Doxygen binary is a requirement.
+
+
+Questions
+=========
+* Improve theme function (theme class no array keys)
+* Form - static instance or service, preserve for alter / validate / build
