@@ -129,7 +129,7 @@ class Request {
   }
 
   /**
-   * @param $index
+   * @param int $index
    * @return null|string
    */
   public function getDrupalPathArgument($index) {
