@@ -1,15 +1,22 @@
 <?php
 /**
  * @file
+ *
+ * Variable abstraction.
  */
 
 namespace CW\Params;
 
+/**
+ * Class Variable
+ * @package CW\Params
+ */
 class Variable {
 
   // Variable types.
   const TYPE_SHORT_STRING = 'string';
   const TYPE_LONG_TEXT = 'text';
+  const TYPE_FORMATTED_TEXT = 'formatted';
 
   /**
    * @var string
@@ -83,7 +90,16 @@ class Variable {
    * @return mixed
    */
   public function getValue() {
-    return variable_get($this->getMachineName(), $this->value);
+    $value = variable_get($this->getMachineName(), $this->value);
+
+    // When it's a formatted text, the value is an array with the format type.
+    // We need to extract the value.
+    // @todo Known issue is that the format type (eg full_html) is not communicated to the form.
+    if ($this->getType() == self::TYPE_FORMATTED_TEXT) {
+      return $value['value'];
+    }
+
+    return $value;
   }
 
   /**
