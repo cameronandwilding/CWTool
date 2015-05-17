@@ -15,6 +15,10 @@ use CW\Controller\UserController;
  */
 class NodeCreationParams extends EntityCreationParams {
 
+  // Node status.
+  const NODE_PUBLISHED = 1;
+  const NODE_NOT_PUBLISHED = 1;
+
   /**
    * @var null|string
    */
@@ -35,6 +39,11 @@ class NodeCreationParams extends EntityCreationParams {
    */
   private $uid;
 
+  /**
+   * @var int
+   */
+  private $status;
+
   public function __construct($type, $title = NULL, $language = LANGUAGE_NONE, $uid = UserController::USER_CURRENT, array $extraAttributes = array()) {
     parent::__construct($extraAttributes);
 
@@ -42,6 +51,7 @@ class NodeCreationParams extends EntityCreationParams {
     $this->type = $type;
     $this->language = $language;
     $this->uid = $uid;
+    $this->status = self::NODE_PUBLISHED;
   }
 
   /**
@@ -98,6 +108,20 @@ class NodeCreationParams extends EntityCreationParams {
    */
   public function setUid($uid) {
     $this->uid = $uid;
+  }
+
+  /**
+   * @return int
+   */
+  public function getStatus() {
+    return $this->status;
+  }
+
+  /**
+   * @param int $status
+   */
+  public function setStatus($status) {
+    $this->status = $status;
   }
 
 }

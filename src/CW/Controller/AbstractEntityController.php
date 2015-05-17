@@ -267,6 +267,32 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Field accessor helper to get the target id of an entity reference.
+   *
+   * @param string $fieldName
+   * @param int $idx
+   * @param string $lang
+   * @return mixed|null
+   * @todo add to field accessor interface
+   */
+  public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang);
+  }
+
+  /**
+   * Field accessor helper to get the file id of an file.
+   *
+   * @param string $fieldName
+   * @param int $idx
+   * @param string $lang
+   * @return mixed|null
+   * @todo add to field accessor interface
+   */
+  public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
+  }
+
+  /**
    * Extract all the values of field items.
    *
    * @param string $field_name

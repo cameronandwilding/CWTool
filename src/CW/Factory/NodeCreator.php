@@ -38,6 +38,7 @@ class NodeCreator implements Creator {
     // Create a new node object.
     $node = new stdClass();
     $node->type = $this->params->getType();
+    $node->status = $this->params->getStatus();
     $node->is_new = TRUE;
 
     // Set defaults.
