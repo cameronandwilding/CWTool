@@ -104,4 +104,15 @@ interface FieldAccessor {
    */
   public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
+  /**
+   * Get the referenced taxonomy term controller.
+   *
+   * @param string $fieldName
+   * @param EntityControllerFactory $entityFactory
+   * @param int $idx
+   * @param string $lang
+   * @return mixed
+   */
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
+
 }
