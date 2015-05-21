@@ -41,3 +41,7 @@ class TaxonomyTermController extends AbstractEntityController {
     return $this->property('description');
   }
 }
+
+/**
+ * @}
+ */
