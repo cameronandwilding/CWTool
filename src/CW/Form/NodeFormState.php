@@ -93,4 +93,14 @@ class NodeFormState extends FormState implements FieldAccessor {
     return $entityFactory->initWithId($fid);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang))) {
+      return NULL;
+    }
+
+    return $entityFactory->initWithId($tid);
+  }
 }

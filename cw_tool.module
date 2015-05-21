@@ -27,6 +27,7 @@ define('CWTOOL_SERVICE_VARIABLE_ADAPTER', 'cw.variable-adapter');
 define('CWTOOL_SERVICE_CRON_TIMER', 'cw.cron-timer');
 define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
 define('CWTOOL_SERVICE_FILE_FACTORY', 'cw.file-controller.factory');
+define('CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY', 'cw.taxonomy-term-controller.factory');
 
 /**
  * Get the dependency injection container.
@@ -119,6 +120,13 @@ function cw_tool_logger() {
  */
 function cw_tool_file_factory() {
   return cw_tool_get_container()->get(CWTOOL_SERVICE_FILE_FACTORY);
+}
+
+/**
+ * @return EntityControllerFactory
+ */
+function cw_tool_taxonomy_term_factory() {
+  return cw_tool_get_container()->get(CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY);
 }
 
 /**

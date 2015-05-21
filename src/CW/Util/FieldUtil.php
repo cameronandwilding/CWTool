@@ -17,5 +17,6 @@ class FieldUtil {
   const KEY_TARGET_ID = 'target_id';
   const KEY_VALUE = 'value';
   const KEY_FILE_ID = 'fid';
+  const KEY_TAXONOMY_ID = 'tid';
 
 }

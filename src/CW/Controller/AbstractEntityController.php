@@ -470,6 +470,17 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     return $ctrls;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    $tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
+    if (empty($tid)) {
+      return NULL;
+    }
+
+    return $entityFactory->initWithId($tid);
+  }
 }
 
 /**
