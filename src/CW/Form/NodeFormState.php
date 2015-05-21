@@ -103,4 +103,19 @@ class NodeFormState extends FormState implements FieldAccessor {
 
     return $entityFactory->initWithId($tid);
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
+  }
+
 }

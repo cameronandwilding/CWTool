@@ -267,6 +267,20 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
+  }
+
+  /**
    * Extract all the values of field items.
    *
    * @param string $field_name
