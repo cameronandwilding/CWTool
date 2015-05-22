@@ -89,12 +89,4 @@ abstract class AbstractThemeProcessor {
    * @return bool
    */
   abstract public function isApplicable();
-
-  /**
-   * @param string $string
-   * @return mixed
-   */
-  public static function snakeCase($string) {
-    return preg_replace('/[^a-zA-Z0-9]/', '_', $string);
-  }
 }
