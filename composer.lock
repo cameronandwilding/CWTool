@@ -4,8 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "909804b306bee1478ae83aec6f943ce5",
+    "hash": "11c01e940a63af640e8c2d430060263f",
     "packages": [
+        {
+            "name": "itarato/var-check",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itarato/var-check.git",
+                "reference": "4b29e9d0647c2db7c634732a85b305c9f420e037"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itarato/var-check/zipball/4b29e9d0647c2db7c634732a85b305c9f420e037",
+                "reference": "4b29e9d0647c2db7c634732a85b305c9f420e037",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Accessing properties, keys and instance methods without checking them all the time.",
+            "time": "2014-10-24 10:08:18"
+        },
         {
             "name": "symfony/config",
             "version": "v2.6.7",
@@ -311,7 +338,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "itarato/var-check": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

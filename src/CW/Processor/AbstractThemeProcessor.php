@@ -7,6 +7,7 @@
 namespace CW\Processor;
 
 use CW\Exception\ThemeException;
+use itarato\VarCheck\VC;
 
 /**
  * Class AbstractThemeProcessor
@@ -39,6 +40,13 @@ abstract class AbstractThemeProcessor {
       throw new ThemeException('Missing item in theme vars: ' . $key);
     }
     return $this->vars[$key];
+  }
+
+  /**
+   * @return VC
+   */
+  protected function getWrappedVar() {
+    return VC::make($this->vars);
   }
 
   /**

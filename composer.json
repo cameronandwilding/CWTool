@@ -4,7 +4,8 @@
     "symfony/dependency-injection": "~2.3",
     "symfony/config": "~2.3",
     "symfony/yaml": "~2.3",
-    "symfony/finder": "~2.3"
+    "symfony/finder": "~2.3",
+    "itarato/var-check": "2.*@dev"
   },
   "require-dev": {
     "psr/log": "1.0.0"
