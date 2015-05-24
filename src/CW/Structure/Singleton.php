@@ -5,30 +5,15 @@
 
 namespace CW\Structure;
 
-/**
- * Class Singleton
- * @package CW\Structure
- */
-abstract class Singleton {
+trait Singleton {
 
-  /**
-   * @var static
-   */
-  private static $instance;
+  private static $__instance;
 
-  /**
-   * Constructor.
-   */
-  protected function __construct() { }
-
-  /**
-   * @return static
-   */
   public static function getInstance() {
-    if (empty(self::$instance)) {
-      self::$instance = new static();
+    if (empty(self::$__instance)) {
+      self::$__instance = new static();
     }
-    return self::$instance;
+    return self::$__instance;
   }
 
 }

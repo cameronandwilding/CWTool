@@ -1,6 +1,6 @@
 services:
   cw.article.controller.factory:
-    class: CW\Controller\EntityControllerFactory
+    class: CW\Factory\EntityControllerFactory
     arguments:
       - @cw.identity-map
       - @cw.object-loader.drupal

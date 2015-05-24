@@ -40,17 +40,17 @@ function cw_tool_check_value_in_multidimensional_array(array $haystack, $value_k
  * Useful when you want to use the component the same time you enabled the feature (eg in the same update hook).
  * In that case the component is still not created (queued) so you need to trigger the creation manually.
  *
- * @param $features
+ * @param string $featureName
  *  The feature to be reset and reverted.
- * @param $component
+ * @param string[] $components
  *  The feature component to be reverted.
  */
-function cw_tool_revert_feature($features, $component) {
+function cw_tool_revert_feature($featureName, $components) {
   // Reset features cache.
-  features_get_info('feature', $features, TRUE);
+  features_get_info('feature', $featureName, TRUE);
 
   // Revert taxonomy defined by the feature.
-  features_revert(array($features => array($component)));
+  features_revert(array($featureName => $components));
 }
 
 /**

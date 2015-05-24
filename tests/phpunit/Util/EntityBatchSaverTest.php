@@ -5,40 +5,54 @@
  * Entity batch saver test.
  */
 
-use CW\Model\EntityModel;
+use CW\Controller\AbstractEntityController;
+use CW\Test\TestCase;
 use CW\Util\EntityBatchSaver;
 use CW\Util\LocalProcessIdentityMap;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+class EntityBatchSaverTest extends TestCase {
 
-class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
+  /**
+   * @var PHPUnit_Framework_MockObject_MockObject
+   */
+  protected $objectHandlerMock;
 
-  protected $objectLoaderMock;
-
+  /**
+   * @var EntityBatchSaver
+   */
   protected $entityBatchSaver;
 
+  /**
+   * @var AbstractEntityController[]
+   */
   protected $entities = array();
+
+  /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
 
   public function setUp() {
     parent::setUp();
 
     $identityMap = new LocalProcessIdentityMap();
-    $this->entityBatchSaver = new EntityBatchSaver($identityMap);
+    $this->logger = $this->getMock('Psr\Log\AbstractLogger');
+    $this->entityBatchSaver = new EntityBatchSaver($identityMap, $this->logger);
 
-    $entityType = md5(microtime(TRUE));
-    $entityId1 = rand(1, 1000);
-    $entityId2 = rand(1, 1000);
+    $entityType = self::randomString();
+    $entityId1 = self::randomInt();
+    $entityId2 = self::randomInt();
 
-    $this->objectLoaderMock = $this->getMock('CW\\Model\\ObjectLoader');
-    $this->entities[0] = new EntityModel($this->objectLoaderMock, $entityType, $entityId1);
-    $this->entities[1] = new EntityModel($this->objectLoaderMock, $entityType, $entityId2);
+    $this->objectHandlerMock = $this->getMock('CW\\Model\\ObjectHandler');
+    $this->entities[0] = new FakeEntityController($this->objectHandlerMock, $this->logger, $entityType, $entityId1);
+    $this->entities[1] = new FakeEntityController($this->objectHandlerMock, $this->logger, $entityType, $entityId2);
 
     $identityMap->add($entityId1, $this->entities[0]);
     $identityMap->add($entityId2, $this->entities[1]);
   }
 
   public function testBatchSaveNothing() {
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->exactly(0))
       ->method('save');
 
@@ -46,7 +60,7 @@ class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testBatchSaveOne() {
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->exactly(1))
       ->method('save');
 
@@ -56,7 +70,7 @@ class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testBatchSaveMultiple() {
-    $this->objectLoaderMock
+    $this->objectHandlerMock
       ->expects($this->exactly(2))
       ->method('save');
 
@@ -67,3 +81,5 @@ class EntityBatchSaverTest extends PHPUnit_Framework_TestCase {
   }
 
 }
+
+class FakeEntityController extends AbstractEntityController { }

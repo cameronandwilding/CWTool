@@ -5,8 +5,6 @@
 
 use CW\Util\LocalProcessIdentityMap;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
 class LocalProcessIdentityMapTest extends PHPUnit_Framework_TestCase {
 
   public function testBasic() {
