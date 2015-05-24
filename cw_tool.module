@@ -10,29 +10,27 @@ use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
 use CW\Util\CronTimer;
 use CW\Util\FormUtil;
-use CW\Util\SimpleList;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Pimple\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/cw_tool.content.inc';
 require_once __DIR__ . '/includes/cw_tool.util.inc';
 
 // Service names.
+define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
+define('CWTOOL_SERVICE_IDENTITY_MAP', 'cw.identity-map');
+define('CWTOOL_SERVICE_OBJECT_HANDLER', 'cw.object-handler.drupal');
 define('CWTOOL_SERVICE_NODE_FACTORY', 'cw.node-controller.factory');
 define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
+define('CWTOOL_SERVICE_BATCH_ENTITY_SAVER', 'cw.entity-batch-saver');
 define('CWTOOL_SERVICE_VARIABLE_MANAGER', 'cw.variable-manager');
 define('CWTOOL_SERVICE_VARIABLE_ADAPTER', 'cw.variable-adapter');
 define('CWTOOL_SERVICE_CRON_TIMER', 'cw.cron-timer');
-define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
 define('CWTOOL_SERVICE_FILE_FACTORY', 'cw.file-controller.factory');
 define('CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY', 'cw.taxonomy-term-controller.factory');
 
 /**
- * Get the dependency injection container.
- *
- * @return \Symfony\Component\DependencyInjection\ContainerBuilder
+ * @return \Pimple\Container
  */
 function cw_tool_get_container() {
   static $container;
@@ -41,20 +39,80 @@ function cw_tool_get_container() {
     return $container;
   }
 
-  // @todo add weight so it's sortable
-  $containerConfigs = new SimpleList();
-  $containerConfigs->add(__DIR__ . '/config');
-  drupal_alter('cw_tool_service_container_definition', $containerConfigs);
+  $container = new Container();
 
-  $container = new ContainerBuilder();
+  $container[CWTOOL_SERVICE_LOGGER] = function (Container $c) {
+    return new \Drupal\PSR3\Logger\Watchdog();
+  };
 
-  foreach ($containerConfigs->getAll() as $containerConfig) {
-    $locator = new FileLocator(array($containerConfig));
-    $loader = new YamlFileLoader($container, $locator);
-    $loader->load('services.yml');
-  }
+  $container[CWTOOL_SERVICE_IDENTITY_MAP] = function (Container $c) {
+    return new \CW\Util\LocalProcessIdentityMap();
+  };
 
-  $container->compile();
+  $container[CWTOOL_SERVICE_OBJECT_HANDLER] = function (Container $c) {
+    return new \CW\Model\DrupalObjectHandler();
+  };
+
+  $container[CWTOOL_SERVICE_NODE_FACTORY] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'CW\Controller\NodeController',
+      'node',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
+  $container[CWTOOL_SERVICE_USER_FACTORY] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'CW\Controller\UserController',
+      'user',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
+  $container[CWTOOL_SERVICE_FILE_FACTORY] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'CW\Controller\FileController',
+      'file',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
+  $container[CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'CW\Controller\TaxonomyTermController',
+      'taxonomy_term',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
+  $container[CWTOOL_SERVICE_BATCH_ENTITY_SAVER] = function (Container $c) {
+    return new CW\Util\EntityBatchSaver(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
+  $container[CWTOOL_SERVICE_VARIABLE_MANAGER] = function (Container $c) {
+    return new VariableManager($c[CWTOOL_SERVICE_LOGGER]);
+  };
+
+  $container[CWTOOL_SERVICE_VARIABLE_ADAPTER] = function (Container $c) {
+    return new \CW\Adapter\DrupalVariableAdapter();
+  };
+
+  $container[CWTOOL_SERVICE_CRON_TIMER] = function (Container $c) {
+    return new CronTimer($c[CWTOOL_SERVICE_VARIABLE_ADAPTER]);
+  };
+
+  drupal_alter('cw_tool_service_container_definition', $container);
 
   return $container;
 }
@@ -88,7 +146,7 @@ function cw_tool_menu() {
 
 function cw_tool_core_admin_settings_form($form) {
   /** @var VariableManager $variableManager */
-  $variableManager = cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_MANAGER);
+  $variableManager = cw_tool_get_container()[CWTOOL_SERVICE_VARIABLE_MANAGER];
   $variableManager->collectAppVariables();
   $variablesForm = new VariableFormGenerator($variableManager);
   return $variablesForm->generateForm($form);
@@ -98,35 +156,35 @@ function cw_tool_core_admin_settings_form($form) {
  * @return CronTimer
  */
 function cw_tool_cron_timer() {
-  return cw_tool_get_container()->get(CWTOOL_SERVICE_CRON_TIMER);
+  return cw_tool_get_container()[CWTOOL_SERVICE_CRON_TIMER];
 }
 
 /**
  * @return \CW\Adapter\VariableAdapter
  */
 function cw_tool_variable_adapter() {
-  return cw_tool_get_container()->get(CWTOOL_SERVICE_VARIABLE_ADAPTER);
+  return cw_tool_get_container()[CWTOOL_SERVICE_VARIABLE_ADAPTER];
 }
 
 /**
  * @return \Psr\Log\LoggerInterface
  */
 function cw_tool_logger() {
-  return cw_tool_get_container()->get(CWTOOL_SERVICE_LOGGER);
+  return cw_tool_get_container()[CWTOOL_SERVICE_LOGGER];
 }
 
 /**
  * @return EntityControllerFactory
  */
 function cw_tool_file_factory() {
-  return cw_tool_get_container()->get(CWTOOL_SERVICE_FILE_FACTORY);
+  return cw_tool_get_container()[CWTOOL_SERVICE_FILE_FACTORY];
 }
 
 /**
  * @return EntityControllerFactory
  */
 function cw_tool_taxonomy_term_factory() {
-  return cw_tool_get_container()->get(CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY);
+  return cw_tool_get_container()[CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY];
 }
 
 /**
