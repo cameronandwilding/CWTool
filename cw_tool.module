@@ -10,6 +10,7 @@ use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
 use CW\Util\CronTimer;
 use CW\Util\FormUtil;
+use CW\Util\Functional;
 use Pimple\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -224,4 +225,40 @@ function cw_tool_include_util() {
  */
 function cw_tool_include_content() {
   require_once __DIR__ . '/includes/cw_tool.content.inc';
+}
+
+/**
+ * Implements hook_forms().
+ */
+function cw_tool_forms($form_id) {
+  $forms = array();
+
+  if (strpos($form_id, 'cw_tool_form') === 0) {
+    $formClassName = str_replace('cw_tool_form:', '', $form_id);
+    $forms[$form_id] = array(
+      'callback' => 'cw_tool_generate_form',
+      'callback arguments' => array($formClassName),
+    );
+  }
+
+  return $forms;
+}
+
+/**
+ * Central form hook for forms that are defined as CW\Form\FormBuilder classes.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @param string $class
+ * @return mixed
+ */
+function cw_tool_generate_form($form, $form_state, $class) {
+  $funcArgs = func_get_args();
+
+  call_user_func_array(array($class, 'attachSubmitAndValidation'), array(&$form));
+
+  $callArgs = array(&$form, $form_state);
+  Functional::walk($funcArgs[3], function ($item) use (&$callArgs) { array_push($callArgs, $item); });
+
+  return call_user_func_array(array($class, 'build'), $callArgs);
 }
