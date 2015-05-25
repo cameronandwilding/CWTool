@@ -2,7 +2,7 @@
 /**
  * @file
  *
- * Helper functions.
+ * Main CWTool module file.
  */
 
 use CW\Factory\EntityControllerFactory;
@@ -13,8 +13,6 @@ use CW\Util\FormUtil;
 use Pimple\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/includes/cw_tool.content.inc';
-require_once __DIR__ . '/includes/cw_tool.util.inc';
 
 // Service names.
 define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
@@ -30,6 +28,8 @@ define('CWTOOL_SERVICE_FILE_FACTORY', 'cw.file-controller.factory');
 define('CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY', 'cw.taxonomy-term-controller.factory');
 
 /**
+ * Dependency injection configuration.
+ *
  * @return \Pimple\Container
  */
 function cw_tool_get_container() {
@@ -210,4 +210,18 @@ function cw_tool_form_util_after_build($form, $form_state) {
  */
 function cw_tool_include_js() {
   drupal_add_js(drupal_get_path('module', 'cw_tool') . '/javascript/cw_tool.js');
+}
+
+/**
+ * Load the utility functions.
+ */
+function cw_tool_include_util() {
+  require_once __DIR__ . '/includes/cw_tool.util.inc';
+}
+
+/**
+ * Load the content helper functions.
+ */
+function cw_tool_include_content() {
+  require_once __DIR__ . '/includes/cw_tool.content.inc';
 }

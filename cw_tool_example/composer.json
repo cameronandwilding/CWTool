@@ -1,8 +1,0 @@
-{
-    "name": "cwtool/example",
-    "autoload": {
-        "psr-4": {
-            "CWExample\\": "src/CWExample/"
-        }
-    }
-}
