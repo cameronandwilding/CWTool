@@ -7,7 +7,7 @@
 
 namespace CW\Factory;
 
-use CW\Model\ObjectHandler;
+use CW\Model\EntityHandler;
 use CW\Util\LocalProcessIdentityMap;
 use CW\Util\LoggerObject;
 use Exception;
@@ -54,7 +54,7 @@ class EntityControllerFactory extends LoggerObject {
   /**
    * Object loader that takes care of low level data loading.
    *
-   * @var ObjectHandler
+   * @var EntityHandler
    */
   private $objectHandler;
 
@@ -63,7 +63,7 @@ class EntityControllerFactory extends LoggerObject {
    *
    * @param LocalProcessIdentityMap $localProcessIdentityMap
    *  Identity map cache.
-   * @param ObjectHandler $objectLoader
+   * @param EntityHandler $objectLoader
    *  Low level data loader.
    * @param string $controllerClass
    *  Actual entity controller class.
@@ -71,7 +71,7 @@ class EntityControllerFactory extends LoggerObject {
    *  Entity type.
    * @param LoggerInterface $logger
    */
-  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, ObjectHandler $objectLoader, $controllerClass, $entityType, LoggerInterface $logger) {
+  public function __construct(LocalProcessIdentityMap $localProcessIdentityMap, EntityHandler $objectLoader, $controllerClass, $entityType, LoggerInterface $logger) {
     parent::__construct($logger);
 
     $this->localProcessIdentityMap = $localProcessIdentityMap;
@@ -80,6 +80,8 @@ class EntityControllerFactory extends LoggerObject {
       throw new InvalidArgumentException('Controller class is not subclass of ' . self::ABSTRACT_ENTITY_CONTROLLER_CLASS);
     }
     $this->controllerClass = $controllerClass;
+
+    call_user_func(array($this->controllerClass, 'setObjectHandler'), $objectLoader);
 
     $this->entityType = $entityType;
     $this->objectHandler = $objectLoader;
@@ -115,7 +117,7 @@ class EntityControllerFactory extends LoggerObject {
       $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
     else {
-      $controller = new $this->controllerClass($this->objectHandler, $this->logger, $this->entityType, $entity_id);
+      $controller = new $this->controllerClass($this->logger, $this->entityType, $entity_id);
       $this->localProcessIdentityMap->add($cacheKey, $controller);
     }
 

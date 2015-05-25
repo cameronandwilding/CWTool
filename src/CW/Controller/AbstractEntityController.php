@@ -12,7 +12,7 @@ namespace CW\Controller;
 
 use CW\Adapter\FieldAccessor;
 use CW\Factory\EntityControllerFactory;
-use CW\Model\ObjectHandler;
+use CW\Model\EntityHandler;
 use CW\Util\FieldUtil;
 use CW\Util\LoggerObject;
 use EntityMetadataWrapper;
@@ -61,9 +61,9 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * Data accessor, in order to eliminate coupling with Drupal entity API.
    * Use this for entity operations (CRUD).
    *
-   * @var ObjectHandler
+   * @var EntityHandler
    */
-  protected $objectHandler;
+  protected static $objectHandler;
 
   /**
    * The entity metadata wrapper object.
@@ -91,17 +91,22 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * Constructor.
    *
-   * @param \CW\Model\ObjectHandler $objectLoader
    * @param \Psr\Log\LoggerInterface $logger
    * @param string $entity_type
    * @param int|string $entity_id
    */
-  public function __construct(ObjectHandler $objectLoader, LoggerInterface $logger, $entity_type, $entity_id) {
+  public function __construct(LoggerInterface $logger, $entity_type, $entity_id) {
     parent::__construct($logger);
 
     $this->entityType = $entity_type;
     $this->entityId = $entity_id;
-    $this->objectHandler = $objectLoader;
+  }
+
+  /**
+   * @param EntityHandler $objectHandler
+   */
+  public static function setObjectHandler(EntityHandler $objectHandler) {
+    self::$objectHandler = $objectHandler;
   }
 
   /**
@@ -114,7 +119,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function metadata() {
     if (!isset($this->entityMetadataWrapper)) {
-      $this->entityMetadataWrapper = $this->objectHandler->loadMetadata($this->entityType, $this->entity());
+      $this->entityMetadataWrapper = static::$objectHandler->loadMetadata($this->entityType, $this->entity());
     }
 
     return $this->entityMetadataWrapper;
@@ -133,7 +138,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
         return NULL;
       }
 
-      $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
+      $this->entity = static::$objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 
     return $this->entity;
@@ -154,7 +159,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function save() {
     $this->logger->info('Entity has been saved {this}', array('this' => $this->__toString()));
-    $this->objectHandler->save($this->entityType, $this->entity());
+    static::$objectHandler->save($this->entityType, $this->entity());
     $this->setClean();
   }
 
@@ -187,7 +192,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @return mixed
    */
   public function delete() {
-    return $this->objectHandler->delete($this->entityType, $this->entityId);
+    return static::$objectHandler->delete($this->entityType, $this->entityId);
   }
 
   /**

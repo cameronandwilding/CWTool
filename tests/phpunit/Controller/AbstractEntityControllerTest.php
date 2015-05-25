@@ -32,11 +32,12 @@ class AbstractEntityControllerTest extends TestCase {
   protected $entityId;
 
   public function setUp() {
-    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalObjectHandler');
+    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    $this->controller = new TestController($this->objectHandlerMock, $this->loggerMock, $this->entityType, $this->entityId);
+    TestController::setObjectHandler($this->objectHandlerMock);
+    $this->controller = new TestController($this->loggerMock, $this->entityType, $this->entityId);
   }
 
   public function testLoadEntity() {

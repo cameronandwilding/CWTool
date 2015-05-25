@@ -13,7 +13,7 @@ namespace CW\Model;
  *
  * Drupal API object handler.
  */
-class DrupalObjectHandler implements ObjectHandler {
+class DrupalEntityHandler implements EntityHandler {
 
   /**
    * {@inheritdoc}
@@ -48,6 +48,13 @@ class DrupalObjectHandler implements ObjectHandler {
    */
   public function delete($entityType, $entityId) {
     return entity_delete($entityType, $entityId);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function extractIDs($entityType, $entity) {
+    return entity_extract_ids($entityType, $entity);
   }
 
 }

@@ -51,7 +51,7 @@ function cw_tool_get_container() {
   };
 
   $container[CWTOOL_SERVICE_OBJECT_HANDLER] = function (Container $c) {
-    return new \CW\Model\DrupalObjectHandler();
+    return new \CW\Model\DrupalEntityHandler();
   };
 
   $container[CWTOOL_SERVICE_NODE_FACTORY] = function (Container $c) {

@@ -16,7 +16,7 @@ use EntityDrupalWrapper;
  * Low level object handler. Should be the system's handler, DB handler or maybe
  * some other alternative, such as cache, memcache, etc.
  */
-interface ObjectHandler {
+interface EntityHandler {
 
   /**
    * Load a single entity.
@@ -62,5 +62,14 @@ interface ObjectHandler {
    * @return EntityDrupalWrapper
    */
   public function loadMetadata($entityType, $entity);
+
+  /**
+   * Extract entity IDs.
+   *
+   * @param string $entityType
+   * @param object $entity
+   * @return array
+   */
+  public function extractIDs($entityType, $entity);
 
 }
