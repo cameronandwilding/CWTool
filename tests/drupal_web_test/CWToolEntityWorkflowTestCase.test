@@ -48,12 +48,12 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
     parent::setUp(array('cw_tool'));
     
     /** @var EntityControllerFactory $nodeFactory */
-    $nodeFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_NODE_FACTORY);
+    $nodeFactory = cw_tool_get_container()[CWTOOL_SERVICE_NODE_FACTORY];
     $nodeParams = new NodeCreationParams('article', 'foobar');
     $this->nodeController = $nodeFactory->initNew(new NodeCreator($nodeParams));
 
     /** @var UserControllerFactory $userFactory */
-    $userFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_USER_FACTORY);
+    $userFactory = cw_tool_get_container()[CWTOOL_SERVICE_USER_FACTORY];
     $userParams = new UserCreationParams('johndoe');
     $userParams->addRole(UserController::ROLE_AUTHENTICATED_USER);
     $this->userController = $userFactory->initNew(new UserCreator($userParams));
@@ -132,7 +132,7 @@ class CWToolEntityWorkflowTestCase extends DrupalWebTestCase {
 
   public function testControllerLoadFromEntity() {
     /** @var EntityControllerFactory $nodeFactory */
-    $nodeFactory = cw_tool_get_container()->get(CWTOOL_SERVICE_NODE_FACTORY);
+    $nodeFactory = cw_tool_get_container()[CWTOOL_SERVICE_NODE_FACTORY];
     $nodeParams = new NodeCreationParams('article', 'foobar');
     $nodeCreator = new NodeCreator($nodeParams);
     $node = $nodeCreator->create();
