@@ -1,6 +1,7 @@
 <?php
 /**
  * @file
+ *
  * Abstract theme processor.
  */
 
@@ -12,6 +13,9 @@ use itarato\VarCheck\VC;
 /**
  * Class AbstractThemeProcessor
  * @package CW\Processor
+ *
+ * Responsibility is to handle pre/post process hooks. Add missing and alter
+ * existing variables.
  */
 abstract class AbstractThemeProcessor {
 
@@ -23,7 +27,7 @@ abstract class AbstractThemeProcessor {
   /**
    * @param array $vars
    */
-  public function __construct(&$vars) {
+  private function __construct(&$vars) {
     $this->vars = &$vars;
     if ($this->isApplicable()) {
       $this->execute();
@@ -31,18 +35,24 @@ abstract class AbstractThemeProcessor {
   }
 
   /**
-   * @param string $key
-   * @return mixed
-   * @throws ThemeException
+   * @param array $vars
+   * @return static
    */
-  protected function getVar($key) {
-    if (!$this->hasVar($key)) {
-      throw new ThemeException('Missing item in theme vars: ' . $key);
-    }
-    return $this->vars[$key];
+  public static function process(&$vars) {
+    return new static($vars);
   }
 
   /**
+   * @param string $key
+   * @return mixed
+   */
+  protected function getVar($key) {
+    return !$this->hasVar($key) ? NULL : $this->vars[$key];
+  }
+
+  /**
+   * Access template variables through VarCheck's convenient format.
+   *
    * @return VC
    */
   protected function getWrappedVar() {
@@ -89,4 +99,5 @@ abstract class AbstractThemeProcessor {
    * @return bool
    */
   abstract public function isApplicable();
+
 }
