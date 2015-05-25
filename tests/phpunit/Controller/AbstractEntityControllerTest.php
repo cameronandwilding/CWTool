@@ -134,14 +134,48 @@ class AbstractEntityControllerTest extends TestCase {
     TestController::getClassEntityBundle();
   }
 
-  public function testEntityValidityCheck() {
+  public function testEntityValidityCheckValid() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('extractIDs')
+      ->willReturn(array($this->entityId, NULL, 'testbundle123'));
 
+
+    $entity = new stdClass();
+    TestWithBundleController::setObjectHandler($this->objectHandlerMock);
+    $isValid = TestWithBundleController::isValidEntity($entity);
+
+    $this->assertTrue($isValid);
+  }
+
+  public function testEntityValidityCheckInvalidType() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('extractIDs')
+      ->willReturn(array($this->entityId, NULL, 'testbundle123-wrong'));
+
+
+    $entity = new stdClass();
+    TestWithBundleController::setObjectHandler($this->objectHandlerMock);
+    $isValid = TestWithBundleController::isValidEntity($entity);
+
+    $this->assertFalse($isValid);
   }
 
 }
 
-class TestController extends AbstractEntityController { }
+class TestController extends AbstractEntityController {
 
-class TestValidityCheckController extends AbstractEntityController {
+}
+
+class TestWithBundleController extends AbstractEntityController {
+
+  public static function getClassEntityType() {
+    return 'testtype123';
+  }
+
+  public static function getClassEntityBundle() {
+    return 'testbundle123';
+  }
 
 }

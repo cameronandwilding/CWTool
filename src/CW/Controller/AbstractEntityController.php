@@ -253,7 +253,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     try {
       $bundleExpected = static::getClassEntityBundle();
       $entityType = static::getClassEntityType();
-      list(,, $bundle) = entity_extract_ids($entityType, $entity);
+      list(,, $bundle) = self::$objectHandler->extractIDs($entityType, $entity);
       return $bundle == $bundleExpected;
     }
     catch (Exception $e) {
