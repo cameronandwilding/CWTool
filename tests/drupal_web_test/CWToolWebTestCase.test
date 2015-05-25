@@ -27,6 +27,8 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    */
   public function setUp() {
     parent::setUp(array('cw_tool', 'taxonomy'));
+    cw_tool_include_util();
+    cw_tool_include_content();
   }
 
   /**

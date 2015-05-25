@@ -13,7 +13,6 @@
     <testsuites>
         <testsuite name="CWTool test suite">
             <directory>./tests/phpunit/</directory>
-            <exclude>./tests/phpunit/vendor</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

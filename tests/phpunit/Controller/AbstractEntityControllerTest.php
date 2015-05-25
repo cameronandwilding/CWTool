@@ -133,6 +133,14 @@ class AbstractEntityControllerTest extends TestCase {
     TestController::getClassEntityBundle();
   }
 
+  public function testEntityValidityCheck() {
+
+  }
+
 }
 
 class TestController extends AbstractEntityController { }
+
+class TestValidityCheckController extends AbstractEntityController {
+
+}
