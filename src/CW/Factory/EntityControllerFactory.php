@@ -22,11 +22,12 @@ use Psr\Log\LoggerInterface;
  * in the identity map container.
  * @see http://martinfowler.com/eaaCatalog/identityMap.html
  *
- * The factory doesn't care about the entity type or bundle - in case you need
+ * The factory does not care about the entity type or bundle - in case you need
  * type validation you have to add it to the subclass.
  */
 class EntityControllerFactory extends LoggerObject {
 
+  // Base entity controller class.
   const ABSTRACT_ENTITY_CONTROLLER_CLASS = 'CW\Controller\AbstractEntityController';
 
   /**
