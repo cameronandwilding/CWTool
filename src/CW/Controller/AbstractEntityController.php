@@ -140,6 +140,16 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Check if the entity object is loaded already.
+   * In general this should not be called directly as it's loaded intelligently.
+   *
+   * @return bool
+   */
+  public function hasEntityLoaded() {
+    return !empty($this->entity);
+  }
+
+  /**
    * Sets the Drupal object.
    *
    * @param object $entity
