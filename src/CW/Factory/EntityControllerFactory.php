@@ -140,7 +140,11 @@ class EntityControllerFactory extends LoggerObject {
     }
 
     $controller = $this->initWithId($id, $cache_key);
-    $controller->setEntity($entity);
+
+    if (!$controller->hasEntityLoaded()) {
+      $controller->setEntity($entity);
+    }
+
     return $controller;
   }
 

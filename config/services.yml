@@ -35,6 +35,15 @@ services:
       - 'file'
       - @cw.logger
 
+  cw.taxonomy-term-controller.factory:
+    class: CW\Factory\EntityControllerFactory
+    arguments:
+      - @cw.identity-map
+      - @cw.object-handler.drupal
+      - 'CW\Controller\TaxonomyTermController'
+      - 'taxonomy_term'
+      - @cw.logger
+
   cw.node-batch-saver:
     class: CW\Util\EntityBatchSaver
     arguments:

@@ -140,6 +140,16 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Check if the entity object is loaded already.
+   * In general this should not be called directly as it's loaded intelligently.
+   *
+   * @return bool
+   */
+  public function hasEntityLoaded() {
+    return !empty($this->entity);
+  }
+
+  /**
    * Sets the Drupal object.
    *
    * @param object $entity
@@ -264,6 +274,20 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
       return NULL;
     }
     return $this->entity()->{$fieldName}[$lang][$idx][$key];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    return $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
   }
 
   /**
@@ -470,6 +494,17 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     return $ctrls;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    $tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
+    if (empty($tid)) {
+      return NULL;
+    }
+
+    return $entityFactory->initWithId($tid);
+  }
 }
 
 /**

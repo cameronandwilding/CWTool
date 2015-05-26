@@ -64,6 +64,9 @@ class VariableFormGenerator {
       case Variable::TYPE_LONG_TEXT:
         return 'textarea';
 
+      case Variable::TYPE_FORMATTED_TEXT:
+        return 'text_format';
+
       default:
         return 'textfield';
     }

@@ -32,6 +32,26 @@ interface FieldAccessor {
   public function fieldValue($fieldName, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE);
 
   /**
+   * Get the target id of an entity reference.
+   *
+   * @param string $fieldName
+   * @param int $idx
+   * @param string $lang
+   * @return mixed|null
+   */
+  public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE);
+
+  /**
+   * Get the file id of an file.
+   *
+   * @param string $fieldName
+   * @param int $idx
+   * @param string $lang
+   * @return mixed|null
+   */
+  public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE);
+
+  /**
    * Get the whole field item with all the properties (plus value).
    *
    * @param string $fieldName
@@ -83,5 +103,16 @@ interface FieldAccessor {
    * @return mixed
    */
   public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
+
+  /**
+   * Get the referenced taxonomy term controller.
+   *
+   * @param string $fieldName
+   * @param EntityControllerFactory $entityFactory
+   * @param int $idx
+   * @param string $lang
+   * @return mixed
+   */
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
 }
