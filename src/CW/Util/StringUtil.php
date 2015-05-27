@@ -28,9 +28,9 @@ class StringUtil {
    * @param string $needle
    * @return bool
    */
-  public static function stringEndsWith($string, $needle) {
-    $offset = strlen($string) - strlen($needle);
-    return strpos($string, $needle, $offset) !== FALSE;
+  public static function stringEndsWith($haystack, $needle) {
+    $offset = strlen($haystack) - strlen($needle);
+    return strpos($haystack, $needle, $offset) !== FALSE;
   }
 
   /**
