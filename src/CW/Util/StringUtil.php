@@ -24,7 +24,7 @@ class StringUtil {
   /**
    * Check that a string ends with another string.
    *
-   * @param string $string
+   * @param string $haystack
    * @param string $needle
    * @return bool
    */
