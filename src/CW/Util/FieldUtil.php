@@ -19,7 +19,6 @@ class FieldUtil {
   const KEY_FILE_ID = 'fid';
   const KEY_TAXONOMY_ID = 'tid';
   const KEY_FILENAME = 'filename';
-  const KEY_NODE_ID = 'nid';
-  const KEY_TID = 'tid';
+  const KEY_NODEREFERENCE_ID = 'nid';
 
 }
