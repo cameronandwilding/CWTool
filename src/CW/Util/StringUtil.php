@@ -32,14 +32,4 @@ class StringUtil {
     $offset = strlen($haystack) - strlen($needle);
     return strpos($haystack, $needle, $offset) !== FALSE;
   }
-
-  /**
-   * Remove the last character from a string.
-   *
-   * @param string $string
-   * @return string
-   */
-  public static function removeLastCharacterFromString($string) {
-    return substr($string, 0, -1);
-  }
 }
