@@ -29,7 +29,7 @@ class StringUtil {
    * @return bool
    */
   public static function stringEndsWith($haystack, $needle) {
-    $offset = strlen($haystack) - strlen($needle);
+    $offset = drupal_strlen($haystack) - drupal_strlen($needle);
     return strpos($haystack, $needle, $offset) !== FALSE;
   }
 }
