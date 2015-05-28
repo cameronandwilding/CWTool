@@ -131,6 +131,16 @@ class UserController extends AbstractEntityController {
     return $this->property('mail');
   }
 
+  /**
+   * Get the relative path of the user. (Not transformed.)
+   * Drupal's url can turn it to the transformed version.
+   *
+   * @return string
+   */
+  public function getPath() {
+    return 'user/' . $this->getEntityId();
+  }
+
 }
 
 /**
