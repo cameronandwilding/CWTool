@@ -37,7 +37,7 @@ class Request {
     static $current;
 
     if (empty($current)) {
-      $current = new Request();
+      $current = new static();
       $current->collectGlobalGetParams();
       $current->collectGlobalServerParams();
       $current->collectGlobalPostParams();
