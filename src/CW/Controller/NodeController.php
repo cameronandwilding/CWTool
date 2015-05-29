@@ -53,13 +53,6 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
-   * @return string
-   */
-  public function getTitleLinkedToEntity() {
-    return l($this->getTitle(), $this->getPath());
-  }
-
-  /**
    * @return mixed
    */
   public function getCreatedTimestamp() {
