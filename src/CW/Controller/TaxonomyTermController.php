@@ -40,6 +40,17 @@ class TaxonomyTermController extends AbstractEntityController {
   public function getDescription() {
     return $this->property('description');
   }
+
+  /**
+   * Get the relative path of the term. (Not transformed.)
+   * Drupal's url can turn it to the transformed version.
+   *
+   * @return string
+   */
+  public function getPath() {
+    return 'taxonomy/term/' . $this->getEntityId();
+  }
+
 }
 
 /**

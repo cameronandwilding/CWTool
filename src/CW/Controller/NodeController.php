@@ -46,6 +46,20 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
+   * @return mixed
+   */
+  public function getTitle() {
+    return $this->property('title');
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCreatedTimestamp() {
+    return $this->property('created');
+  }
+
+  /**
    * Render node view.
    *
    * @param string $viewMode

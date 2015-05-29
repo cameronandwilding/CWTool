@@ -68,7 +68,7 @@ class CacheWrapper {
   /**
    * @var Validable[]
    */
-  private $validators;
+  private $validators = array();
 
   /**
    * @var int
