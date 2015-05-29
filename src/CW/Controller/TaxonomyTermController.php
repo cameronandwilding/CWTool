@@ -51,13 +51,6 @@ class TaxonomyTermController extends AbstractEntityController {
     return 'taxonomy/term/' . $this->getEntityId();
   }
 
-  /**
-   * @return string
-   */
-  public function getNameLinkedToEntity() {
-    return l($this->getName(), $this->getPath());
-  }
-
 }
 
 /**
