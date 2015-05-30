@@ -58,6 +58,27 @@ var CWTool = (function () {
     return current_object;
   };
 
+  /**
+   * Compose an URL query string.
+   * Eg.: {a: foo, b: 1} -> a=foo&b=1
+   *
+   * @param query
+   *  Keyed dictionary.
+   * @returns {string}
+   */
+  self.createURLQueryString = function ( query ) {
+    var items = [];
+    for (var key in query) {
+      if (!query.hasOwnProperty(key)) {
+        continue;
+      }
+
+      items.push(encodeURIComponent(key) + '=' + encodeURIComponent(query[key]));
+    }
+
+    return items.join('&');
+  };
+
   return self;
 
 })();
