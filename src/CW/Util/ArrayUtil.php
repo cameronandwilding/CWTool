@@ -58,8 +58,8 @@ class ArrayUtil {
   /**
    * Merge an array onto a primary array.
    *
-   * @param $array_primary
-   * @param $array_secondary
+   * @param array $array_primary
+   * @param array $array_secondary
    */
   public static function merge(&$array_primary, $array_secondary) {
     $array_primary = array_merge($array_primary, $array_secondary);
