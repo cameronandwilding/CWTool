@@ -31,19 +31,29 @@ class Request {
   protected $POST;
 
   /**
+   * Recommended to use it exclusively as a service, otherwise you might cache
+   * a different subclass you intend to load.
+   *
    * @return \CW\Util\Request
    */
   public static function current() {
     static $current;
 
     if (empty($current)) {
-      $current = new Request();
-      $current->collectGlobalGetParams();
-      $current->collectGlobalServerParams();
-      $current->collectGlobalPostParams();
+      $current = new static();
+      $current->collectAllGlobalParams();
     }
 
     return $current;
+  }
+
+  /**
+   * Collect all parameters from current context: GET, POST, SERVER, etc.
+   */
+  protected function collectAllGlobalParams() {
+    $this->collectGlobalGetParams();
+    $this->collectGlobalServerParams();
+    $this->collectGlobalPostParams();
   }
 
   /**
