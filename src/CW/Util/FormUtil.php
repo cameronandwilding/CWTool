@@ -131,4 +131,22 @@ class FormUtil {
     return $form[$field_name][$lang]['#title'];
   }
 
+  /**
+   * Alter the weight of a form element.
+   *
+   * @param array $form_element
+   * @param int $weight
+   */
+  public static function alterFormElementWeight(&$form_element, $weight) {
+    $form_element['#weight'] = $weight;
+  }
+
+  /**
+   * Disable access to a form element.
+   *
+   * @param array $form_element
+   */
+  public static function disableAccessOnFormElement(&$form_element) {
+    $form_element['#access'] = FALSE;
+  }
 }
