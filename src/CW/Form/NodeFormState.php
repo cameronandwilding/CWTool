@@ -58,8 +58,8 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang))) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
       return NULL;
     }
 
@@ -69,14 +69,14 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
     if (!isset($this->formState[self::VALUES_KEY][$fieldName][$lang])) {
       return array();
     }
 
     $controllers = array();
     foreach (array_keys($this->formState[self::VALUES_KEY][$fieldName][$lang]) as $idx) {
-      $controllers[] = $this->fieldReferencedEntityController($fieldName, $entityControllerFactory, $idx, $lang);
+      $controllers[] = $this->fieldReferencedEntityController($fieldName, $entityControllerFactory, $fieldKey, $idx, $lang);
     }
 
     return array_filter($controllers);
