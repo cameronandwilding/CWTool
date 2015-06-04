@@ -1,10 +1,17 @@
 <?php
 /**
  * @file
+ *
+ * Variable groups are to group variables for the application into different
+ * responsibilities.
  */
 
 namespace CW\Params;
 
+/**
+ * Class VariableGroup
+ * @package CW\Params
+ */
 class VariableGroup {
 
   /**
@@ -27,16 +34,25 @@ class VariableGroup {
    */
   private static $counter = 0;
 
+  /**
+   * @param string $title
+   */
   public function __construct($title) {
     $this->title = $title;
     $this->machineName = 'group_' . self::$counter;
     self::$counter++;
   }
 
+  /**
+   * @param \CW\Params\Variable $variable
+   */
   public function addVariable(Variable $variable) {
     $this->variables[] = $variable;
   }
 
+  /**
+   * @param Variable[] $variables
+   */
   public function addVariables(array $variables = array()) {
     foreach ($variables as $variable) {
       $this->addVariable($variable);
