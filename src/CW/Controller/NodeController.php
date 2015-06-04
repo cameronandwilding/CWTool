@@ -65,6 +65,13 @@ class NodeController extends AbstractEntityController {
     return render($nodeView);
   }
 
+  /**
+   * @return string|null
+   */
+  public function getTitle() {
+    return $this->property('title');
+  }
+
 }
 
 /**
