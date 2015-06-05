@@ -38,18 +38,33 @@ class VariableFormGenerator {
    * @return array
    */
   public function generateForm($form = array()) {
-    foreach ($this->variableManager->getVariables() as $variable) {
-      $form_element = array(
-        '#title' => $variable->getLabel(),
-        '#type' => self::getFormElementTypeOfVariableType($variable->getType()),
-        '#default_value' => $variable->getValue(),
-      );
-
-      if ($desc = $variable->getDescription()) {
-        $form_element['#description'] = $desc;
+    foreach ($this->variableManager->getGroups() as $group) {
+      if (!$group->hasVariable()) {
+        continue;
       }
 
-      $form[$variable->getMachineName()] = $form_element;
+      $fieldsetKey = 'group_' . $group->getMachineName();
+
+      $form[$fieldsetKey] = array(
+        '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#title' => $group->getTitle(),
+      );
+
+      foreach ($group->getVariables() as $variable) {
+        $form_element = array(
+          '#title' => $variable->getLabel(),
+          '#type' => self::getFormElementTypeOfVariableType($variable->getType()),
+          '#default_value' => $variable->getValue(),
+        );
+
+        if ($desc = $variable->getDescription()) {
+          $form_element['#description'] = $desc;
+        }
+
+        $form[$fieldsetKey][$variable->getMachineName()] = $form_element;
+      }
     }
 
     return system_settings_form($form);
