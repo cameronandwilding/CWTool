@@ -11,6 +11,7 @@
 namespace CW\Controller;
 
 use CW\Adapter\FieldAccessor;
+use CW\Exception\MissingImplementationException;
 use CW\Factory\EntityControllerFactory;
 use CW\Model\EntityHandler;
 use CW\Util\FieldUtil;
@@ -226,7 +227,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @throws \Exception
    */
   public static function getClassEntityType() {
-    throw new Exception('Undefined entity type');
+    throw new MissingImplementationException('Undefined entity type');
   }
 
   /**
@@ -238,7 +239,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @throws \Exception
    */
   public static function getClassEntityBundle() {
-    throw new Exception('Undefined entity bundle');
+    throw new MissingImplementationException('Undefined entity bundle');
   }
 
   /**
@@ -256,7 +257,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
       list(,, $bundle) = self::$objectHandler->extractIDs($entityType, $entity);
       return $bundle == $bundleExpected;
     }
-    catch (Exception $e) {
+    catch (MissingImplementationException $e) {
       return FALSE;
     }
   }
@@ -320,7 +321,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
-      return NULL;
+      return [];
     }
     return $this->entity()->{$fieldName}[$lang];
   }
