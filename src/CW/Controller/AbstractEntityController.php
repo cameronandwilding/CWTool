@@ -501,6 +501,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
 
     return $entityFactory->initWithId($tid);
   }
+
 }
 
 /**

@@ -53,6 +53,9 @@ class AbstractEntityControllerTest extends TestCase {
     $this->controller = new TestController($this->loggerMock, $this->entityType, $this->entityId);
 
     $this->fullEntity = (object) [
+      'prop1' => 'val1',
+      'propNull' => NULL,
+      'propFalse' => FALSE,
       'field_one' => [
         self::LANGUAGE_NONE => [
           [
@@ -458,6 +461,28 @@ class AbstractEntityControllerTest extends TestCase {
     $this->controller->fieldReferencedFileCtrl('field_one', $factoryMock);
   }
 
+  public function testEntityFieldTaxonomyTermCtrlReference() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'CW\Controller\TaxonomyTermController',
+      \CW\Controller\TaxonomyTermController::getClassEntityType(),
+      $this->loggerMock
+    ]);
+    $factoryMock
+      ->expects($this->once())
+      ->method('initWithId')
+      ->with($this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TAXONOMY_ID]);
+
+    $this->controller->fieldReferencedTaxonomyTermCtrl('field_one', $factoryMock);
+  }
+
   public function testEntityFieldValueSetUpdate() {
     $this->objectHandlerMock
       ->expects($this->once())
@@ -507,6 +532,67 @@ class AbstractEntityControllerTest extends TestCase {
     $this->assertEquals($newVals[1], $this->fullEntity->field_one[self::LANGUAGE_NONE][1][FieldUtil::KEY_VALUE]);
     $this->assertEquals([FieldUtil::KEY_VALUE => $newVals[0]], $this->fullEntity->field_one[self::LANGUAGE_NONE][0]);
     $this->assertEquals([FieldUtil::KEY_VALUE => $newVals[1]], $this->fullEntity->field_one[self::LANGUAGE_NONE][1]);
+  }
+
+  public function testEntityFieldReferencesAll() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TARGET_ID] = 'foo';
+    $this->fullEntity->field_one[self::LANGUAGE_NONE][1][FieldUtil::KEY_TARGET_ID] = 'bar';
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'TestController',
+      'foobar',
+      $this->loggerMock
+    ]);
+    $factoryMock
+      ->expects($this->exactly(2))
+      ->method('initWithId')
+      ->withConsecutive(
+        [$this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TARGET_ID]],
+        [$this->fullEntity->field_one[self::LANGUAGE_NONE][1][FieldUtil::KEY_TARGET_ID]]
+      );
+
+    $this->controller->fieldAllReferencedEntityController('field_one', $factoryMock);
+  }
+
+  public function testEntityFieldReferencesAllMissing() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'TestController',
+      'foobar',
+      $this->loggerMock
+    ]);
+    $factoryMock
+      ->expects($this->exactly(0))
+      ->method('initWithId');
+
+    $this->controller->fieldAllReferencedEntityController('field_non_existing', $factoryMock);
+  }
+
+  public function testEntityProperty() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $this->assertEquals('val1', $this->controller->property('prop1'));
+    $this->assertEquals(NULL, $this->controller->property('propNull'));
+    $this->assertEquals(FALSE, $this->controller->property('propFalse'));
+    $this->assertNull($this->controller->property('propNonExisting'));
   }
 
 }
