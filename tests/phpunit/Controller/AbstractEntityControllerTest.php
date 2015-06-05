@@ -396,6 +396,24 @@ class AbstractEntityControllerTest extends TestCase {
     $this->controller->fieldReferencedEntityController('field_one', $factoryMock);
   }
 
+  public function testEntityFieldReferenceMissing() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'TestController',
+      'foobar',
+      $this->loggerMock
+    ]);
+
+    $this->assertNull($this->controller->fieldReferencedEntityController('field_missing', $factoryMock));
+  }
+
   public function testEntityFieldReferenceCustomKey() {
     $this->objectHandlerMock
       ->expects($this->once())
@@ -471,6 +489,24 @@ class AbstractEntityControllerTest extends TestCase {
 
     $this->controller->setFieldValue('field_new', $newVal);
     $this->assertEquals($newVal, $this->fullEntity->field_new[self::LANGUAGE_NONE][0][FieldUtil::KEY_VALUE]);
+  }
+
+  /**
+   * Test the multi field update - field items are populated with the given values.
+   * Verify that it's also erasing everything else.
+   */
+  public function testEntityFieldMultiValueSetUpdate() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $newVals = ['foo', 'bar'];
+    $this->controller->setMultiFieldValues('field_one', $newVals);
+    $this->assertEquals($newVals[0], $this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_VALUE]);
+    $this->assertEquals($newVals[1], $this->fullEntity->field_one[self::LANGUAGE_NONE][1][FieldUtil::KEY_VALUE]);
+    $this->assertEquals([FieldUtil::KEY_VALUE => $newVals[0]], $this->fullEntity->field_one[self::LANGUAGE_NONE][0]);
+    $this->assertEquals([FieldUtil::KEY_VALUE => $newVals[1]], $this->fullEntity->field_one[self::LANGUAGE_NONE][1]);
   }
 
 }
