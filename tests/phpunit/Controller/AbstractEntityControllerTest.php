@@ -81,6 +81,20 @@ class AbstractEntityControllerTest extends TestCase {
   }
 
   public function testLoadEntity() {
+    $controller = new TestController($this->loggerMock, $this->entityType, NULL);
+    $entity = (object) [
+      'type' => self::randomString(),
+      'id' => self::randomInt(),
+    ];
+    $this->objectHandlerMock
+      ->expects($this->never())
+      ->method('loadSingleEntity')
+      ->willReturn($entity);
+
+    $this->assertNull($controller->entity());
+  }
+
+  public function testLoadEntityMissingId() {
     $entity = (object) [
       'type' => self::randomString(),
       'id' => self::randomInt(),
@@ -461,6 +475,27 @@ class AbstractEntityControllerTest extends TestCase {
     $this->controller->fieldReferencedFileCtrl('field_one', $factoryMock);
   }
 
+  public function testEntityFieldFileCtrlReferenceMissing() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'CW\Controller\FileController',
+      'file',
+      $this->loggerMock
+    ]);
+    $factoryMock
+      ->expects($this->never())
+      ->method('initWithId');
+
+    $this->assertNull($this->controller->fieldReferencedFileCtrl('field_missing', $factoryMock));
+  }
+
   public function testEntityFieldTaxonomyTermCtrlReference() {
     $this->objectHandlerMock
       ->expects($this->once())
@@ -481,6 +516,28 @@ class AbstractEntityControllerTest extends TestCase {
       ->with($this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TAXONOMY_ID]);
 
     $this->controller->fieldReferencedTaxonomyTermCtrl('field_one', $factoryMock);
+  }
+
+  public function testEntityFieldTaxonomyTermCtrlReferenceMissing() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
+    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+      $localProcessIdentityMapMock,
+      $this->objectHandlerMock,
+      'CW\Controller\TaxonomyTermController',
+      \CW\Controller\TaxonomyTermController::getClassEntityType(),
+      $this->loggerMock
+    ]);
+    $factoryMock
+      ->expects($this->never())
+      ->method('initWithId')
+      ->with($this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TAXONOMY_ID]);
+
+    $this->controller->fieldReferencedTaxonomyTermCtrl('field_non_existing', $factoryMock);
   }
 
   public function testEntityFieldValueSetUpdate() {
@@ -593,6 +650,22 @@ class AbstractEntityControllerTest extends TestCase {
     $this->assertEquals(NULL, $this->controller->property('propNull'));
     $this->assertEquals(FALSE, $this->controller->property('propFalse'));
     $this->assertNull($this->controller->property('propNonExisting'));
+  }
+
+  public function testEntitySetPropertyTest() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $newVal = 'foo';
+    $this->assertNotEquals($newVal, $this->controller->property('prop1'));
+    $this->controller->setProperty('prop1', $newVal);
+    $this->assertEquals($newVal, $this->controller->property('prop1'));
+
+    $this->assertNull($this->controller->property('propFoo'));
+    $this->controller->setProperty('propFoo', $newVal);
+    $this->assertEquals($newVal, $this->controller->property('propFoo'));
   }
 
 }
