@@ -9,9 +9,7 @@ use CW\Test\TestCase;
 use CW\Util\FieldUtil;
 
 // Assist on Drupal defines for test.
-if (!defined('LANGUAGE_NONE')) {
-  define('LANGUAGE_NONE', 'und');
-}
+if (!defined('LANGUAGE_NONE')) { define('LANGUAGE_NONE', 'und'); }
 
 /**
  * Class AbstractEntityControllerTest
