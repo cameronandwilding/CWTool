@@ -370,8 +370,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang))) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
       return NULL;
     }
     return $entityControllerFactory->initWithId($targetID);
@@ -380,14 +380,14 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
       return array();
     }
 
     $controllers = array();
     foreach (array_keys($this->entity()->{$fieldName}[$lang]) as $idx) {
-      $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $idx, $lang);
+      $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $fieldKey, $idx, $lang);
     }
 
     return array_filter($controllers);

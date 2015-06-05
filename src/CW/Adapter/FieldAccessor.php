@@ -79,7 +79,7 @@ interface FieldAccessor {
    * @param string $lang
    * @return AbstractEntityController|NULL
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $idx = 0, $lang = LANGUAGE_NONE);
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE);
 
   /**
    * Get all referenced entity controller referenced by the field.
@@ -91,7 +91,7 @@ interface FieldAccessor {
    * @param string $lang
    * @return AbstractEntityController[]
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $lang = LANGUAGE_NONE);
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE);
 
   /**
    * Get the referenced file controller.
