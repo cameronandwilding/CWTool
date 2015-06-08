@@ -11,6 +11,7 @@
 namespace CW\Controller;
 
 use CW\Adapter\FieldAccessor;
+use CW\Exception\MissingImplementationException;
 use CW\Factory\EntityControllerFactory;
 use CW\Model\EntityHandler;
 use CW\Util\FieldUtil;
@@ -226,7 +227,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @throws \Exception
    */
   public static function getClassEntityType() {
-    throw new Exception('Undefined entity type');
+    throw new MissingImplementationException('Undefined entity type');
   }
 
   /**
@@ -238,7 +239,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @throws \Exception
    */
   public static function getClassEntityBundle() {
-    throw new Exception('Undefined entity bundle');
+    throw new MissingImplementationException('Undefined entity bundle');
   }
 
   /**
@@ -256,7 +257,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
       list(,, $bundle) = self::$objectHandler->extractIDs($entityType, $entity);
       return $bundle == $bundleExpected;
     }
-    catch (Exception $e) {
+    catch (MissingImplementationException $e) {
       return FALSE;
     }
   }
@@ -320,7 +321,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
-      return NULL;
+      return [];
     }
     return $this->entity()->{$fieldName}[$lang];
   }
@@ -370,8 +371,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!($targetID = $this->fieldValue($fieldName, FieldUtil::KEY_TARGET_ID, $idx, $lang))) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
+    if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
       return NULL;
     }
     return $entityControllerFactory->initWithId($targetID);
@@ -380,14 +381,14 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
       return array();
     }
 
     $controllers = array();
     foreach (array_keys($this->entity()->{$fieldName}[$lang]) as $idx) {
-      $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $idx, $lang);
+      $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $fieldKey, $idx, $lang);
     }
 
     return array_filter($controllers);
@@ -500,6 +501,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
 
     return $entityFactory->initWithId($tid);
   }
+
 }
 
 /**
