@@ -69,7 +69,7 @@ class ArrayUtil {
    * Merge a collection of array items onto an array.
    *
    * @param array $original_array
-   * @param array $list
+   * @param array $collection
    */
   public static function mergeCollection(array &$original_array, array $collection) {
     foreach ($collection as $list) {
