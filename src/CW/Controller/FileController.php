@@ -26,6 +26,19 @@ class FileController extends AbstractEntityController {
     return self::ENTITY_TYPE;
   }
 
+  /**
+   * @return string|null
+   */
+  public function getFileURI() {
+    return $this->property('uri');
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getFileName() {
+    return $this->property('filename');
+  }
 }
 
 /**
