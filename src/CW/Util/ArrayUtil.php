@@ -64,4 +64,16 @@ class ArrayUtil {
   public static function merge(&$array_primary, $array_secondary) {
     $array_primary = array_merge($array_primary, $array_secondary);
   }
+
+  /**
+   * Merge a collection of array items onto an array.
+   *
+   * @param array $original_array
+   * @param array $collection
+   */
+  public static function mergeCollection(array &$original_array, array $collection) {
+    foreach ($collection as $list) {
+      self::merge($original_array, $list);
+    }
+  }
 }

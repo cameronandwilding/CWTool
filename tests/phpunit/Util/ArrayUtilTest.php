@@ -20,4 +20,45 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($map, 'error', 'miss'), 'miss');
   }
 
+  public function testCollectionMerge() {
+    $original = [
+      'foo',
+      'bar'
+    ];
+
+    $additions = [
+      ['alfa', 'bravo', 'charlie'],
+      ['delta'],
+    ];
+
+    \CW\Util\ArrayUtil::mergeCollection($original, $additions);
+
+    $this->assertTrue(in_array('foo', $original));
+    $this->assertTrue(in_array('bar', $original));
+    $this->assertTrue(in_array('alfa', $original));
+    $this->assertTrue(in_array('bravo', $original));
+    $this->assertTrue(in_array('charlie', $original));
+    $this->assertTrue(in_array('delta', $original));
+  }
+
+  public function testKeyedCollectionMerge() {
+    $original = [
+      'foo' => 'bar',
+      'zoom' => 'zip',
+    ];
+
+    $additions = [
+      [
+        'alfa' => 'bravo',
+      ],
+      [
+        'foo' => 'charlie',
+      ],
+    ];
+
+    \CW\Util\ArrayUtil::mergeCollection($original, $additions);
+    $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($original, 'alfa'), 'bravo');
+    $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($original, 'foo'), 'charlie');
+    $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($original, 'zoom'), 'zip');
+  }
 }
