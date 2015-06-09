@@ -5,8 +5,11 @@
 
 use CW\Util\DateUtil;
 
-class DateUtilTest extends PHPUnit_Framework_TestCase {
+class DateUtilTest extends \CW\Test\TestCase {
 
+  /**
+   * @todo: This test is unstable and will fail when your timezone is not GMT
+   */
   public function testFieldExtraction() {
     $date = '2014-02-20';
     $fieldDate = [
