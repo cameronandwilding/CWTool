@@ -43,6 +43,11 @@ class UserController extends AbstractEntityController {
   private static $drupalAdapter;
 
   /**
+   * @var bool
+   */
+  private $realEntityLoadedFlag = FALSE;
+
+  /**
    * @return bool
    */
   public function isCurrent() {
@@ -103,13 +108,12 @@ class UserController extends AbstractEntityController {
    */
   public function entity($forceReload = self::RELOAD_IGNORE) {
     // Flag to make sure it's reloaded only once at max.
-    static $realEntityLoadedFlag = FALSE;
-
-    if (!$realEntityLoadedFlag && $this->isUserEntityIncomplete()) {
-      $realEntityLoadedFlag = TRUE;
+    if (!$this->realEntityLoadedFlag && $this->isUserEntityIncomplete()) {
+      $this->realEntityLoadedFlag = TRUE;
       return parent::entity(self::RELOAD_FORCE);
     }
 
+    $this->realEntityLoadedFlag = TRUE;
     return parent::entity($forceReload);
   }
 
@@ -133,7 +137,7 @@ class UserController extends AbstractEntityController {
   /**
    * @return \CW\Adapter\DrupalUserAdapter
    */
-  public static function getDrupalAdapter() {
+  protected static function getDrupalAdapter() {
     if (empty(self::$drupalAdapter)) {
       self::$drupalAdapter = new DrupalUserAdapter();
     }
@@ -143,13 +147,8 @@ class UserController extends AbstractEntityController {
 
   /**
    * @param \CW\Adapter\DrupalUserAdapter $drupalAdapter
-   * @throws \CW\Exception\CWException
    */
   public static function setDrupalAdapter(DrupalUserAdapter $drupalAdapter) {
-    if (empty(self::$drupalAdapter)) {
-      throw new CWException('Drupal adapter is already defined.');
-    }
-
     self::$drupalAdapter = $drupalAdapter;
   }
 

@@ -38,6 +38,8 @@ class NodeControllerTest extends TestCase {
   private $fullEntity;
 
   public function setUp() {
+    parent::setUp();
+
     $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
