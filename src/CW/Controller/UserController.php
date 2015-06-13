@@ -9,6 +9,8 @@
  */
 
 namespace CW\Controller;
+use CW\Adapter\DrupalUserAdapter;
+use CW\Exception\CWException;
 
 /**
  * Class UserController
@@ -36,6 +38,11 @@ class UserController extends AbstractEntityController {
   const TYPE_USER = 'user';
 
   /**
+   * @var DrupalUserAdapter
+   */
+  private static $drupalAdapter;
+
+  /**
    * @return bool
    */
   public function isCurrent() {
@@ -46,8 +53,8 @@ class UserController extends AbstractEntityController {
    * @return mixed
    */
   public static function currentUID() {
-    global $user;
-    return $user->uid;
+    $account = self::getDrupalAdapter()->getGlobalUserObject();
+    return $account->uid;
   }
 
   /**
@@ -68,25 +75,7 @@ class UserController extends AbstractEntityController {
    * Drupal login.
    */
   public function login() {
-    global $user;
-
-    // Override global user.
-    $user = $this->entity();
-
-    $this->logger->info(__METHOD__ . ' session opened for {name}.', array('name' => $user->name));
-
-    // Update the user table timestamp noting user has logged in.
-    // This is also used to invalidate one-time login links.
-    $user->login = REQUEST_TIME;
-    db_update('users')
-      ->fields(array('login' => $user->login))
-      ->condition('uid', $user->uid)
-      ->execute();
-
-    // Regenerate the session ID to prevent against session fixation attacks.
-    // This is called before hook_user in case one of those functions fails
-    // or incorrectly does a redirect which would leave the old session in place.
-    drupal_session_regenerate();
+    self::getDrupalAdapter()->login($this->entity(), $this->logger);
   }
 
   /**
@@ -139,6 +128,29 @@ class UserController extends AbstractEntityController {
    */
   public function getPath() {
     return 'user/' . $this->getEntityId();
+  }
+
+  /**
+   * @return \CW\Adapter\DrupalUserAdapter
+   */
+  public static function getDrupalAdapter() {
+    if (empty(self::$drupalAdapter)) {
+      self::$drupalAdapter = new DrupalUserAdapter();
+    }
+
+    return self::$drupalAdapter;
+  }
+
+  /**
+   * @param \CW\Adapter\DrupalUserAdapter $drupalAdapter
+   * @throws \CW\Exception\CWException
+   */
+  public static function setDrupalAdapter(DrupalUserAdapter $drupalAdapter) {
+    if (empty(self::$drupalAdapter)) {
+      throw new CWException('Drupal adapter is already defined.');
+    }
+
+    self::$drupalAdapter = $drupalAdapter;
   }
 
 }
