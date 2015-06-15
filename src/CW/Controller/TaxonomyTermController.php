@@ -51,6 +51,14 @@ class TaxonomyTermController extends AbstractEntityController {
     return 'taxonomy/term/' . $this->getEntityId();
   }
 
+  /**
+   * Get the machine name of the vocabulary the term belongs to.
+   *
+   * @return string|null
+   */
+  public function getVocabularyMachineName() {
+    return $this->property('vocabulary_machine_name');
+  }
 }
 
 /**
