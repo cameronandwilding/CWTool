@@ -40,4 +40,22 @@ class Functional {
     }
   }
 
+  /**
+   * Creates a cached version of the function.
+   *
+   * @param callable $callback
+   * @return callable
+   */
+  public static function memoize($callback) {
+    return function () use ($callback) {
+      static $cached = NULL;
+
+      if (empty($cached)) {
+        $cached = call_user_func($callback);
+      }
+
+      return $cached;
+    };
+  }
+
 }
