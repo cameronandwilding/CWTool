@@ -132,6 +132,7 @@ function cw_tool_menu() {
       'page callback' => 'system_admin_menu_block_page',
       'access arguments' => array('access administration pages'),
       'file' => 'system.admin.inc',
+      'file path' => drupal_get_path('module', 'system'),
     ),
 
     // Variable settings page.
