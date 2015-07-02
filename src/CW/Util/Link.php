@@ -185,7 +185,7 @@ class Link {
    * @param array $attributes
    * @return $this
    */
-  private function setAttributes(array $attributes) {
+  public function setAttributes(array $attributes) {
     $this->attributes = array_merge($this->attributes, $attributes);
     return $this;
   }
