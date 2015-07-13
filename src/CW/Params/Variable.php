@@ -17,6 +17,7 @@ class Variable {
   const TYPE_SHORT_STRING = 'string';
   const TYPE_LONG_TEXT = 'text';
   const TYPE_FORMATTED_TEXT = 'formatted';
+  const TYPE_SHORT_STRING_OPTION = 'string_option';
 
   /**
    * @var string
@@ -42,6 +43,11 @@ class Variable {
    * @var string
    */
   private $type;
+
+  /**
+   * @var array
+   */
+  private $options = [];
 
   /**
    * @param $machineName
@@ -135,6 +141,20 @@ class Variable {
    */
   public function setType($type) {
     $this->type = $type;
+  }
+
+  /**
+   * @return array
+   */
+  public function getOptions() {
+    return $this->options;
+  }
+
+  /**
+   * @param array $options
+   */
+  public function setOptions($options) {
+    $this->options = $options;
   }
 
 }

@@ -9,6 +9,7 @@ namespace CW\Form;
 
 use CW\Manager\VariableManager;
 use CW\Params\Variable;
+use CW\Params\VariableGroup;
 
 /**
  * Class VariableFormGenerator
@@ -59,6 +60,10 @@ class VariableFormGenerator {
           '#default_value' => $variable->getValue(),
         );
 
+        if ($variable->getType() === Variable::TYPE_SHORT_STRING_OPTION) {
+          $form_element['#options'] = $variable->getOptions();
+        }
+
         if ($desc = $variable->getDescription()) {
           $form_element['#description'] = $desc;
         }
@@ -81,6 +86,9 @@ class VariableFormGenerator {
 
       case Variable::TYPE_FORMATTED_TEXT:
         return 'text_format';
+
+      case Variable::TYPE_SHORT_STRING_OPTION:
+        return 'select';
 
       default:
         return 'textfield';
