@@ -60,6 +60,15 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
+   * Get author UID.
+   *
+   * @return string|null
+   */
+  public function getAuthorUID() {
+    return $this->property('uid');
+  }
+
+  /**
    * Render node view.
    *
    * @param string $viewMode
