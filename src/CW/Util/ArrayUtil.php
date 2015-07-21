@@ -76,4 +76,29 @@ class ArrayUtil {
       self::merge($original_array, $list);
     }
   }
+
+  /**
+   * Convert a multiline string to an array, which line as a value of the array.
+   *
+   * @param string $string
+   * @return array
+   */
+  public static function multiLineStringToArray($string) {
+    return explode(PHP_EOL, $string);
+  }
+
+  /**
+   * Convert a multiline string to an array, with each line trimmed.
+   *
+   * @param string $string
+   * @param string $character_mask
+   * @return array
+   */
+  public static function multiLineStringToArrayAndTrimValues($string, $character_mask = " \t\n\r\0\x0B") {
+    $array = self::multiLineStringToArray($string);
+    foreach ($array as &$value) {
+      $value = trim($value, $character_mask);
+    }
+    return $array;
+  }
 }

@@ -61,4 +61,27 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($original, 'foo'), 'charlie');
     $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($original, 'zoom'), 'zip');
   }
+
+  public function testMultiLineStringToArray() {
+    $string = 'foo' . PHP_EOL . 'bar' . PHP_EOL . 'alpha' . PHP_EOL . 'bravo';
+    $string_to_array = \CW\Util\ArrayUtil::multiLineStringToArray($string);
+
+    $this->assertEquals($string_to_array[0], 'foo');
+    $this->assertEquals($string_to_array[1], 'bar');
+    $this->assertEquals($string_to_array[2], 'alpha');
+    $this->assertEquals($string_to_array[3], 'bravo');
+  }
+
+  public function testMultiLineStringToArrayAndTrimValues() {
+    $string = 'foo
+    bar
+    alpha
+    bravo';
+    $string_to_array = \CW\Util\ArrayUtil::multiLineStringToArrayAndTrimValues($string);
+
+    $this->assertEquals($string_to_array[0], 'foo');
+    $this->assertEquals($string_to_array[1], 'bar');
+    $this->assertEquals($string_to_array[2], 'alpha');
+    $this->assertEquals($string_to_array[3], 'bravo');
+  }
 }
