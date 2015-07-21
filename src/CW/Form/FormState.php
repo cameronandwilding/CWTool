@@ -21,6 +21,9 @@ class FormState {
   // Value key.
   const VALUES_KEY = 'values';
 
+  // Build info key.
+  const BUILD_INFO_KEY = 'build_info';
+
   /**
    * @var array
    */
@@ -54,4 +57,12 @@ class FormState {
     return VC::make($this->formState[self::VALUES_KEY]);
   }
 
+  /**
+   * Returns the VarCheck wrapped build info for easy access.
+   *
+   * @return \itarato\VarCheck\VC
+   */
+  public function getWrappedBuildInfo() {
+    return VC::make($this->formState[self::BUILD_INFO_KEY]);
+  }
 }
