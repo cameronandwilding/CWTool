@@ -32,4 +32,16 @@ class StringUtil {
     $offset = drupal_strlen($haystack) - drupal_strlen($needle);
     return strpos($haystack, $needle, $offset) !== FALSE;
   }
+
+  /**
+   * Make path (in URL) compatible string that contains only lower case letters,
+   * digits and underscore.
+   *
+   * @param string $string
+   * @return string
+   */
+  public static function pathEncode($string) {
+    return mb_strtolower(preg_replace('/[^a-zA-Z0-9]*/', '_', $string));
+  }
+
 }
