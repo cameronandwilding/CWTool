@@ -9,10 +9,10 @@ class StringUtilTest extends TestCase {
 
   public function testPathEncoding() {
     $strings = [
-      'abc' => 'abc',
-      '  abc  def  ' => '_abc_def_',
-      '1 foo' => '1_foo',
-      'FOfo' => 'fofo',
+      'abc' => 'abc', // Same string.
+      '  abc  def  ' => '_abc_def_', // Multiple illegal chars.
+      '1 foo' => '1_foo', // Symbols.
+      'FOfo' => 'fofo', // Upper case.
     ];
 
     foreach ($strings as $from => $to) {
