@@ -41,7 +41,7 @@ class StringUtil {
    * @return string
    */
   public static function pathEncode($string) {
-    return mb_strtolower(preg_replace('/[^a-zA-Z0-9]*/', '_', $string));
+    return mb_strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $string));
   }
 
 }
