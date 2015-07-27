@@ -58,4 +58,16 @@ class Functional {
     };
   }
 
+  /**
+   * Apply a function on each element in the list.
+   *
+   * @param array $list
+   * @param callable $callback
+   */
+  public static function apply(array &$list, $callback) {
+    array_walk($list, function (&$item) use ($callback) {
+      $item = call_user_func($callback, $item);
+    });
+  }
+
 }
