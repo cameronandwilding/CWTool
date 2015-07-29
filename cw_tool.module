@@ -8,6 +8,7 @@
 use CW\Factory\EntityControllerFactory;
 use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
+use CW\Model\EntityHandler;
 use CW\Util\CronTimer;
 use CW\Util\FormUtil;
 use CW\Util\Functional;
@@ -187,6 +188,13 @@ function cw_tool_file_factory() {
  */
 function cw_tool_taxonomy_term_factory() {
   return cw_tool_get_container()[CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY];
+}
+
+/**
+ * @return EntityHandler
+ */
+function cw_tool_entity_handler() {
+  return cw_tool_get_container()[CWTOOL_SERVICE_OBJECT_HANDLER];
 }
 
 /**

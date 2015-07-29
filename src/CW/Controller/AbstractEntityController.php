@@ -64,7 +64,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    *
    * @var EntityHandler
    */
-  protected static $objectHandler;
+  protected $objectHandler;
 
   /**
    * The entity metadata wrapper object.
@@ -96,18 +96,12 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @param string $entity_type
    * @param int|string $entity_id
    */
-  public function __construct(LoggerInterface $logger, $entity_type, $entity_id) {
+  public function __construct(LoggerInterface $logger, EntityHandler $entityHandler, $entity_type, $entity_id) {
     parent::__construct($logger);
 
     $this->entityType = $entity_type;
     $this->entityId = $entity_id;
-  }
-
-  /**
-   * @param EntityHandler $objectHandler
-   */
-  public static function setObjectHandler(EntityHandler $objectHandler) {
-    self::$objectHandler = $objectHandler;
+    $this->objectHandler = $entityHandler;
   }
 
   /**
@@ -120,7 +114,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function metadata() {
     if (!isset($this->entityMetadataWrapper)) {
-      $this->entityMetadataWrapper = static::$objectHandler->loadMetadata($this->entityType, $this->entity());
+      $this->entityMetadataWrapper = $this->objectHandler->loadMetadata($this->entityType, $this->entity());
     }
 
     return $this->entityMetadataWrapper;
@@ -139,7 +133,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
         return NULL;
       }
 
-      $this->entity = static::$objectHandler->loadSingleEntity($this->entityType, $this->entityId);
+      $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
 
     return $this->entity;
@@ -160,7 +154,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function save() {
     $this->logger->info('Entity has been saved {this}', array('this' => $this->__toString()));
-    static::$objectHandler->save($this->entityType, $this->entity());
+    $this->objectHandler->save($this->entityType, $this->entity());
     $this->setClean();
   }
 
@@ -193,7 +187,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @return mixed
    */
   public function delete() {
-    return static::$objectHandler->delete($this->entityType, $this->entityId);
+    return $this->objectHandler->delete($this->entityType, $this->entityId);
   }
 
   /**
@@ -251,10 +245,11 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
       return FALSE;
     }
 
+    $objectHandler = cw_tool_entity_handler();
     try {
       $bundleExpected = static::getClassEntityBundle();
       $entityType = static::getClassEntityType();
-      list(,, $bundle) = self::$objectHandler->extractIDs($entityType, $entity);
+      list(,, $bundle) = $objectHandler->extractIDs($entityType, $entity);
       return $bundle == $bundleExpected;
     }
     catch (MissingImplementationException $e) {

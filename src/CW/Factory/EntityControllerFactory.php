@@ -81,8 +81,6 @@ class EntityControllerFactory extends LoggerObject {
     }
     $this->controllerClass = $controllerClass;
 
-    call_user_func(array($this->controllerClass, 'setObjectHandler'), $objectLoader);
-
     $this->entityType = $entityType;
     $this->objectHandler = $objectLoader;
   }
@@ -117,7 +115,7 @@ class EntityControllerFactory extends LoggerObject {
       $controller = $this->localProcessIdentityMap->get($cacheKey);
     }
     else {
-      $controller = new $this->controllerClass($this->logger, $this->entityType, $entity_id);
+      $controller = new $this->controllerClass($this->logger, $this->objectHandler, $this->entityType, $entity_id);
       $this->localProcessIdentityMap->add($cacheKey, $controller);
     }
 
