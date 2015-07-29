@@ -56,13 +56,4 @@ class FormState {
   public function getWrappedVales() {
     return VC::make($this->formState[self::VALUES_KEY]);
   }
-
-  /**
-   * Returns the VarCheck wrapped build info for easy access.
-   *
-   * @return \itarato\VarCheck\VC
-   */
-  public function getWrappedBuildInfo() {
-    return VC::make($this->formState[self::BUILD_INFO_KEY]);
-  }
 }

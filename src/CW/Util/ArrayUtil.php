@@ -13,6 +13,9 @@ namespace CW\Util;
  */
 class ArrayUtil {
 
+  // Default trim character mask.
+  const TRIM_CHARACTER_MASK_DEFAULT_VALUE = " \t\n\r\0\x0B";
+
   /**
    * Map translate helps to translate one value to another using a translation
    * map.
@@ -84,7 +87,7 @@ class ArrayUtil {
    * @return array
    */
   public static function multiLineStringToArray($string) {
-    return explode(PHP_EOL, $string);
+    return preg_split("/\r?\n/", $string);
   }
 
   /**
@@ -94,7 +97,7 @@ class ArrayUtil {
    * @param string $character_mask
    * @return array
    */
-  public static function multiLineStringToArrayAndTrimValues($string, $character_mask = " \t\n\r\0\x0B") {
+  public static function multiLineStringToArrayAndTrimValues($string, $character_mask = self::TRIM_CHARACTER_MASK_DEFAULT_VALUE) {
     $array = self::multiLineStringToArray($string);
     foreach ($array as &$value) {
       $value = trim($value, $character_mask);

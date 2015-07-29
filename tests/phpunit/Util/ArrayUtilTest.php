@@ -63,7 +63,7 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testMultiLineStringToArray() {
-    $string = 'foo' . PHP_EOL . 'bar' . PHP_EOL . 'alpha' . PHP_EOL . 'bravo';
+    $string = 'foo' . PHP_EOL . 'bar' . "\n" . 'alpha' . "\r\n" . 'bravo';
     $string_to_array = \CW\Util\ArrayUtil::multiLineStringToArray($string);
 
     $this->assertEquals($string_to_array[0], 'foo');
