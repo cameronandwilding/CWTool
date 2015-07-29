@@ -51,6 +51,7 @@ class NodeControllerTest extends TestCase {
       'status' => 1,
       'title' => 'foobar',
       'created' => 123456789,
+      'uid' => 12,
     ];
   }
 
@@ -114,6 +115,18 @@ class NodeControllerTest extends TestCase {
 
     unset($this->fullEntity->created);
     $this->assertEquals(NULL, $this->controller->getCreatedTimestamp());
+  }
+
+  public function testAuthorUID() {
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $this->assertEquals(12, $this->controller->getAuthorUID());
+
+    unset($this->fullEntity->uid);
+    $this->assertEquals(NULL, $this->controller->getAuthorUID());
   }
   
 }

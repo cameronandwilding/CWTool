@@ -21,6 +21,9 @@ class FormState {
   // Value key.
   const VALUES_KEY = 'values';
 
+  // Build info key.
+  const BUILD_INFO_KEY = 'build_info';
+
   /**
    * @var array
    */
@@ -53,5 +56,4 @@ class FormState {
   public function getWrappedVales() {
     return VC::make($this->formState[self::VALUES_KEY]);
   }
-
 }
