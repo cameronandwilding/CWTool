@@ -245,6 +245,9 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
       return FALSE;
     }
 
+    /**
+     * @todo: We need to think of a way to solve this hard coded dependency.
+     */
     $objectHandler = cw_tool_entity_handler();
     try {
       $bundleExpected = static::getClassEntityBundle();
