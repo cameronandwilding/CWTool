@@ -43,6 +43,15 @@ abstract class AbstractThemeProcessor {
   }
 
   /**
+   * Reference to the template variable array.
+   *
+   * @return array
+   */
+  public function &getVars() {
+    return $this->vars;
+  }
+
+  /**
    * @param string $key
    * @return mixed
    */
