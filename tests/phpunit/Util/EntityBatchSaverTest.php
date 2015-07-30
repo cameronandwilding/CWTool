@@ -44,9 +44,8 @@ class EntityBatchSaverTest extends TestCase {
     $entityId2 = self::randomInt();
 
     $this->objectHandlerMock = $this->getMock('CW\Model\EntityHandler');
-    FakeEntityController::setObjectHandler($this->objectHandlerMock);
-    $this->entities[0] = new FakeEntityController($this->logger, $entityType, $entityId1);
-    $this->entities[1] = new FakeEntityController($this->logger, $entityType, $entityId2);
+    $this->entities[0] = new FakeEntityController($this->logger, $this->objectHandlerMock, $entityType, $entityId1);
+    $this->entities[1] = new FakeEntityController($this->logger, $this->objectHandlerMock, $entityType, $entityId2);
 
     $identityMap->add($entityId1, $this->entities[0]);
     $identityMap->add($entityId2, $this->entities[1]);

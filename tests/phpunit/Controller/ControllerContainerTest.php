@@ -31,6 +31,7 @@ class ControllerContainerTest extends TestCase {
     /** @var \PHPUnit_Framework_MockObject_MockObject $ctrlMock */
     $this->ctrlMock = $this->getMock('CW\Controller\AbstractEntityController', [], [
       $this->loggerMock,
+      $this->objectHandlerMock,
       $this->entityType,
       $this->entityId
     ]);

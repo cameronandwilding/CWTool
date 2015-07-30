@@ -48,9 +48,8 @@ class UserControllerTest extends TestCase {
 
     $this->drupalAdapterMock = $this->getMock('CW\Adapter\DrupalUserAdapter');
 
-    UserController::setObjectHandler($this->objectHandlerMock);
     UserController::setDrupalAdapter($this->drupalAdapterMock);
-    $this->controller = new UserController($this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new UserController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
     syslog(LOG_ERR, 'new');
 
     $this->fullEntity = (object) [
@@ -104,12 +103,12 @@ class UserControllerTest extends TestCase {
   }
 
   public function testIsAdminYes() {
-    $adminCtrl = new UserController($this->loggerMock, $this->entityType, UserController::UID_ADMIN);
+    $adminCtrl = new UserController($this->loggerMock, $this->objectHandlerMock, $this->entityType, UserController::UID_ADMIN);
     $this->assertTrue($adminCtrl->isAdmin());
   }
 
   public function testIsAdminNo() {
-    $adminCtrl = new UserController($this->loggerMock, $this->entityType, UserController::UID_ADMIN + rand(1, 1000));
+    $adminCtrl = new UserController($this->loggerMock, $this->objectHandlerMock, $this->entityType, UserController::UID_ADMIN + rand(1, 1000));
     $this->assertFalse($adminCtrl->isAdmin());
   }
 

@@ -40,8 +40,7 @@ class TaxonomyTermControllerTest extends TestCase {
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    TaxonomyTermController::setObjectHandler($this->objectHandlerMock);
-    $this->controller = new TaxonomyTermController($this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new TaxonomyTermController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
 
     $this->fullEntity = (object) [
       'tid' => $this->entityId,

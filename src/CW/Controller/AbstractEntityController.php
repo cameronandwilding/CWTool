@@ -238,9 +238,12 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
 
   /**
    * @param $entity
+   * @param \CW\Model\EntityHandler $entityHandler
+   *  This is default to NULL, in which case the default cw-tool entity handler
+   *  will be used - purely for backward compatibility reasons.
    * @return bool
    */
-  public static function isValidEntity($entity) {
+  public static function isValidEntity($entity, EntityHandler $entityHandler = NULL) {
     if (!is_object($entity)) {
       return FALSE;
     }
@@ -248,11 +251,14 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     /**
      * @todo: We need to think of a way to solve this hard coded dependency.
      */
-    $objectHandler = cw_tool_entity_handler();
+    if ($entityHandler === NULL) {
+      $entityHandler = cw_tool_entity_handler();
+    }
+
     try {
       $bundleExpected = static::getClassEntityBundle();
       $entityType = static::getClassEntityType();
-      list(,, $bundle) = $objectHandler->extractIDs($entityType, $entity);
+      list(,, $bundle) = $entityHandler->extractIDs($entityType, $entity);
       return $bundle == $bundleExpected;
     }
     catch (MissingImplementationException $e) {

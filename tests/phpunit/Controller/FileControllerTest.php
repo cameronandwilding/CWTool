@@ -49,8 +49,7 @@ class FileControllerTest extends TestCase {
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    FileController::setObjectHandler($this->objectHandlerMock);
-    $this->controller = new FileController($this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new FileController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
 
     $this->fullEntity = (object) [
       'filename' => 'foobar.png',

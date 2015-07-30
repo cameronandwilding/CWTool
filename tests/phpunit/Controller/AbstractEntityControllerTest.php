@@ -47,8 +47,7 @@ class AbstractEntityControllerTest extends TestCase {
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    TestController::setObjectHandler($this->objectHandlerMock);
-    $this->controller = new TestController($this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new TestController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
 
     $this->fullEntity = (object) [
       'prop1' => 'val1',
@@ -79,7 +78,7 @@ class AbstractEntityControllerTest extends TestCase {
   }
 
   public function testLoadEntity() {
-    $controller = new TestController($this->loggerMock, $this->entityType, NULL);
+    $controller = new TestController($this->loggerMock, $this->objectHandlerMock, $this->entityType, NULL);
     $entity = (object) [
       'type' => self::randomString(),
       'id' => self::randomInt(),
@@ -194,8 +193,7 @@ class AbstractEntityControllerTest extends TestCase {
 
 
     $entity = new stdClass();
-    TestWithBundleController::setObjectHandler($this->objectHandlerMock);
-    $isValid = TestWithBundleController::isValidEntity($entity);
+    $isValid = TestWithBundleController::isValidEntity($entity, $this->objectHandlerMock);
 
     $this->assertTrue($isValid);
   }
@@ -211,8 +209,7 @@ class AbstractEntityControllerTest extends TestCase {
 
 
     $entity = new stdClass();
-    TestWithBundleController::setObjectHandler($this->objectHandlerMock);
-    $isValid = TestWithBundleController::isValidEntity($entity);
+    $isValid = TestWithBundleController::isValidEntity($entity, $this->objectHandlerMock);
 
     $this->assertFalse($isValid);
   }
@@ -227,12 +224,10 @@ class AbstractEntityControllerTest extends TestCase {
       ->willReturn(array($this->entityId, NULL, 'testbundle123'));
 
 
-    TestWithBundleController::setObjectHandler($this->objectHandlerMock);
-
-    $this->assertFalse(TestWithBundleController::isValidEntity(NULL));
-    $this->assertFalse(TestWithBundleController::isValidEntity(''));
-    $this->assertFalse(TestWithBundleController::isValidEntity([]));
-    $this->assertFalse(TestWithBundleController::isValidEntity(1));
+    $this->assertFalse(TestWithBundleController::isValidEntity(NULL, $this->objectHandlerMock));
+    $this->assertFalse(TestWithBundleController::isValidEntity('', $this->objectHandlerMock));
+    $this->assertFalse(TestWithBundleController::isValidEntity([], $this->objectHandlerMock));
+    $this->assertFalse(TestWithBundleController::isValidEntity(1, $this->objectHandlerMock));
   }
 
   /**
@@ -241,8 +236,7 @@ class AbstractEntityControllerTest extends TestCase {
    */
   public function testEntityValidityCheckIncompleteController() {
     $entity = new stdClass();
-    TestController::setObjectHandler($this->objectHandlerMock);
-    $isValid = TestController::isValidEntity($entity);
+    $isValid = TestController::isValidEntity($entity, $this->objectHandlerMock);
 
     $this->assertFalse($isValid);
   }

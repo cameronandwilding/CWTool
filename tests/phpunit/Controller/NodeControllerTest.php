@@ -44,8 +44,7 @@ class NodeControllerTest extends TestCase {
     $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
-    NodeController::setObjectHandler($this->objectHandlerMock);
-    $this->controller = new NodeController($this->loggerMock, $this->entityType, $this->entityId);
+    $this->controller = new NodeController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
 
     $this->fullEntity = (object) [
       'status' => 1,
