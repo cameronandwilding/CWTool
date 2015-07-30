@@ -1,6 +1,8 @@
 CW Tool
 =======
 
+[![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v3)](https://travis-ci.org/cameronandwilding/CWTool)
+
 Install
 -------
 
@@ -42,7 +44,7 @@ Dependency injection layer
 --------------------------
 
 
-CWTool is using Pimple as service container for dependency injection. It reads the defined yaml files to collect the services and make them enable for the service container. For a service yaml file example look at the cw_tool/config/services.yml file.
+CWTool is using Pimple   as service container for dependency injection. It reads the defined yaml files to collect the services and make them enable for the service container. For a service yaml file example look at the cw_tool/config/services.yml file.
 
 In order to pick up services defined by other modules there is a hook to define:
 
