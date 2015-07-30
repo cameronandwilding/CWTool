@@ -7,7 +7,7 @@ Install
 
 * copy the module into the modules folder
     * even better if you add it as a git submodule
-    * even better 
+    * even better through composer: ```composer require cw/tool```
 * update composer dependencies:
     * ```composer update``` in the module folder
 * enable cw_tool module
