@@ -118,6 +118,13 @@ class UserController extends AbstractEntityController {
   }
 
   /**
+   * @return mixed
+   */
+  public function getUsername() {
+    return $this->property('name');
+  }
+
+  /**
    * @return string
    */
   public function getMail() {
