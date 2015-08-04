@@ -21,12 +21,23 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
   const VAR_VIEW_MODE = 'view_mode';
 
   /**
+   * Check if the processor is acting on a given view mode.
+   *
+   * @param string $viewMode
+   *  CoreEntityManager::VIEW_MODE_NODE_*
+   * @return bool
+   */
+  public function isViewMode($viewMode) {
+    return $this->getVar(self::VAR_VIEW_MODE) == $viewMode;
+  }
+
+  /**
    * Check if the processor is acting on the full view mode.
    *
    * @return bool
    */
   public function isViewModeFull() {
-    return $this->getVar(self::VAR_VIEW_MODE) == CoreEntityManager::VIEW_MODE_NODE_FULL;
+    return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_FULL);
   }
 
   /**
@@ -35,6 +46,6 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isViewModeTeaser() {
-    return $this->getVar(self::VAR_VIEW_MODE) == CoreEntityManager::VIEW_MODE_NODE_TEASER;
+    return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_TEASER);
   }
 }
