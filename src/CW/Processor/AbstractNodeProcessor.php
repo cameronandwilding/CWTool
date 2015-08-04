@@ -19,6 +19,17 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
 
   // Template variables.
   const VAR_VIEW_MODE = 'view_mode';
+  const VAR_NODE = 'node';
+
+  /**
+   * Check if the processor is acting on a given node type.
+   *
+   * @param string $nodeType
+   * @return bool
+   */
+  public function isNodeType($nodeType) {
+    return $this->getWrappedVar()->{self::VAR_NODE}->type->_value() == $nodeType;
+  }
 
   /**
    * Check if the processor is acting on a given view mode.
