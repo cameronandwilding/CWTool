@@ -70,4 +70,36 @@ class Functional {
     });
   }
 
+  /**
+   * Apply a function to all elements and returns TRUE if any evaluation is TRUE.
+   *
+   * @param array $subjects
+   * @param $callable
+   * @return bool
+   */
+  public static function any(array $subjects, $callable) {
+    foreach ($subjects as $subject) {
+      if (call_user_func($callable, $subject)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Apply a function to all elements and returns TRUE if all evaluation is TRUE.
+   *
+   * @param array $subjects
+   * @param $callable
+   * @return bool
+   */
+  public static function all(array $subjects, $callable) {
+    foreach ($subjects as $subject) {
+      if (!call_user_func($callable, $subject)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
 }
