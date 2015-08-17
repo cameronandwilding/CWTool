@@ -11,6 +11,7 @@
 namespace CW\Controller;
 use CW\Adapter\DrupalUserAdapter;
 use CW\Exception\CWException;
+use CW\Util\Functional;
 
 /**
  * Class UserController
@@ -98,12 +99,7 @@ class UserController extends AbstractEntityController {
    * @return bool
    */
   public function hasAnyRole(array $roleNames) {
-    foreach ($roleNames as $roleName) {
-      if ($this->hasRole($roleName)) {
-        return TRUE;
-      }
-    }
-    return FALSE;
+    return Functional::any($roleNames, [$this, 'hasRole']);
   }
 
   /**
@@ -113,12 +109,7 @@ class UserController extends AbstractEntityController {
    * @return bool
    */
   public function hasAllRoles(array $roleNames) {
-    foreach ($roleNames as $roleName) {
-      if (!$this->hasRole($roleName)) {
-        return FALSE;
-      }
-    }
-    return TRUE;
+    return Functional::all($roleNames, [$this, 'hasRole']);
   }
 
   /**
