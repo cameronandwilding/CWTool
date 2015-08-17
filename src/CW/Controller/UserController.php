@@ -92,6 +92,36 @@ class UserController extends AbstractEntityController {
   }
 
   /**
+   * Check that a user has any of a given array of roles.
+   *
+   * @param array $roleNames
+   * @return bool
+   */
+  public function hasAnyRole($roleNames) {
+    foreach ($roleNames as $roleName) {
+      if ($this->hasRole($roleName)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Check that a user has all of a given array of roles.
+   *
+   * @param array $roleNames
+   * @return bool
+   */
+  public function hasAllRoles($roleNames) {
+    foreach ($roleNames as $roleName) {
+      if (!$this->hasRole($roleName)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
+  /**
    * User entity exist in GLOBAL user object - but that's incomplete sometimes
    * as it does not contain fields or other properties.
    * It is "incomplete" when not loaded through the full entity load process.
