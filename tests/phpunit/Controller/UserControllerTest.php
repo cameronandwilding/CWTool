@@ -139,6 +139,40 @@ class UserControllerTest extends TestCase {
     $this->assertFalse($this->controller->hasRole('bar'));
   }
 
+  public function testHasAllRoles() {
+    $this->fullEntity->roles = [
+      'foo' => 'foo',
+      'bar' => 'bar',
+      'zulu' => 'zulu',
+    ];
+
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $this->assertTrue($this->controller->hasAllRoles(['foo', 'bar', 'zulu']));
+    $this->assertFalse($this->controller->hasAllRoles(['Foo', 'bar', 'zulu']));
+    $this->assertFalse($this->controller->hasAllRoles(['tango']));
+  }
+
+  public function testHasAnyRole() {
+    $this->fullEntity->roles = [
+      'foo' => 'foo',
+      'bar' => 'bar',
+      'zulu' => 'zulu',
+    ];
+
+    $this->objectHandlerMock
+      ->expects($this->once())
+      ->method('loadSingleEntity')
+      ->willReturn($this->fullEntity);
+
+    $this->assertTrue($this->controller->hasAnyRole(['tango', 'bar', 'beta']));
+    $this->assertFalse($this->controller->hasAnyRole(['Foo', 'delta']));
+    $this->assertFalse($this->controller->hasAnyRole(['echo']));
+  }
+
   public function testUserEntityIncomplete() {
     $account = (object) [
       'uid' => $this->entityId,
