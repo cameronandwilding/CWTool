@@ -44,4 +44,20 @@ class FunctionalTest extends TestCase {
     }
   }
 
+  public function testAny() {
+    $pass = [1, 2, 3, 4, 100];
+    $noPass = [1, 2, 3, 4];
+
+    $this->assertTrue(Functional::any($pass, function ($item) {return $item > 10;}));
+    $this->assertFalse(Functional::any($noPass, function ($item) {return $item > 10;}));
+  }
+
+  public function testAll() {
+    $pass = [1, 2, 3, 4, 100];
+    $noPass = [1, 2, 3, 4];
+
+    $this->assertFalse(Functional::all($pass, function ($item) {return $item < 10;}));
+    $this->assertTrue(Functional::all($noPass, function ($item) {return $item < 10;}));
+  }
+
 }
