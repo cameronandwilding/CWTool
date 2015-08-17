@@ -94,10 +94,10 @@ class UserController extends AbstractEntityController {
   /**
    * Check that a user has any of a given array of roles.
    *
-   * @param array $roleNames
+   * @param string[] $roleNames
    * @return bool
    */
-  public function hasAnyRole($roleNames) {
+  public function hasAnyRole(array $roleNames) {
     foreach ($roleNames as $roleName) {
       if ($this->hasRole($roleName)) {
         return TRUE;
@@ -109,10 +109,10 @@ class UserController extends AbstractEntityController {
   /**
    * Check that a user has all of a given array of roles.
    *
-   * @param array $roleNames
+   * @param string[] $roleNames
    * @return bool
    */
-  public function hasAllRoles($roleNames) {
+  public function hasAllRoles(array $roleNames) {
     foreach ($roleNames as $roleName) {
       if (!$this->hasRole($roleName)) {
         return FALSE;
