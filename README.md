@@ -44,7 +44,7 @@ Dependency injection layer
 --------------------------
 
 
-CWTool is using Pimple   as service container for dependency injection. It reads the defined yaml files to collect the services and make them enable for the service container. For a service yaml file example look at the cw_tool/config/services.yml file.
+CWTool is using (Pimple)[https://github.com/silexphp/Pimple/tree/1.1] as service container for dependency injection. Read the documentation for more information about Pimple. 
 
 In order to pick up services defined by other modules there is a hook to define:
 
