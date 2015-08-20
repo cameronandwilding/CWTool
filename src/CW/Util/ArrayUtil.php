@@ -37,6 +37,9 @@ class ArrayUtil {
    * @return mixed
    */
   public static function mapTranslate($map, $key, $not_found_value = NULL) {
+    if (!is_int($key) && !is_string($key)) {
+      return $not_found_value;
+    }
     return array_key_exists($key, $map) ? $map[$key] : $not_found_value;
   }
 

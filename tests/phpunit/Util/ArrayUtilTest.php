@@ -20,6 +20,11 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(\CW\Util\ArrayUtil::mapTranslate($map, 'error', 'miss'), 'miss');
   }
 
+  public function testArrayMapWithIllegalKey() {
+    $this->assertNull(\CW\Util\ArrayUtil::mapTranslate([], new stdClass()));
+    $this->assertNull(\CW\Util\ArrayUtil::mapTranslate([1 => 1], 1.0));
+  }
+
   public function testCollectionMerge() {
     $original = [
       'foo',
