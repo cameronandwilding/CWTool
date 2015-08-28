@@ -1,11 +1,7 @@
 {
   "name": "cw/tool",
   "require": {
-    "itarato/var-check": "2.*@dev",
-    "pimple/pimple": "~3.0"
-  },
-  "require-dev": {
-    "psr/log": "1.0.0"
+    "itarato/var-check": "2.*@dev"
   },
   "authors": [
     {

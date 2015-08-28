@@ -7,8 +7,6 @@
 
 namespace CW\Processor;
 
-use CW\Manager\CoreEntityManager;
-
 /**
  * Class AbstractNodeProcessor
  * @package CW\Processor
@@ -21,6 +19,10 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
   const VAR_VIEW_MODE = 'view_mode';
   const VAR_NODE = 'node';
 
+  // Core view modes.
+  const VIEW_MODE_NODE_TEASER = 'teaser';
+  const VIEW_MODE_NODE_FULL = 'full';
+
   /**
    * Check if the processor is acting on a given node type.
    *
@@ -28,7 +30,7 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isNodeType($nodeType) {
-    return $this->getWrappedVar()->{self::VAR_NODE}->type->_value() == $nodeType;
+    return $this->getVar(self::VAR_NODE)->getType() == $nodeType;
   }
 
   /**
@@ -48,7 +50,7 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isViewModeFull() {
-    return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_FULL);
+    return $this->isViewMode(self::VIEW_MODE_NODE_FULL);
   }
 
   /**
@@ -57,6 +59,6 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isViewModeTeaser() {
-    return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_TEASER);
+    return $this->isViewMode(self::VIEW_MODE_NODE_TEASER);
   }
 }

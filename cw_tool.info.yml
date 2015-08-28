@@ -1,0 +1,5 @@
+name: Cameron & Wilding Tools
+description:  General helper methods for regular Drupal 7 development
+package: candw
+type: module
+core: 8.x
