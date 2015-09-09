@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "18b0181f52de6bb5877745877cfd527c",
+    "hash": "4407bf49fb1ae75ebea6d5fead4f256d",
     "packages": [
         {
             "name": "itarato/var-check",

@@ -8,10 +8,5 @@
       "name": "Cameron and Wilding",
       "email": "info@cameronandwilding.com"
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "CW\\": "src/CW/"
-    }
-  }
+  ]
 }
