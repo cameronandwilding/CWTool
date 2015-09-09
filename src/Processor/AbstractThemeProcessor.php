@@ -5,9 +5,9 @@
  * Abstract theme processor.
  */
 
-namespace CW\Processor;
+namespace Drupal\cw_tool\Processor;
 
-use CW\Exception\ThemeException;
+use Drupal\cw_tool\Exception\ThemeException;
 use itarato\VarCheck\VC;
 
 /**

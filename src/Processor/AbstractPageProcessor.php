@@ -5,7 +5,7 @@
  * Abstract page processor.
  */
 
-namespace CW\Processor;
+namespace Drupal\cw_tool\Processor;
 
 /**
  * Class AbstractPageProcessor

@@ -5,7 +5,7 @@
  * Abstract node processor.
  */
 
-namespace CW\Processor;
+namespace Drupal\cw_tool\Processor;
 
 /**
  * Class AbstractNodeProcessor

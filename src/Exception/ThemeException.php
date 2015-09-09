@@ -5,7 +5,7 @@
  * Theme exception type.
  */
 
-namespace CW\Exception;
+namespace Drupal\cw_tool\Exception;
 
 use Exception;
 
