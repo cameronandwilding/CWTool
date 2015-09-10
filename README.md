@@ -44,11 +44,9 @@ Then you can call:
 
 The controller classes are subclass of *Drupal\cw_tool\Controller\AbstractEntityController*:
 
-```
+```PHP
 namespace Drupal\drupal8_sandbox\Controller;
-
 use Drupal\cw_tool\Controller\AbstractEntityController;
-
 class ArticleController extends AbstractEntityController { }
 ```
 
