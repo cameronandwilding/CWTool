@@ -30,7 +30,9 @@ abstract class AbstractThemeSuggestion {
   private $hook;
 
   /**
+   * @param string[] $suggestions
    * @param array $vars
+   * @param string $hook
    */
   private function __construct(array &$suggestions, array $vars, $hook) {
     $this->suggestions = &$suggestions;
@@ -44,7 +46,7 @@ abstract class AbstractThemeSuggestion {
   /**
    * @param array $suggestions
    * @param array $vars
-   * @param $hook
+   * @param string $hook
    * @return static
    */
   public static function suggest(array &$suggestions, array $vars, $hook) {
