@@ -4,13 +4,15 @@
  *  Abstract template suggestion.
  */
 
-namespace Drupal\cw_tool\ThemeSuggestion;
+namespace Drupal\cw_tool\Theme;
 
 use itarato\VarCheck\VC;
 
 /**
  * Class AbstractThemeSuggestion
- * @package Drupal\cw_tool\ThemeSuggestion
+ * @package Drupal\cw_tool\Theme
+ *
+ * Responsibility is to handle altering theme suggestions.
  */
 abstract class AbstractThemeSuggestion {
 
