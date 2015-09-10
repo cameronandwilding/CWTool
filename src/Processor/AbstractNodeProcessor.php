@@ -61,4 +61,5 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
   public function isViewModeTeaser() {
     return $this->isViewMode(self::VIEW_MODE_NODE_TEASER);
   }
+
 }
