@@ -47,7 +47,7 @@ abstract class AbstractThemeSuggestion {
    * @param $hook
    * @return static
    */
-  public static function process(array &$suggestions, array $vars, $hook) {
+  public static function suggest(array &$suggestions, array $vars, $hook) {
     return new static($suggestions, $vars, $hook);
   }
 
