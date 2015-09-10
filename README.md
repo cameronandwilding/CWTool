@@ -38,9 +38,9 @@ services:
       - 'Drupal\my_module\Controller\ArticleController'
 ```
 
-Then you can call:
+Then you can call: 
 
-```\Drupal::service('my_module.entity_factory.node.article')->initWithID(123);```
+    \Drupal::service('my_module.entity_factory.node.article')->initWithID(123);
 
 The controller classes are subclass of **Drupal\cw_tool\Controller\AbstractEntityController**:
 
