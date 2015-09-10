@@ -42,7 +42,7 @@ Then you can call:
 
 ```\Drupal::service('my_module.entity_factory.node.article')->initWithID(123);```
 
-The controller classes are subclass of *Drupal\cw_tool\Controller\AbstractEntityController*:
+The controller classes are subclass of **Drupal\cw_tool\Controller\AbstractEntityController**:
 
 ```PHP
 namespace Drupal\drupal8_sandbox\Controller;
