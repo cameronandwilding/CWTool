@@ -24,9 +24,9 @@ Entities in code should be handled through entity controller classes. There shou
 
 Entities are created through dedicated entity controller factories - which are all services.
  
-**Sample: Article bundle controller**
+*Sample: Article bundle controller*
 
-Create an entity controller factory service in your module's *.services.yml:
+Create an entity controller factory service in your module's \*.services.yml:
 
 ```YML
 services:
@@ -42,7 +42,7 @@ Then you can call:
 
     \Drupal::service('my_module.entity_factory.node.article')->initWithID(123);
 
-The controller classes are subclass of **Drupal\cw_tool\Controller\AbstractEntityController**:
+The controller classes are subclass of *Drupal\cw_tool\Controller\AbstractEntityController*:
 
 ```PHP
 namespace Drupal\my_module\Controller;

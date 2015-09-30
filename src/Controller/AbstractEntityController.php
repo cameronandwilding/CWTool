@@ -42,7 +42,7 @@ class AbstractEntityController {
     $this->entityManager = $entityManager;
   }
 
-  protected function getEntityStorage() {
+  private function getEntityStorage() {
     if (empty($this->storage)) {
       $this->storage = $this->entityManager->getStorage($this->entityType);
     }
@@ -57,6 +57,20 @@ class AbstractEntityController {
       $this->entity = $this->getEntityStorage()->load($this->entityID);
     }
     return $this->entity;
+  }
+
+  /**
+   * @return string
+   */
+  public function getEntityType() {
+    return $this->entityType;
+  }
+
+  /**
+   * @return string
+   */
+  public function getEntityID() {
+    return $this->entityID;
   }
 
 }
