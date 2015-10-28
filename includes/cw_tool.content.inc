@@ -52,7 +52,9 @@ function _cw_tool_purge_deleted_fields() {
   }
 
   db_delete('field_config')->condition('deleted', 1)->execute();
-  $num_deleted = db_delete('field_config_instance')->condition('deleted', 1)->execute();
+  $num_deleted = db_delete('field_config_instance')
+    ->condition('deleted', 1)
+    ->execute();
 
   watchdog(__FUNCTION__, 'Purged @num_deleted deleted fields from the database', array('@num_deleted' => $num_deleted));
 }
@@ -258,14 +260,14 @@ function cw_tool_reset_taxonomy_to_alphabetical($vocabulary_names) {
  *   the database before the call.
  *  It's also possible to pass an incomplete entity without loading it from the db, if it has the id/revision/bundle
  *   on it:
- *  @code
+ * @code
  *    $node = new stdClass();
  *    $node->nid = 1;
  *    $node->vid = 1;
  *    $node->type = 'post';
  *    $node->field_tag[LANGUAGE_NONE][0]['tid'] = 1;
  *    crimson_helper_save_fields_on_entity($node, 'node', array('field_tag'));
- *  @endcode
+ * @endcode
  */
 function cw_tool_save_fields_on_entity(stdClass $entity, $entity_type, array $field_names) {
   // Gathering info about the entity.
@@ -474,7 +476,10 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
   // Check that we have been passed and valid region.
   $available_regions = system_region_list($theme);
   if ($region != BLOCK_REGION_NONE && !isset($available_regions[$region])) {
-    watchdog(__FUNCTION__, 'Region @region_name not found in theme @theme_name.', array('@region_name' => $region, '@theme_name' => $theme), WATCHDOG_ERROR);
+    watchdog(__FUNCTION__, 'Region @region_name not found in theme @theme_name.', array(
+      '@region_name' => $region,
+      '@theme_name' => $theme
+    ), WATCHDOG_ERROR);
     return;
   }
   // Get the block id to update.
@@ -487,7 +492,11 @@ function cw_tool_update_block_region_and_weight($theme, $module, $delta, $region
     ->fetchField();
   // Check that a valid block has been found.
   if (is_null($block_id)) {
-    watchdog(__FUNCTION__, 'No block found in database from module @module_name, delta @delta in theme @theme_name.', array('@module_name' => $delta, '@delta' => $delta, '@theme_name' => $theme), WATCHDOG_ERROR);
+    watchdog(__FUNCTION__, 'No block found in database from module @module_name, delta @delta in theme @theme_name.', array(
+      '@module_name' => $delta,
+      '@delta' => $delta,
+      '@theme_name' => $theme
+    ), WATCHDOG_ERROR);
     return;
   }
   // If block is not being assigned to a region, it is being disabled.
@@ -554,10 +563,10 @@ function cw_tool_get_menu_link_from_link_title_and_menu_name($link_title, $menu_
  *  The title of the node.
  * @param string $type
  *  The machine name of the node type.
- * @param array $additional_information.
+ * @param array $additional_information .
  *  An optional associative array contain addition information to add to the
  *  created node. For example field information or menu information.
- *  @see https://drupal.org/node/49768
+ * @see https://drupal.org/node/49768
  * @param string $language
  *  The default language of the node.
  * @param int $uid
@@ -579,12 +588,12 @@ function cw_tool_create_node($title, $type, array $additional_information = arra
   $node->title = $title;
   $node->language = $language;
   if (!empty($additional_information)) {
-    foreach($additional_information as $node_property => $property) {
+    foreach ($additional_information as $node_property => $property) {
       $node->$node_property = $property;
     }
   }
   // Node object prepare will attempt to use global $user to add the UID, which
-  // will be null if we run through drush.
+  // will be null if we run through Drush.
   $node->uid = $uid;
 
   // Prepare node for saving. Note that if $node->author is set to a username here
@@ -594,4 +603,37 @@ function cw_tool_create_node($title, $type, array $additional_information = arra
   // Save node and return.
   node_save($node);
   return $node;
+}
+
+/**
+ * Create user roles.
+ *
+ * @param array $user_roles
+ *  An array of the user role machine associated with its weight.
+ */
+function cw_tool_create_user_roles(array $user_roles) {
+  foreach ($user_roles as $machine_name => $weight) {
+    $role = new stdClass();
+    $role->name = $machine_name;
+    $role->weight = $weight;
+    user_role_save($role);
+  }
+}
+
+/**
+ * Assign permission to user roles.
+ *
+ * @param $user_role
+ *  The user roles to assign permissions to.
+ * @param array $user_role_permissions
+ *  An array of permissions associated with granted or revoke permission statuses.
+ */
+function cw_tool_assign_user_permissions_to_user_role($user_role, array $user_role_permissions) {
+  // The role to grant the permissions to.
+  $user_role = user_role_load_by_name($user_role);
+
+  // Grant permissions.
+  if ($user_role->rid) {
+    user_role_change_permissions($user_role->rid, $user_role_permissions);
+  }
 }

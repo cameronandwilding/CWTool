@@ -134,6 +134,7 @@ function _cw_tool_parse_function_name($element) {
 
 /**
  * Does a case insensitive search for a file.
+ *
  * @see http://stackoverflow.com/questions/3964793/php-case-insensitive-version-of-file-exists
  *
  * @param $file_name
@@ -192,7 +193,10 @@ function cw_tool_save_theme_color_settings($theme, $scheme, array $palette = arr
   }
   // If we are not saving a custom scheme, check that the scheme is defined.
   if ($scheme != 'custom' && !isset($info['schemes'][$scheme])) {
-    watchdog(__FUNCTION__, 'Color scheme @scheme_name not defined by the theme @theme_name.', array('@scheme_name' => $scheme, '@theme_name' => $theme), WATCHDOG_ERROR);
+    watchdog(__FUNCTION__, 'Color scheme @scheme_name not defined by the theme @theme_name.', array(
+      '@scheme_name' => $scheme,
+      '@theme_name' => $theme,
+    ), WATCHDOG_ERROR);
     return;
   }
   // If we have an empty palette, we have a defined scheme, so load default to
@@ -213,4 +217,19 @@ function cw_tool_save_theme_color_settings($theme, $scheme, array $palette = arr
   module_load_include('inc', 'system', 'system.admin');
   $form = drupal_get_form('system_theme_settings', $theme);
   color_scheme_form_submit($form, $form_state);
+}
+
+/**
+ * Converts a human readable string into a machine readable string.
+ * Using dashes (not underscore).
+ *
+ * @param string $human_readable
+ *  Any string.
+ * @return string
+ */
+function cw_tool_create_machine_name($human_readable) {
+  $machine_readable = strtolower($human_readable);
+  // @todo Default to hyphen but perhaps you might want an underscore.
+  $machine_readable = preg_replace('@[^a-z0-9_]+@', '-', $machine_readable);
+  return $machine_readable;
 }
