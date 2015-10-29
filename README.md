@@ -49,8 +49,10 @@ CWTool is using (Pimple)[https://github.com/silexphp/Pimple/tree/1.1] as service
 In order to pick up services defined by other modules there is a hook to define:
 
 ```php
-function hook_cw_tool_service_container_definition_alter(\CW\Util\SimpleList $collection) {
-  $collection->add('my/custom/path');
+function hook_cw_tool_service_container_definition_alter(Pimple\Container $container) {
+  $container['my.service'] = function (Pimple\Container $c) {
+    return new MyServiceClass($c['another.service'], 'fixed_param');
+  };
 }
 ```
 
@@ -145,6 +147,18 @@ function hook_cw_tool_app_variables(\CW\Manager\VariableManager $variableManager
 ```
 
 All application variables should be added in this hook in order to have their presence on the admin UI.
+
+
+Drush commands
+--------------
+
+**Entity controller class scaffolding**
+
+Creates boilerplate PHP class code for bootstrapping.
+
+```bash
+drush cwt-sc-ctrl node blog --namespace=My\Corp
+```
 
 
 General development guidelines
