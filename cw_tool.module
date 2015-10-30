@@ -17,17 +17,23 @@ use Pimple\Container;
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Service names.
-define('CWTOOL_SERVICE_LOGGER', 'cw.logger');
-define('CWTOOL_SERVICE_IDENTITY_MAP', 'cw.identity-map');
-define('CWTOOL_SERVICE_OBJECT_HANDLER', 'cw.object-handler.drupal');
-define('CWTOOL_SERVICE_NODE_FACTORY', 'cw.node-controller.factory');
-define('CWTOOL_SERVICE_USER_FACTORY', 'cw.user-controller.factory');
-define('CWTOOL_SERVICE_BATCH_ENTITY_SAVER', 'cw.entity-batch-saver');
-define('CWTOOL_SERVICE_VARIABLE_MANAGER', 'cw.variable-manager');
-define('CWTOOL_SERVICE_VARIABLE_ADAPTER', 'cw.variable-adapter');
-define('CWTOOL_SERVICE_CRON_TIMER', 'cw.cron-timer');
-define('CWTOOL_SERVICE_FILE_FACTORY', 'cw.file-controller.factory');
-define('CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY', 'cw.taxonomy-term-controller.factory');
+const CWTOOL_SERVICE_NODE_FACTORY = 'cw.node-controller.factory';
+const CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY = 'cw.taxonomy-term-controller.factory';
+const CWTOOL_SERVICE_USER_FACTORY = 'cw.user-controller.factory';
+const CWTOOL_SERVICE_FILE_FACTORY = 'cw.file-controller.factory';
+
+const CWTOOL_SERVICE_VARIABLE_MANAGER = 'cw.variable-manager';
+const CWTOOL_SERVICE_VARIABLE_ADAPTER = 'cw.variable-adapter';
+
+const CWTOOL_SERVICE_LOGGER = 'cw.logger';
+const CWTOOL_SERVICE_IDENTITY_MAP = 'cw.identity-map';
+const CWTOOL_SERVICE_OBJECT_HANDLER = 'cw.object-handler.drupal';
+const CWTOOL_SERVICE_BATCH_ENTITY_SAVER = 'cw.entity-batch-saver';
+const CWTOOL_SERVICE_CRON_TIMER = 'cw.cron-timer';
+
+const CWTOOL_SERVICE_DB_CACHE = 'cw.cache.db';
+// Static cache falling back to database cache.
+const CWTOOL_SERVICE_DOUBLE_CACHE = 'cw.cache.double';
 
 /**
  * Dependency injection configuration.
@@ -114,6 +120,16 @@ function cw_tool_get_container() {
     return new CronTimer($c[CWTOOL_SERVICE_VARIABLE_ADAPTER]);
   };
 
+  $container[CWTOOL_SERVICE_DB_CACHE] = function (Container $c) {
+    $cachePool = new \Drupal\PSRCache\CachePool();
+    $cachePool->setCacheHandler(new \Drupal\PSRCache\Adaptor\DefaultDrupalCacheHandler());
+    return $cachePool;
+  };
+
+  $container[CWTOOL_SERVICE_DOUBLE_CACHE] = function (Container $c) {
+    return new \Drupal\PSRCache\StaticCacheProxy($c[CWTOOL_SERVICE_DB_CACHE]);
+  };
+
   drupal_alter('cw_tool_service_container_definition', $container);
 
   return $container;
@@ -195,6 +211,20 @@ function cw_tool_taxonomy_term_factory() {
  */
 function cw_tool_entity_handler() {
   return cw_tool_get_container()[CWTOOL_SERVICE_OBJECT_HANDLER];
+}
+
+/**
+ * @return \Psr\Cache\CacheItemPoolInterface
+ */
+function cw_tool_db_cache() {
+  return cw_tool_get_container()[CWTOOL_SERVICE_DB_CACHE];
+}
+
+/**
+ * @return \Psr\Cache\CacheItemPoolInterface
+ */
+function cw_tool_double_cache() {
+  return cw_tool_get_container()[CWTOOL_SERVICE_DOUBLE_CACHE];
 }
 
 /**

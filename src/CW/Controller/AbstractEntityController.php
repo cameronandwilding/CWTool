@@ -13,6 +13,7 @@ namespace CW\Controller;
 use CW\Adapter\FieldAccessor;
 use CW\Exception\MissingImplementationException;
 use CW\Factory\EntityControllerFactory;
+use CW\Manager\CoreEntityManager;
 use CW\Model\EntityHandler;
 use CW\Util\FieldUtil;
 use CW\Util\LoggerObject;
@@ -504,6 +505,21 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
     }
 
     return $entityFactory->initWithId($tid);
+  }
+
+  /**
+   * Fetches the appropriate entity controller of a referenced entity.
+   * It uses cw_tool_field_controller_reference_map to lookup the association.
+   *
+   * @param string $fieldName
+   * @param string $lang
+   * @return \CW\Controller\AbstractEntityController[]
+   * @throws \CW\Exception\CWException
+   *  In case the association does not exist.
+   */
+  public function fieldReferencedEntityControllersLookup($fieldName, $lang = LANGUAGE_NONE) {
+    $lookupMap = CoreEntityManager::referenceControllerFactoryLookup($fieldName);
+    return $this->fieldAllReferencedEntityController($fieldName, $lookupMap->getEntityControllerFactory(), $lookupMap->getFieldKey(), $lang);
   }
 
 }
