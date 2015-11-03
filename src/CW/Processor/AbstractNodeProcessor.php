@@ -59,4 +59,5 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
   public function isViewModeTeaser() {
     return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_TEASER);
   }
+
 }

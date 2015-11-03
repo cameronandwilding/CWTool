@@ -134,6 +134,29 @@ $nodeController = $nodeFactory->initNew(new NodeCreator($articleParams));
 ```
 
 
+Entity fields
+-------------
+
+
+Entity controllers (```AbstractEntityController```) and entity form values (```NodeFormState```) are implementing ```FieldAccessor```. Use it to get/set field values or referenced entities. Common field values are defaulted into function args or included in ```FieldUtil```.
+
+To define types of references, use hook ```cw_tool_field_controller_reference_map``` to match them with their associated entity factory:
+
+```php
+function hook_cw_tool_field_controller_reference_map(\CW\Params\HookFieldControllerReferenceMapCollector $collector) {
+  $collector->add('field_some_entity_reference', MY_NODE_BUNDLE_FACTORY);
+  $collector->add('field_some_node_reference', MY_NODE_BUNDLE_FACTORY, \CW\Util\FieldUtil::KEY_NODEREFERENCE_ID);
+}
+```
+
+And then you can just call the entity ref getter on the entity controller:
+
+```php
+$ctrl = cw_tool_get_container()[MY_CONTROLLER_FACTORY_SERVICE];
+$tagControllers = $ctrl->fieldReferencedEntityControllersLookup(MyController::FIELD_TAG);
+```
+
+
 Variable manager
 ----------------
 
@@ -143,14 +166,139 @@ Application variables are managed with the variable manager. Hook can be impleme
 ```php
 function hook_cw_tool_app_variables(\CW\Manager\VariableManager $variableManager) {
   $variableManager->addVariable(new \CW\Params\Variable('myVar', 'My variable'));
+
+  $varGroup = new \CW\Params\VariableGroup(t('My group'));
+  $varGroup->addVariable(new \CW\Params\Variable('myOtherVar', 'My other var'));
+  $variableManager->addGroup($varGroup);
 }
 ```
 
 All application variables should be added in this hook in order to have their presence on the admin UI.
 
 
+Forms
+-----
+
+
+Alters for existing forms (not defined by the module) should be registered in ```hook_form_NAME_alter()``` and a static class method (```class::alter```) should add the necessary alterations.
+
+Adding new submit or validation callbacks via CW/Util/FormUtil:
+
+```php
+class SomeExistingForm {
+	public static function alter(&$form, &$form_state) {
+		FormUtil::registerSubmitCallback($form, [__CLASS__, 'submit']);
+	}
+	
+	public static function submit(&$form, &$form_state) { }
+}
+```
+
+For custom forms subclass ```CW\Form\FormBuilder```:
+
+```php
+class MyForm extends CW\Form\FormBuilder {
+	public static function build($form, $form_state) {
+		$form['submit'] = ['#type' => 'submit', 'value' => t('Submit')];
+		return $form;
+	}
+	
+	public static function submit(&$form, &$form_state) {
+		// Do some action.
+	}
+}
+
+// Calling the form:
+$form = MyForm::get();
+$html = drupal_render($form);
+```
+
+
+Theme
+-----
+
+
+To create a new theme subclass ```CW\Theme\Theme```:
+
+```php
+class MyThemeClass extends Theme {
+    public function __construct($requiredVars) {
+        ...
+    }
+
+    public static function getName() {
+        return 'my_theme_name';
+    }
+    
+    protected static function getDefinition() {
+        return array(
+            'template' => 'templates/my-template',
+            'variables' => array(
+                'var1' => NULL,
+                'var2' => NULL,
+            ),
+        );
+    }
+    
+    public function getVariables() {
+        return array(
+            'var1' => ...,
+            'var2' => ...,
+        );
+    }
+}
+```
+
+Then add it to hook_theme():
+
+```php
+function my_module_theme() {
+  $theme_info = [];
+  ArrayUtil::mergeCollection($theme_info, [
+    MyThemeClass::getHookThemeArray(),
+    MyOtherThemeClass::getHookThemeArray(),
+  ]);
+  return $theme_info;
+}
+```
+
+Using the theme:
+
+```php
+$myTheme = new MyThemeClass($requiredVars);
+$out = $myTheme->render();
+```
+
+
+Template preprocessors
+----------------------
+
+
+It is recommended to subclass ```AbstractThemeProcessor``` for all separable (pre)processing tasks. The subclass is responsible for deciding if it's applicable (eg.: ArticlePreprocessor should be only for article node variable preprocessing).
+ 
+ 
+```php
+class MyArticleNodePreprocessor extends CW\Processor\AbstractNodeProcessor {
+    const VAR_TITLE = 'my_title';
+    public function execute() {
+        $this->setVar(self::VAR_TITLE, 'foobar');
+    }
+    public function isApplicable() {
+        return $this->getVar('node')->type == MyArticleController::BUNDLE;
+    }
+}
+
+function my_theme_node_preprocess(&$vars) {
+    MyArticleNodePreprocessor::process($vars);
+    MyBlogNodePreprocessor::process($vars);
+}
+```
+
+
+
 Drush commands
 --------------
+
 
 **Entity controller class scaffolding**
 
@@ -189,6 +337,7 @@ Avoid using arrays as argument. Make a parameter object instead.
 Helper functions
 ----------------
 
+
 Helper tools for generic Drupal7 development (simple functions in the includes):
 
 * update hook helpers
@@ -203,6 +352,7 @@ Helper tools for generic Drupal7 development (simple functions in the includes):
 Documentation
 -------------
 
+
 Execute Doxygen generator:
 
 ```doxygen Doxygen```
@@ -212,5 +362,6 @@ The Doxygen binary is a requirement.
 
 Questions
 =========
+
 * Improve theme function (theme class no array keys)
 * Form - static instance or service, preserve for alter / validate / build

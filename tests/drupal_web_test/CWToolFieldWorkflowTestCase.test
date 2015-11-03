@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ */
+
+class CWToolFieldWorkflowTestCase extends DrupalWebTestCase {
+
+  /**
+   * @var object|NULL
+   */
+  private $nodeAdminUser;
+
+  public static function getInfo() {
+    return [
+      'name' => 'CWTools field test',
+      'description' => 'Field related test cases',
+      'group' => 'CW',
+    ];
+  }
+
+  public function setUp() {
+    parent::setUp(['cw_tool_test']);
+
+    $this->nodeAdminUser = $this->drupalCreateUser(['bypass node access', 'administer nodes']);
+  }
+
+  public function testEntityReferenceField() {
+    $this->drupalLogin($this->nodeAdminUser);
+    $this->drupalGet('/node/add/cwtoolbundle');
+    $this->assertText('testentityreference');
+  }
+
+}
