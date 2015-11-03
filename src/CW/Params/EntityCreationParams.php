@@ -61,13 +61,29 @@ class EntityCreationParams {
    * @return \CW\Params\EntityCreationParams
    */
   public function setField($fieldName, $value, $fieldKey = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
-    if (empty($this->extraAttributes[$fieldName])) {
-      $this->extraAttributes[$fieldName] = array($lang => array());
+    if (empty($this->extraAttributes[$fieldName][$lang])) {
+      $this->extraAttributes[$fieldName][$lang] = [];
     }
 
-    $this->extraAttributes[$fieldName][$lang][] = array($fieldKey => $value);
+    $this->extraAttributes[$fieldName][$lang][] = [$fieldKey => $value];
 
     // For chaining;
+    return $this;
+  }
+
+  /**
+   * @param string $fieldName
+   * @param array $value
+   * @param string $lang
+   * @return $this
+   */
+  public function setFieldItem($fieldName, array $value, $lang = LANGUAGE_NONE) {
+    if (empty($this->extraAttributes[$fieldName][$lang])) {
+      $this->extraAttributes[$fieldName][$lang] = [];
+    }
+
+    $this->extraAttributes[$fieldName][$lang][] = $value;
+
     return $this;
   }
 

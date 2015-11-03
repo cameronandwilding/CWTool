@@ -357,6 +357,18 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Set a field item.
+   *
+   * @param string $field_name
+   * @param array $value
+   * @param int $idx
+   * @param string $lang
+   */
+  public function setFieldItem($field_name, array $value, $idx = 0, $lang = LANGUAGE_NONE) {
+    $this->entity()->{$field_name}[$lang][$idx] = $value;
+  }
+
+  /**
    * Updates a field with multiple values.
    * Be careful as it's removing the previous values and only keeping the new
    * ones.
