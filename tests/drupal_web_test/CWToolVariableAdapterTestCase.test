@@ -3,7 +3,7 @@
  * @file
  */
 
-class DrupalVariableAdapterTestCase extends DrupalWebTestCase {
+class CWToolVariableAdapterTestCase extends DrupalWebTestCase {
 
   /**
    * @var \CW\Adapter\DrupalVariableAdapter
@@ -15,8 +15,8 @@ class DrupalVariableAdapterTestCase extends DrupalWebTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'CWTools DrupalVariableAdapter test',
-      'description' => 'DrupalVariableAdapterTestCase.',
+      'name' => 'CWTools variable adapter test',
+      'description' => 'Variable adapter tests.',
       'group' => 'CW',
     );
   }

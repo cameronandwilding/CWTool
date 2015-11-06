@@ -1,9 +1,27 @@
 language: php
 
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
 php:
-  - "5.5"
+  - 5.5
+
+before_install:
+  - sudo apt-get update > /dev/null
+
+install:
+  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require drush/drush:7.*
 
 before_script:
   - composer install
+  - mysql -e 'create database drupal'
+  - cd ..
+  - drush dl drupal -y
+  - cd -
 
-script: phpunit -c phpunit.xml
+script:
+  - phpunit -c phpunit.xml
