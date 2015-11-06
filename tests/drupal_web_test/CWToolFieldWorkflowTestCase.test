@@ -1,14 +1,32 @@
 <?php
+use CW\Controller\NodeController;
+
 /**
  * @file
  */
 
 class CWToolFieldWorkflowTestCase extends DrupalWebTestCase {
 
+  const TEST_BUNDLE = 'cwtoolbundle';
+
+  protected $nodeReferencedTitle;
+
+  protected $nodeMainTitle;
+
   /**
    * @var object|NULL
    */
   private $nodeAdminUser;
+
+  /**
+   * @var object
+   */
+  protected $nodeReferenced;
+
+  /**
+   * @var object
+   */
+  protected $nodeMain;
 
   public static function getInfo() {
     return [
@@ -22,12 +40,56 @@ class CWToolFieldWorkflowTestCase extends DrupalWebTestCase {
     parent::setUp(['cw_tool_test']);
 
     $this->nodeAdminUser = $this->drupalCreateUser(['bypass node access', 'administer nodes']);
+
+    $this->nodeReferencedTitle = $this->randomName();
+    $nodeReferencedParam = new \CW\Params\NodeCreationParams(self::TEST_BUNDLE, $this->nodeReferencedTitle);
+    $this->nodeReferenced = (new \CW\Factory\NodeCreator($nodeReferencedParam))->create();
+
+    $this->nodeMainTitle = $this->randomName();
+    $nodeMainParam = new \CW\Params\NodeCreationParams(self::TEST_BUNDLE, $this->nodeMainTitle);
+    $nodeMainParam->setField('field_testentityreference', $this->nodeReferenced->nid, \CW\Util\FieldUtil::KEY_TARGET_ID);
+    $nodeMainParam->setField('field_testnodereference', $this->nodeReferenced->nid, \CW\Util\FieldUtil::KEY_NODEREFERENCE_ID);
+    $this->nodeMain = (new \CW\Factory\NodeCreator($nodeMainParam))->create();
   }
 
+  /**
+   * Test entity reference fields.
+   */
   public function testEntityReferenceField() {
-    $this->drupalLogin($this->nodeAdminUser);
-    $this->drupalGet('/node/add/cwtoolbundle');
-    $this->assertText('testentityreference');
+    /** @var NodeController $nodeCtrl */
+    $nodeCtrl = cw_tool_get_container()[CWTOOL_SERVICE_NODE_FACTORY]->initWithEntity($this->nodeMain);
+
+    $this->_testExistingFieldReferenceLookup($nodeCtrl);
+    $this->_testNonExistingFieldReferenceLookup($nodeCtrl);
+  }
+
+  /**
+   * @param NodeController $nodeCtrl
+   */
+  protected function _testExistingFieldReferenceLookup(NodeController $nodeCtrl) {
+    $refs = $nodeCtrl->fieldReferencedEntityControllersLookup('field_testnodereference');
+
+    $this->assertEqual(1, count($refs), 'There is one referenced node');
+    $this->assertEqual($this->nodeReferencedTitle, $refs[0]->getTitle());
+  }
+
+  /**
+   * @param NodeController $nodeCtrl
+   */
+  protected function _testNonExistingFieldReferenceLookup(NodeController $nodeCtrl) {
+    // Check if the reference is there through the non-convenience accessor.
+    $nodeRefCtrl = $nodeCtrl->fieldReferencedEntityController('field_testentityreference', cw_tool_get_container()[CWTOOL_SERVICE_NODE_FACTORY]);
+    $this->assertEqual($this->nodeReferencedTitle, $nodeRefCtrl->getTitle());
+
+    // Cheap way of checking exception without another test function.
+    $exceptionOccured = FALSE;
+    try {
+      $nodeCtrl->fieldReferencedEntityControllersLookup('field_testentityreference');
+    }
+    catch (\CW\Exception\CWException $e) {
+      $exceptionOccured = TRUE;
+    }
+    $this->assertTrue($exceptionOccured, 'Exception fired for undefined field ref lookup.');
   }
 
 }

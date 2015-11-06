@@ -10,5 +10,5 @@ include_once 'cw_tool_test.features.inc';
  * Implements hook_cw_tool_field_controller_reference_map().
  */
 function cw_tool_test_cw_tool_field_controller_reference_map(\CW\Params\HookFieldControllerReferenceMapCollector $collector) {
-  $collector->add('field_nodereference', CWTOOL_SERVICE_NODE_FACTORY, \CW\Util\FieldUtil::KEY_NODEREFERENCE_ID);
+  $collector->add('field_testnodereference', CWTOOL_SERVICE_NODE_FACTORY, \CW\Util\FieldUtil::KEY_NODEREFERENCE_ID);
 }

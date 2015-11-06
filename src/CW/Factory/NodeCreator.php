@@ -32,7 +32,7 @@ class NodeCreator implements Creator {
   /**
    * Create a node entity.
    *
-   * @return AbstractEntityController
+   * @return object
    */
   public function create() {
     // Create a new node object.
