@@ -11,26 +11,40 @@ php:
   - 5.5
 
 install:
+  # Set up Composer.
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - composer self-update
+
+  # Get Drush 7.x.
   - composer global require drush/drush:7.*
 
 before_script:
+  # Composer for cw_tool.
   - composer install
+
+  # Drupal 7.x installation.
   - mysql -e 'create database drupal'
   - cd ..
   - drush dl drupal -y
   - cd drupal-*
   - drush si minimal --db-url=mysql://root:@localhost/drupal -y
+
+  # Set up modules.
   - ln -s /home/travis/build/cameronandwilding/CWTool ./sites/all/modules/cwtool
   - drush dl ctools drupal_psr_cache drupal_psr3 entity entityreference references features strongarm -y
   - composer install -d sites/all/modules/drupal_psr3
   - composer install -d sites/all/modules/drupal_psr_cache
   - drush en cw_tool simpletest -y
+
+  # Return to cw_tool folder.
   - cd /home/travis/build/cameronandwilding/CWTool
 
 script:
+  # Unit tests.
   - phpunit -c phpunit.xml
+
+  # Drupal web tests.
   - cd ../drupal-*/
+  # Run web server.
   - drush runserver 127.0.0.1:8080 &
   - php ./scripts/run-tests.sh --verbose --php /home/travis/.phpenv/shims/php --url http://127.0.0.1:8080 CW
