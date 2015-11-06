@@ -32,4 +32,5 @@ before_script:
 script:
   - phpunit -c phpunit.xml
   - cd ../drupal-*/
+  - drush runserver 127.0.0.1:8080 &
   - php ./scripts/run-tests.sh --verbose --php /home/travis/.phpenv/shims/php --url http://127.0.0.1:8080 CW
