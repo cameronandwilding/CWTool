@@ -1,3 +1,5 @@
+sudo: false
+
 language: php
 
 mysql:
@@ -8,11 +10,13 @@ mysql:
 php:
   - 5.5
 
-before_install:
-  - sudo apt-get update > /dev/null
+addons:
+  apt:
+    packages:
+      - php5-cgi
+      - php5-mysql
 
 install:
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - composer global require drush/drush:7.*
 
