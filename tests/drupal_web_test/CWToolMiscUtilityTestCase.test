@@ -6,10 +6,10 @@
  */
 
 /**
- * Class CWToolWebTestCase
+ * Class CWToolMiscUtilityTestCase
  * General functionality tests.
  */
-class CWToolWebTestCase extends DrupalWebTestCase {
+class CWToolMiscUtilityTestCase extends DrupalWebTestCase {
 
   /**
    * Implements DrupalTestCase::getInfo().
@@ -81,9 +81,9 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    * Test cw_tool_delete_field_multiple().
    * @see cw_tool_delete_field_multiple()
    */
-  public function test_cw_tool_delete_field_multiple() {
+//  public function test_cw_tool_delete_field_multiple() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_create_term_multiple().
@@ -128,144 +128,144 @@ class CWToolWebTestCase extends DrupalWebTestCase {
    * Test cw_tool_revert_feature().
    * @see cw_tool_revert_feature()
    */
-  public function test_cw_tool_revert_feature() {
+//  public function test_cw_tool_revert_feature() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_add_field_collection().
    * @see cw_tool_add_field_collection()
    */
-  public function test_cw_tool_add_field_collection() {
+//  public function test_cw_tool_add_field_collection() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_delete_field_instance().
    * @see cw_tool_delete_field_instance()
    */
-  public function test_cw_tool_delete_field_instance() {
+//  public function test_cw_tool_delete_field_instance() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_convert_to_png().
    * @see cw_tool_convert_to_png()
    */
-  public function test_cw_tool_convert_to_png() {
+//  public function test_cw_tool_convert_to_png() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_watchdog().
    * @see cw_tool_watchdog()
    */
-  public function test_cw_tool_watchdog() {
+//  public function test_cw_tool_watchdog() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_purge_terms().
    * @see cw_tool_purge_terms()
    */
-  public function test_cw_tool_purge_terms() {
+//  public function test_cw_tool_purge_terms() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_purge_all_terms_except_listed_terms().
    * @see cw_tool_purge_all_terms_except_listed_terms()
    */
-  public function test_cw_tool_purge_all_terms_except_listed_terms() {
+//  public function test_cw_tool_purge_all_terms_except_listed_terms() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_delete_term_multiple().
    * @see cw_tool_delete_term_multiple()
    */
-  public function test_cw_tool_delete_term_multiple() {
+//  public function test_cw_tool_delete_term_multiple() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_print_backtrace().
    * @see cw_tool_print_backtrace()
    */
-  public function test_cw_tool_print_backtrace() {
+//  public function test_cw_tool_print_backtrace() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_user_has_role().
    * @see cw_tool_user_has_role()
    */
-  public function test_cw_tool_user_has_role() {
+//  public function test_cw_tool_user_has_role() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_file_exists_case_insensitive().
    * @see cw_tool_file_exists_case_insensitive()
    */
-  public function test_cw_tool_file_exists_case_insensitive() {
+//  public function test_cw_tool_file_exists_case_insensitive() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_reset_taxonomy_to_alphabetical().
    * @see cw_tool_reset_taxonomy_to_alphabetical()
    */
-  public function test_cw_tool_reset_taxonomy_to_alphabetical() {
+//  public function test_cw_tool_reset_taxonomy_to_alphabetical() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_save_fields_on_entity().
    * @see cw_tool_save_fields_on_entity()
    */
-  public function test_cw_tool_save_fields_on_entity() {
+//  public function test_cw_tool_save_fields_on_entity() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_purge_terms_of_vocabulary().
    * @see cw_tool_purge_terms_of_vocabulary()
    */
-  public function test_cw_tool_purge_terms_of_vocabulary() {
+//  public function test_cw_tool_purge_terms_of_vocabulary() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_delete_vocabulary().
    * @see cw_tool_delete_vocabulary()
    */
-  public function test_cw_tool_delete_vocabulary() {
+//  public function test_cw_tool_delete_vocabulary() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_delete_vocabulary_multiple().
    * @see cw_tool_delete_vocabulary_multiple()
    */
-  public function test_cw_tool_delete_vocabulary_multiple() {
+//  public function test_cw_tool_delete_vocabulary_multiple() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_add_submenus().
    * @see cw_tool_add_submenus()
    */
-  public function test_cw_tool_add_submenus() {
+//  public function test_cw_tool_add_submenus() {
     // @todo Implement test.
-  }
+//  }
 
   /**
    * Test cw_tool_get_value_in_an_object_or_array_field_collection_field().
    * @see cw_tool_get_value_in_an_object_or_array_field_collection_field()
    */
-  public function test_cw_tool_get_value_in_an_object_or_array_field_collection_field() {
+//  public function test_cw_tool_get_value_in_an_object_or_array_field_collection_field() {
     // @todo Implement test.
-  }
+//  }
 
 }

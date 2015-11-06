@@ -6,7 +6,7 @@ dependencies[] = entity
 dependencies[] = drupal_psr3
 dependencies[] = drupal_psr_cache
 
-files[] = tests/drupal_web_test/CWToolWebTestCase.test
+files[] = tests/drupal_web_test/CWToolMiscUtilityTestCase.test
 files[] = tests/drupal_web_test/CWToolEntityWorkflowTestCase.test
 files[] = tests/drupal_web_test/CWToolVariableAdapterTestCase.test
 files[] = tests/drupal_web_test/CWToolFieldWorkflowTestCase.test
