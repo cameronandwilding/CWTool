@@ -13,6 +13,7 @@ php:
 addons:
   apt:
     packages:
+      - php5-cli
       - php5-cgi
       - php5-mysql
 
