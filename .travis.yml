@@ -38,5 +38,5 @@ before_script:
 
 script:
   - phpunit -c phpunit.xml
-  - cd ../drupal-*/scripts
-  - php run-tests.sh --verbose --php /usr/bin/php --url http://127.0.0.1:8080 CW
+  - cd ../drupal-*/
+  - php ./scripts/run-tests.sh --verbose --php /usr/bin/php --url http://127.0.0.1:8080 CW
