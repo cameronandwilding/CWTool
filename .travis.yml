@@ -10,12 +10,12 @@ mysql:
 php:
   - 5.5
 
-addons:
-  apt:
-    packages:
-      - php5-cli
-      - php5-cgi
-      - php5-mysql
+#addons:
+#  apt:
+#    packages:
+#      - php5-cli
+#      - php5-cgi
+#      - php5-mysql
 
 install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -24,22 +24,22 @@ install:
 
 before_script:
   - composer install
-#  - mysql -e 'create database drupal'
-#  - cd ..
-#  - drush dl drupal -y
-#  - cd drupal-*
-#  - drush si minimal --db-url=mysql://root:@localhost/drupal -y
-#  - ln -s /home/travis/build/cameronandwilding/CWTool ./sites/all/modules/cwtool
-#  - drush dl drupal_psr_cache drupal_psr3 entity -y
-#  - composer install -d sites/all/modules/drupal_psr3
-#  - composer install -d sites/all/modules/drupal_psr_cache
-#  - drush en cw_tool simpletest -y
+  - mysql -e 'create database drupal'
+  - cd ..
+  - drush dl drupal -y
+  - cd drupal-*
+  - drush si minimal --db-url=mysql://root:@localhost/drupal -y
+  - ln -s /home/travis/build/cameronandwilding/CWTool ./sites/all/modules/cwtool
+  - drush dl drupal_psr_cache drupal_psr3 entity -y
+  - composer install -d sites/all/modules/drupal_psr3
+  - composer install -d sites/all/modules/drupal_psr_cache
+  - drush en cw_tool simpletest -y
   - cd /home/travis/build/cameronandwilding/CWTool
 
 script:
   - phpunit -c phpunit.xml
   - cd ../drupal-*/
-  - php -v
-  - which php
-  - which phpunit
-#  - php ./scripts/run-tests.sh --verbose --php /usr/bin/php --url http://127.0.0.1:8080 CW
+#  - php -v
+#  - which php
+#  - which phpunit
+  - php ./scripts/run-tests.sh --verbose --php /home/travis/.phpenv/shims/php --url http://127.0.0.1:8080 CW
