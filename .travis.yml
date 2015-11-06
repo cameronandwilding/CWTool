@@ -37,3 +37,4 @@ before_script:
 
 script:
   - phpunit -c phpunit.xml
+  - drush help test-run
