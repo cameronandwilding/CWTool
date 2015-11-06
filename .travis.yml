@@ -18,6 +18,7 @@ addons:
 
 install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer self-update
   - composer global require drush/drush:7.*
 
 before_script:
@@ -25,7 +26,11 @@ before_script:
   - mysql -e 'create database drupal'
   - cd ..
   - drush dl drupal -y
-  - cd -
+  - cd drupal-*
+  - drush si minimal --db-url=mysql://root:@localhost/drupal -y
+  - ln -s /home/travis/build/cameronandwilding/CWTool ./sites/all/modules/cwtool
+  - drush en cw_tool simpletest -y
+  - cd /home/travis/build/cameronandwilding/CWTool
 
 script:
   - phpunit -c phpunit.xml
