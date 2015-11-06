@@ -37,4 +37,5 @@ before_script:
 
 script:
   - phpunit -c phpunit.xml
-  - drush help test-run
+  - cd ../drupal-*/scripts
+  - php run-tests.sh --verbose CW
