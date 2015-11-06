@@ -23,7 +23,7 @@ before_script:
   - cd drupal-*
   - drush si minimal --db-url=mysql://root:@localhost/drupal -y
   - ln -s /home/travis/build/cameronandwilding/CWTool ./sites/all/modules/cwtool
-  - drush dl drupal_psr_cache drupal_psr3 entity references -y
+  - drush dl drupal_psr_cache drupal_psr3 entity references features strongarm -y
   - composer install -d sites/all/modules/drupal_psr3
   - composer install -d sites/all/modules/drupal_psr_cache
   - drush en cw_tool simpletest -y
