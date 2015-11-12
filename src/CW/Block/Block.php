@@ -59,4 +59,5 @@ abstract class Block {
    * @return array
    */
   abstract function getRenderArray();
+
 }
