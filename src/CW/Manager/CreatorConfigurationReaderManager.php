@@ -24,9 +24,10 @@ class CreatorConfigurationReaderManager {
 
     $conf = $this->configurationReader->read();
     foreach ($conf['items'] as $id => $item) {
-      $processClass = $item['@processor'];
+      // @todo make processor to [class, args] so it can be extended -> and possibly make the conf reader util functions a trait.
+      $processClass = $item['@executor'];
       /** @var CreatorConfigurationExecutor $processor */
-      $processor = new $processClass($item);
+      $processor = new $processClass($item, $products);
       $products[$id] = $processor->create();
     }
 
