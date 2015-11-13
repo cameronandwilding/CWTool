@@ -81,7 +81,7 @@ abstract class CreatorConfigurationExecutor {
     $param = NULL;
     if (!is_array($confValue)) {
       if ($this->isConfigurationReference($confValue)) {
-        $param = $this->getConfiguration($confValue);
+        $param = $this->resolveConfigurationReference($confValue);
       }
       elseif ($this->isProductReference($confValue)) {
         $param = $this->resolveProductProperty($confValue);
@@ -101,6 +101,12 @@ abstract class CreatorConfigurationExecutor {
     }
 
     return $param;
+  }
+
+  private function resolveConfigurationReference($confValue) {
+    // Remove marker char.
+    $confValue = substr($confValue, 1);
+    return $this->getConfiguration($confValue);
   }
 
   /**
@@ -177,9 +183,6 @@ abstract class CreatorConfigurationExecutor {
    * @throws \CW\Exception\CWException
    */
   protected function getConfiguration($name, $default = NULL) {
-    // Remove marker char.
-    $name = substr($name, 1);
-
     // Caching is crucial so we do not instantiate classes multiple times.
     if ($this->paramCache->has($name)) {
       return $this->paramCache->{$name};
@@ -244,7 +247,7 @@ abstract class CreatorConfigurationExecutor {
    */
   public function create() {
     $this->prepare();
-    $nodeCreator = $this->getConfiguration('@creator');
+    $nodeCreator = $this->getConfiguration('creator');
     if (!is_subclass_of($nodeCreator, 'CW\Factory\Creator')) {
       throw new CWException('creator is not implementing the CW\\Factory\\Creator interface.');
     }
