@@ -170,6 +170,7 @@ items:
     properties:
       mail: %randomString
       pass: cakes
+      
   node_one:
     executor: CW\Factory\EntityCreatorConfigurationExecutor
     param:
@@ -178,6 +179,7 @@ items:
     creator:
       class: CW\Factory\NodeCreator
       args: [@param]
+      
   node_two:
     executor: CW\Factory\EntityCreatorConfigurationExecutor
     param:
