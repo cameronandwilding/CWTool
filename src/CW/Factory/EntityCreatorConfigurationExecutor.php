@@ -10,9 +10,9 @@ use CW\Params\NodeCreationParams;
 class EntityCreatorConfigurationExecutor extends CreatorConfigurationExecutor {
 
   protected function setProperties() {
-    $props = $this->getConfParam('properties', []);
+    $props = $this->getConfiguration('properties', []);
     /** @var NodeCreationParams $param */
-    $param = $this->getConfParam('@param');
+    $param = $this->getConfiguration('@param');
     foreach ($props as $prop => $value) {
       $param->setProperty($prop, $value);
     }
@@ -20,10 +20,10 @@ class EntityCreatorConfigurationExecutor extends CreatorConfigurationExecutor {
 
   protected function setFields() {
     /** @var NodeCreationParams $param */
-    $param = $this->getConfParam('@param');
-    $fields = $this->getConfParam('fields', []);
+    $param = $this->getConfiguration('@param');
+    $fields = $this->getConfiguration('fields', []);
     foreach ($fields as $fieldName => $fieldItem) {
-      $fieldItem = $this->resolveParamArgs($fieldItem);
+      $fieldItem = $this->resolveValue($fieldItem);
       if (!is_array($fieldItem)) {
         $param->setField($fieldName, $fieldItem);
       }
