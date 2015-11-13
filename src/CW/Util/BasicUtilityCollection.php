@@ -8,6 +8,15 @@ namespace CW\Util;
 use CW\Adapter\UtilityCollectionInterface;
 use CW\Factory\SelfFactory;
 
+/**
+ * Class BasicUtilityCollection
+ *
+ * @package CW\Util
+ *
+ * Basic utility functions.
+ * For explanation to utility collections:
+ * @see CW\Adapter\UtilityCollectionInterface
+ */
 class BasicUtilityCollection implements UtilityCollectionInterface {
 
   use SelfFactory;

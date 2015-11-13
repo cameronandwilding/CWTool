@@ -9,32 +9,60 @@ use CW\Adapter\UtilityCollectionInterface;
 use CW\Exception\CWException;
 use CW\Util\AssocArray;
 
+/**
+ * Class CreatorConfigurationExecutor
+ *
+ * @package CW\Factory
+ *
+ * Object factory executor for CW\Factory\Creator creators.
+ * This is the base class for executors. It is required to create specific executors,
+ * because the process of object creation and the configuration needed for it
+ * can be hugely different.
+ * Basically anything can be created that can use a Creator class.
+ */
 abstract class CreatorConfigurationExecutor {
 
+  // Special value markers.
   const MARKER_CONFIGURATION = '@';
   const MARKER_PRODUCT = '$';
   const MARKER_FUNCTION = '%';
 
   /**
+   * Configuration for the product item.
+   *
    * @var array
    */
   private $conf;
 
   /**
+   * Cache for high level generated configuration values (classes mostly).
+   *
    * @var AssocArray
    */
   private $paramCache;
 
   /**
+   * All generated objects created so far in the process.
+   * Used for referencing back to already created product properties.
+   *
    * @var array
    */
   private $products;
 
   /**
+   * To provide a set of functions to call from the configuration to set default values.
+   *
    * @var \CW\Adapter\UtilityCollectionInterface
    */
   private $utilityCollection;
 
+  /**
+   * CreatorConfigurationExecutor constructor.
+   *
+   * @param array $conf
+   * @param object[] $products
+   * @param \CW\Adapter\UtilityCollectionInterface $utilityCollection
+   */
   public function __construct(array $conf, array $products, UtilityCollectionInterface $utilityCollection) {
     $this->conf = $conf;
     $this->paramCache = new AssocArray();
@@ -42,7 +70,14 @@ abstract class CreatorConfigurationExecutor {
     $this->utilityCollection = $utilityCollection;
   }
 
-  public function resolveValue($confValue) {
+  /**
+   * Resolve a configuration value - being a value, reference or function.
+   *
+   * @param mixed $confValue
+   * @return mixed
+   * @throws \CW\Exception\CWException
+   */
+  protected function resolveValue($confValue) {
     $param = NULL;
     if (!is_array($confValue)) {
       if ($this->isConfigurationReference($confValue)) {
@@ -68,6 +103,11 @@ abstract class CreatorConfigurationExecutor {
     return $param;
   }
 
+  /**
+   * @param string $confValue
+   * @return mixed
+   * @throws \CW\Exception\CWException
+   */
   private function resolveProductProperty($confValue) {
     $parts = explode('.', $confValue);
     // Remove reference marker sign.
@@ -92,6 +132,11 @@ abstract class CreatorConfigurationExecutor {
     return $currentProduct;
   }
 
+  /**
+   * @param array $confValue
+   * @return object
+   * @throws \CW\Exception\CWException
+   */
   private function resolveClass($confValue) {
     $class = $confValue['class'];
     if (!class_exists($class)) {
@@ -104,6 +149,11 @@ abstract class CreatorConfigurationExecutor {
     return $reflClass->newInstanceArgs($processedArgs);
   }
 
+  /**
+   * @param string $confValue
+   * @return mixed
+   * @throws \CW\Exception\CWException
+   */
   private function resolveFunction($confValue) {
     $matches = NULL;
     $confValue = substr($confValue, 1);
@@ -121,12 +171,15 @@ abstract class CreatorConfigurationExecutor {
   }
 
   /**
-   * @param $name
-   * @param null $default
+   * @param string $name
+   * @param mixed $default
    * @return mixed
    * @throws \CW\Exception\CWException
    */
   protected function getConfiguration($name, $default = NULL) {
+    // Remove marker char.
+    $name = substr($name, 1);
+
     // Caching is crucial so we do not instantiate classes multiple times.
     if ($this->paramCache->has($name)) {
       return $this->paramCache->{$name};
@@ -139,26 +192,50 @@ abstract class CreatorConfigurationExecutor {
     return $this->paramCache->{$name} = $this->resolveValue($this->conf[$name]);
   }
 
+  /**
+   * @param string $name
+   * @return bool
+   */
   private function isConfigurationReference($name) {
     return $this->isFirstChar($name, self::MARKER_CONFIGURATION);
   }
 
+  /**
+   * @param string $name
+   * @return bool
+   */
   private function isProductReference($name) {
     return $this->isFirstChar($name, self::MARKER_PRODUCT);
   }
 
+  /**
+   * @param array $def
+   * @return bool
+   */
   private function isClass($def) {
     return is_array($def) && !empty($def['class']);
   }
 
+  /**
+   * @param string $name
+   * @return bool
+   */
   private function isFunction($name) {
     return $this->isFirstChar($name, self::MARKER_FUNCTION);
   }
 
+  /**
+   * @param string $string
+   * @param string $char
+   * @return bool
+   */
   private function isFirstChar($string, $char) {
     return strpos($string, $char) === 0;
   }
 
+  /**
+   * Prepare configuration specifically to the desired type.
+   */
   abstract protected function prepare();
 
   /**
@@ -169,7 +246,7 @@ abstract class CreatorConfigurationExecutor {
     $this->prepare();
     $nodeCreator = $this->getConfiguration('@creator');
     if (!is_subclass_of($nodeCreator, 'CW\Factory\Creator')) {
-      throw new CWException('@creator is not implementing the CW\\Factory\\Creator interface.');
+      throw new CWException('creator is not implementing the CW\\Factory\\Creator interface.');
     }
 
     return $nodeCreator->create();
