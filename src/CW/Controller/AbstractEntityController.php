@@ -94,6 +94,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * Constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
+   * @param \CW\Model\EntityHandler $entityHandler
    * @param string $entity_type
    * @param int|string $entity_id
    */
