@@ -91,6 +91,16 @@ function cw_tool_get_container() {
     );
   };
 
+  $container[CWTOOL_SERVICE_IMAGE_FACTORY] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'CW\Controller\ImageController',
+      'file',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+
   $container[CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY] = function (Container $c) {
     return new EntityControllerFactory(
       $c[CWTOOL_SERVICE_IDENTITY_MAP],
@@ -197,6 +207,13 @@ function cw_tool_logger() {
  */
 function cw_tool_file_factory() {
   return cw_tool_get_container()[CWTOOL_SERVICE_FILE_FACTORY];
+}
+
+/**
+ * @return EntityControllerFactory
+ */
+function cw_tool_image_factory() {
+  return cw_tool_get_container()[CWTOOL_SERVICE_IMAGE_FACTORY];
 }
 
 /**
