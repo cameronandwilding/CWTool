@@ -21,6 +21,7 @@ const CWTOOL_SERVICE_NODE_FACTORY = 'cw.node-controller.factory';
 const CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY = 'cw.taxonomy-term-controller.factory';
 const CWTOOL_SERVICE_USER_FACTORY = 'cw.user-controller.factory';
 const CWTOOL_SERVICE_FILE_FACTORY = 'cw.file-controller.factory';
+const CWTOOL_SERVICE_IMAGE_FACTORY = 'cw.image-controller.factory';
 
 const CWTOOL_SERVICE_VARIABLE_MANAGER = 'cw.variable-manager';
 const CWTOOL_SERVICE_VARIABLE_ADAPTER = 'cw.variable-adapter';
