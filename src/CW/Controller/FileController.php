@@ -27,6 +27,8 @@ class FileController extends AbstractEntityController {
   }
 
   /**
+   * Gets file uri.
+   *
    * @return string|null
    */
   public function getFileURI() {
@@ -34,10 +36,21 @@ class FileController extends AbstractEntityController {
   }
 
   /**
+   * Gets file name.
+   *
    * @return string|null
    */
   public function getFileName() {
     return $this->property('filename');
+  }
+
+  /**
+   * Gets file mime type.
+   *
+   * @return string|null
+   */
+  public function getFileMimeType() {
+    return $this->property('filemime');
   }
 }
 
