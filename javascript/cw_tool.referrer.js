@@ -4,14 +4,15 @@
  */
 var CW = CW || {};
 
-(function($) {
+'use strict';
 
-  'use strict';
+/**
+ * @memberof CW
+ * @property {object} Referrer - Handler to get handle referrer information from javascript.
+ */
+CW.Referrer = jQuery.extend({}, CW.Path, {
 
-  CW.Referrer = $.extend({}, CW.Path, {
+  /** @inheritdoc */
+  uri : document.referrer
 
-    uri : document.referrer
-
-  });
-
-}(jQuery));
+});
