@@ -1,4 +1,4 @@
-/**
+;/**
  * @file
  *
  * Add path related behaviours.

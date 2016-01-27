@@ -1,4 +1,4 @@
-/**
+;/**
  * @file
  *
  * Add referrer related behaviours.
