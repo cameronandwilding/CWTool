@@ -1,7 +1,9 @@
 /**
  * @file
- *  Add referrer related behaviours.
+ *
+ * Add referrer related behaviours.
  */
+
 var CW = CW || {};
 
 /**
