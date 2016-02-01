@@ -319,3 +319,35 @@ function cw_tool_generate_form($form, $form_state, $class) {
 
   return call_user_func_array(array($class, 'build'), $callArgs);
 }
+
+/**
+ * Implements hook_library().
+ */
+function cw_tool_library() {
+  $libraries = [];
+
+  $path = drupal_get_path('module', 'cw_tool');
+
+  // Path JS plugin.
+  $libraries['cwtool.path'] = [
+    'title' => 'CWTool Path Javascript plugin.',
+    'version' => VERSION,
+    'js' => [
+      $path . '/javascript/cw_tool.path.js' => ['group' => JS_LIBRARY],
+    ],
+  ];
+
+  // Referrer JS plugin.
+  $libraries['cwtool.referrer'] = [
+    'title' => 'CWTool Referrer Javascript plugin.',
+    'version' => VERSION,
+    'js' => [
+      $path . '/javascript/cw_tool.referrer.js' => ['group' => JS_LIBRARY],
+    ],
+    'dependencies' => [
+      ['cw_tool', 'cwtool.path'],
+    ],
+  ];
+
+  return $libraries;
+}
