@@ -22,12 +22,12 @@ abstract class AbstractThemeProcessor {
   /**
    * @var array
    */
-  private $vars;
+  protected $vars;
 
   /**
    * @param array $vars
    */
-  private function __construct(&$vars) {
+  protected function __construct(&$vars) {
     $this->vars = &$vars;
     if ($this->isApplicable()) {
       $this->execute();
