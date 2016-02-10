@@ -61,9 +61,9 @@ class Request {
    * @return bool
    */
   public function isHTTPS() {
-    $https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
-    $https_forwarded = (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
-    return $https || $https_forwarded;
+    $is_https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+    $is_https_forwarded = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https';
+    return $is_https || $is_https_forwarded;
   }
 
   /**
