@@ -47,6 +47,26 @@ class Request {
   }
 
   /**
+   * Checks if the current request is a POST.
+   *
+   * @return bool
+   */
+  public function isPOST() {
+    return $_SERVER['REQUEST_METHOD'] === 'POST';
+  }
+
+  /**
+   * Uses all the options to check if the current request is HTTPS.
+   *
+   * @return bool
+   */
+  public function isHTTPS() {
+    $https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+    $https_forwarded = (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+    return $https || $https_forwarded;
+  }
+
+  /**
    * Internally gets the GET params.
    */
   protected function collectGlobalGetParams() {
