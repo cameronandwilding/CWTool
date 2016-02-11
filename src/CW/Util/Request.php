@@ -47,6 +47,26 @@ class Request {
   }
 
   /**
+   * Checks if the current request is a POST.
+   *
+   * @return bool
+   */
+  public function isPOST() {
+    return $_SERVER['REQUEST_METHOD'] === 'POST';
+  }
+
+  /**
+   * Uses all the options to check if the current request is HTTPS.
+   *
+   * @return bool
+   */
+  public function isHTTPS() {
+    $is_https = isset($_SERVER['HTTPS']) && drupal_strtolower($_SERVER['HTTPS']) === 'on';
+    $is_https_forwarded = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && drupal_strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https';
+    return $is_https || $is_https_forwarded;
+  }
+
+  /**
    * Internally gets the GET params.
    */
   protected function collectGlobalGetParams() {
