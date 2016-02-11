@@ -61,8 +61,8 @@ class Request {
    * @return bool
    */
   public function isHTTPS() {
-    $is_https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
-    $is_https_forwarded = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https';
+    $is_https = isset($_SERVER['HTTPS']) && drupal_strtolower($_SERVER['HTTPS']) === 'on';
+    $is_https_forwarded = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && drupal_strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https';
     return $is_https || $is_https_forwarded;
   }
 
