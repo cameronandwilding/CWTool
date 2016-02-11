@@ -60,6 +60,13 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
+   * @return mixed
+   */
+  public function getChangedTimestamp() {
+    return $this->property('changed');
+  }
+
+  /**
    * Get author UID.
    *
    * @return string|null
