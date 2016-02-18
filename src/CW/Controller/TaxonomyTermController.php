@@ -8,9 +8,11 @@
  */
 
 namespace CW\Controller;
+use CW\Factory\EntityControllerFactory;
 
 /**
  * Class TaxonomyTermController
+ *
  * @package CW\Controller
  *
  * Most basic implementation of taxonomy term controller.
@@ -59,6 +61,17 @@ class TaxonomyTermController extends AbstractEntityController {
   public function getVocabularyMachineName() {
     return $this->property('vocabulary_machine_name');
   }
+
+  /**
+   * @param \CW\Factory\EntityControllerFactory $factory
+   * @return AbstractEntityController[]
+   */
+  public function getAllParentCtrl(EntityControllerFactory $factory) {
+    return array_map(function ($term) use ($factory) {
+      return $factory->initWithEntity($term);
+    }, taxonomy_get_parents($this->getEntityId()));
+  }
+
 }
 
 /**

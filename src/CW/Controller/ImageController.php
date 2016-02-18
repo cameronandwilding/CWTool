@@ -2,8 +2,6 @@
 /**
  * @file
  *
- * Image controller.
- *
  * @addtogroup cwentity
  * @{
  */
@@ -12,7 +10,10 @@ namespace CW\Controller;
 
 /**
  * Class ImageController
+ *
  * @package CW\Controller
+ *
+ * Image controller.
  */
 class ImageController extends FileController {
 
@@ -69,4 +70,5 @@ class ImageController extends FileController {
   public function getTitle() {
     return $this->property('title');
   }
+
 }
