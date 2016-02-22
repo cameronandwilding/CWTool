@@ -76,6 +76,13 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
+   * @return string|null
+   */
+  public function getBody() {
+    return $this->fieldValue('field_body');
+  }
+
+  /**
    * Render node view.
    *
    * @param string $viewMode

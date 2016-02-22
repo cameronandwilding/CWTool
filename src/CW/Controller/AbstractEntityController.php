@@ -521,7 +521,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
-   * Fetches the appropriate entity controller of a referenced entity.
+   * Fetches all the appropriate entity controller of a referenced entity.
    * It uses cw_tool_field_controller_reference_map to lookup the association.
    *
    * @param string $fieldName
@@ -533,6 +533,21 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   public function fieldReferencedEntityControllersLookup($fieldName, $lang = LANGUAGE_NONE) {
     $lookupMap = CoreEntityManager::referenceControllerFactoryLookup($fieldName);
     return $this->fieldAllReferencedEntityController($fieldName, $lookupMap->getEntityControllerFactory(), $lookupMap->getFieldKey(), $lang);
+  }
+
+  /**
+   * Fetches the appropriate entity controller of a referenced entity.
+   * It uses cw_tool_field_controller_reference_map to lookup the association.
+   *
+   * @param string $fieldName
+   * @param int $idx
+   * @param string $lang
+   * @return \CW\Controller\AbstractEntityController
+   * @throws \CW\Exception\CWException In case the association does not exist.
+   */
+  public function fieldReferencedEntityControllerLookup($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
+    $lookupMap = CoreEntityManager::referenceControllerFactoryLookup($fieldName);
+    return $this->fieldReferencedEntityController($fieldName, $lookupMap->getEntityControllerFactory(), $lookupMap->getFieldKey(), $idx, $lang);
   }
 
 }
