@@ -8,6 +8,8 @@
 namespace CW\Adapter;
 
 use CW\Controller\AbstractEntityController;
+use CW\Controller\FileController;
+use CW\Controller\TaxonomyTermController;
 use CW\Factory\EntityControllerFactory;
 use CW\Util\FieldUtil;
 
@@ -37,7 +39,7 @@ interface FieldAccessor {
    * @param string $fieldName
    * @param int $idx
    * @param string $lang
-   * @return mixed|null
+   * @return string|null
    */
   public function fieldTargetID($fieldName, $idx = 0, $lang = LANGUAGE_NONE);
 
@@ -47,7 +49,7 @@ interface FieldAccessor {
    * @param string $fieldName
    * @param int $idx
    * @param string $lang
-   * @return mixed|null
+   * @return string|null
    */
   public function fieldFileID($fieldName, $idx = 0, $lang = LANGUAGE_NONE);
 
@@ -100,7 +102,7 @@ interface FieldAccessor {
    * @param EntityControllerFactory $entityFactory
    * @param int $idx
    * @param string $lang
-   * @return mixed
+   * @return FileController|NULL
    */
   public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
@@ -111,7 +113,7 @@ interface FieldAccessor {
    * @param EntityControllerFactory $entityFactory
    * @param int $idx
    * @param string $lang
-   * @return mixed
+   * @return TaxonomyTermController|NULL
    */
   public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 

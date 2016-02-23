@@ -542,7 +542,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @param string $fieldName
    * @param int $idx
    * @param string $lang
-   * @return \CW\Controller\AbstractEntityController
+   * @return \CW\Controller\AbstractEntityController|NULL
    * @throws \CW\Exception\CWException In case the association does not exist.
    */
   public function fieldReferencedEntityControllerLookup($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
