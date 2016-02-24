@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/itarato/var-check.git",
-                "reference": "4b29e9d0647c2db7c634732a85b305c9f420e037"
+                "reference": "faa61a75cf0666fdfb9a7c079a3934ef6fe09f96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itarato/var-check/zipball/4b29e9d0647c2db7c634732a85b305c9f420e037",
-                "reference": "4b29e9d0647c2db7c634732a85b305c9f420e037",
+                "url": "https://api.github.com/repos/itarato/var-check/zipball/faa61a75cf0666fdfb9a7c079a3934ef6fe09f96",
+                "reference": "faa61a75cf0666fdfb9a7c079a3934ef6fe09f96",
                 "shasum": ""
             },
             "type": "library",
@@ -32,7 +32,7 @@
                 "MIT"
             ],
             "description": "Accessing properties, keys and instance methods without checking them all the time.",
-            "time": "2014-10-24 10:08:18"
+            "time": "2016-02-23 04:59:27"
         },
         {
             "name": "pimple/pimple",
@@ -82,16 +82,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5"
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/f79824187de95064a2f5038904c4d7f0227fedb5",
-                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/34c8a4b51e751e7ea869b8262f883d008a2b81b8",
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8",
                 "shasum": ""
             },
             "require": {
@@ -127,7 +127,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2016-01-13 10:28:07"
         }
     ],
     "packages-dev": [
