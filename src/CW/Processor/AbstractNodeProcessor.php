@@ -28,7 +28,7 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isNodeType($nodeType) {
-    return $this->getWrappedVar()->{self::VAR_NODE}->type->_value() == $nodeType;
+    return $this->getNodeType() === $nodeType;
   }
 
   /**
@@ -39,7 +39,7 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return bool
    */
   public function isViewMode($viewMode) {
-    return $this->getVar(self::VAR_VIEW_MODE) == $viewMode;
+    return $this->getViewMode() == $viewMode;
   }
 
   /**
@@ -58,6 +58,20 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    */
   public function isViewModeTeaser() {
     return $this->isViewMode(CoreEntityManager::VIEW_MODE_NODE_TEASER);
+  }
+
+  /**
+   * @return string
+   */
+  protected function getViewMode() {
+    return $this->getVar(self::VAR_VIEW_MODE);
+  }
+
+  /**
+   * @return string
+   */
+  protected function getNodeType() {
+    return $this->getWrappedVar()->{self::VAR_NODE}->type->_value();
   }
 
 }

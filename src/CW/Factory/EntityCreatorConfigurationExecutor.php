@@ -6,7 +6,6 @@
 namespace CW\Factory;
 
 use CW\Params\EntityCreationParams;
-use CW\Params\NodeCreationParams;
 
 /**
  * Class EntityCreatorConfigurationExecutor
@@ -51,13 +50,18 @@ class EntityCreatorConfigurationExecutor extends CreatorConfigurationExecutor {
   protected function setFields() {
     $param = $this->getEntityCreationParam();
     $fields = $this->getConfiguration(self::CONF_FIELDS, []);
-    foreach ($fields as $fieldName => $fieldItem) {
-      $fieldItem = $this->resolveValue($fieldItem);
-      if (!is_array($fieldItem)) {
-        $param->setField($fieldName, $fieldItem);
+    foreach ($fields as $fieldName => $fieldData) {
+      $fieldData = $this->resolveValue($fieldData);
+      if (!is_array($fieldData)) {
+        $param->setField($fieldName, $fieldData);
+      }
+      elseif (self::isGenericArray($fieldData)) {
+        foreach ($fieldData as $fieldItem) {
+          $param->setFieldItem($fieldName, $fieldItem);
+        }
       }
       else {
-        $param->setFieldItem($fieldName, $fieldItem);
+        $param->setFieldItem($fieldName, $fieldData);
       }
     }
   }
@@ -75,6 +79,20 @@ class EntityCreatorConfigurationExecutor extends CreatorConfigurationExecutor {
    */
   protected function getEntityCreationParam() {
     return $this->getConfiguration(self::CONF_PARAM);
+  }
+
+  /**
+   * @param mixed $value
+   * @return bool
+   */
+  protected static function isGenericArray($value) {
+    if (!is_array($value)) {
+      return FALSE;
+    }
+
+    $keys = array_keys($value);
+    $sample_keys = range(0, count($keys) - 1);
+    return $keys === $sample_keys;
   }
 
 }
