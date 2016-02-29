@@ -170,7 +170,10 @@ abstract class CreatorConfigurationExecutor {
       throw new CWException('Method: ' . $funcName . ' does not exist on class: ' . get_class($this->utilityCollection));
     }
 
-    $args = !empty($matches['args']) ? explode(',', $matches['args']) : [];
+    // Arguments are separated by comma - using a comma as part of an arg can be
+    // done with \, (slash comma).
+    $args = !empty($matches['args']) ? preg_split('/(?<!\\\\),/', $matches['args']) : [];
+    array_walk($args, function (&$arg) { $arg = str_replace('\\,', ',', $arg); });
     $args = $this->resolveValue($args);
 
     return call_user_func_array([$this->utilityCollection, $funcName], $args);
