@@ -71,7 +71,14 @@ abstract class AbstractNodeProcessor extends AbstractThemeProcessor {
    * @return string
    */
   protected function getNodeType() {
-    return $this->getWrappedVar()->{self::VAR_NODE}->type->_value();
+    return @$this->getNode()->type;
+  }
+
+  /**
+   * @return object|NULL
+   */
+  protected function getNode() {
+    return $this->getVar(self::VAR_NODE);
   }
 
 }

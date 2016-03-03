@@ -13,6 +13,7 @@ namespace CW\Controller;
 use CW\Adapter\FieldAccessor;
 use CW\Exception\MissingImplementationException;
 use CW\Factory\EntityControllerFactory;
+use CW\Factory\EntityControllerFactoryInterface;
 use CW\Manager\CoreEntityManager;
 use CW\Model\EntityHandler;
 use CW\Util\FieldUtil;
@@ -335,7 +336,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
     $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
     if (empty($fid)) {
       return NULL;
@@ -389,7 +390,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
       return NULL;
     }
@@ -399,7 +400,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $factory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactoryInterface $factory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
     if (!isset($this->entity()->{$fieldName}[$lang])) {
       return array();
     }
@@ -511,7 +512,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
     $tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
     if (empty($tid)) {
       return NULL;

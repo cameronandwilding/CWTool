@@ -10,7 +10,6 @@
 
 namespace CW\Controller;
 use CW\Adapter\DrupalUserAdapter;
-use CW\Exception\CWException;
 use CW\Util\Functional;
 
 /**

@@ -8,7 +8,7 @@
  */
 
 namespace CW\Controller;
-use CW\Factory\EntityControllerFactory;
+use CW\Factory\EntityControllerFactoryInterface;
 
 /**
  * Class TaxonomyTermController
@@ -63,10 +63,10 @@ class TaxonomyTermController extends AbstractEntityController {
   }
 
   /**
-   * @param \CW\Factory\EntityControllerFactory $factory
+   * @param \CW\Factory\EntityControllerFactoryInterface $factory
    * @return TaxonomyTermController[]
    */
-  public function getAllParentCtrl(EntityControllerFactory $factory) {
+  public function getAllParentCtrl(EntityControllerFactoryInterface $factory) {
     return array_map(function ($term) use ($factory) {
       return $factory->initWithEntity($term);
     }, taxonomy_get_parents($this->getEntityId()));

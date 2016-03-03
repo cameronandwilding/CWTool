@@ -11,6 +11,7 @@ use CW\Controller\AbstractEntityController;
 use CW\Controller\FileController;
 use CW\Controller\TaxonomyTermController;
 use CW\Factory\EntityControllerFactory;
+use CW\Factory\EntityControllerFactoryInterface;
 use CW\Util\FieldUtil;
 
 /**
@@ -81,7 +82,7 @@ interface FieldAccessor {
    * @param string $lang
    * @return AbstractEntityController|NULL
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE);
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE);
 
   /**
    * Get all referenced entity controller referenced by the field.
@@ -93,7 +94,7 @@ interface FieldAccessor {
    * @param string $lang
    * @return AbstractEntityController[]
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE);
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE);
 
   /**
    * Get the referenced file controller.
@@ -104,7 +105,7 @@ interface FieldAccessor {
    * @param string $lang
    * @return FileController|NULL
    */
-  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
   /**
    * Get the referenced taxonomy term controller.
@@ -115,6 +116,6 @@ interface FieldAccessor {
    * @param string $lang
    * @return TaxonomyTermController|NULL
    */
-  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
 }

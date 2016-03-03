@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
  * The factory does not care about the entity type or bundle - in case you need
  * type validation you have to add it to the subclass.
  */
-class EntityControllerFactory extends LoggerObject {
+class EntityControllerFactory extends LoggerObject implements EntityControllerFactoryInterface {
 
   // Base entity controller class.
   const ABSTRACT_ENTITY_CONTROLLER_CLASS = 'CW\Controller\AbstractEntityController';
@@ -86,17 +86,7 @@ class EntityControllerFactory extends LoggerObject {
   }
 
   /**
-   * Factory method. This a MUST initializer for entity controllers.
-   * This method checks all items in cache (identity map) and load if it's
-   * possible.
-   *
-   * @param mixed $entity_id
-   *  In case it's missing (NULL), always provide a $cacheKey.
-   * @param null $cacheKey
-   *  Only use cache key when entity is missing or not unique.
-   * @return \CW\Controller\AbstractEntityController
-   * @throws \CW\Exception\IdentityMapException
-   * @throws \Exception
+   * {@inheritdoc}
    */
   public function initWithId($entity_id = NULL, $cacheKey = NULL) {
     $controller = NULL;
@@ -123,11 +113,7 @@ class EntityControllerFactory extends LoggerObject {
   }
 
   /**
-   * Factory with the Drupal entity.
-   *
-   * @param $entity
-   * @return \CW\Controller\AbstractEntityController
-   * @throws \EntityMalformedException
+   * {@inheritdoc}
    */
   public function initWithEntity($entity) {
     list($id,,) = entity_extract_ids($this->entityType, $entity);
@@ -146,11 +132,7 @@ class EntityControllerFactory extends LoggerObject {
   }
 
   /**
-   * Initialize a new controller with a creator factory.
-   * Use creator instances to be able to produce the expected entity type/bundle.
-   *
-   * @param \CW\Factory\Creator $creator
-   * @return \CW\Controller\AbstractEntityController
+   * {@inheritdoc}
    */
   public function initNew(Creator $creator) {
     $entity = $creator->create();

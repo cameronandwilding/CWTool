@@ -78,6 +78,7 @@ class BasicUtilityCollection implements UtilityCollectionInterface {
   public function uploadFileAndGetFID() {
     $source = (object) array(
       'uri' => __DIR__ . '/../../../assets/sample.png',
+      'filemime' => 'image/png',
     );
     $file = file_copy($source, 'public://cw_tool_creator_sample.png', FILE_EXISTS_RENAME);
     return @$file->fid;
