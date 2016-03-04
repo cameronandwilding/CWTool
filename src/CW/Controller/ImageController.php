@@ -18,6 +18,26 @@ namespace CW\Controller;
 class ImageController extends FileController {
 
   /**
+   * @var string
+   */
+  protected $alt;
+
+  /**
+   * @var string
+   */
+  protected $title;
+
+  /**
+   * @var int
+   */
+  protected $width;
+
+  /**
+   * @var int
+   */
+  protected $height;
+
+  /**
    * Renders an image.
    *
    * @return string
@@ -28,8 +48,8 @@ class ImageController extends FileController {
   public function render() {
     return theme('image', [
       'path' => $this->getFileURI(),
-      'alt' => $this->getAlt(),
-      'title' => $this->getTitle(),
+      'alt' => $this->getAltFromHostField(),
+      'title' => $this->getTitleFromHostField(),
     ]);
   }
 
@@ -48,8 +68,8 @@ class ImageController extends FileController {
     return theme('image_style', [
       'style_name' => $style,
       'path' => $this->getFileURI(),
-      'alt' => $this->getAlt(),
-      'title' => $this->getTitle(),
+      'alt' => $this->getAltFromHostField(),
+      'title' => $this->getTitleFromHostField(),
     ]);
   }
 
@@ -57,6 +77,7 @@ class ImageController extends FileController {
    * Gets file mime type.
    *
    * @return string|null
+   * @deprecated Use self::getAltFromHostField().
    */
   public function getAlt() {
     return $this->property('alt');
@@ -66,9 +87,74 @@ class ImageController extends FileController {
    * Gets file mime type.
    *
    * @return string|null
+   * @deprecated Use self::getTitleFromHostField().
    */
   public function getTitle() {
     return $this->property('title');
+  }
+
+  /**
+   * Only available if controller was instantiated from an entity field.
+   *
+   * @return string
+   */
+  public function getAltFromHostField() {
+    return @$this->alt;
+  }
+
+  /**
+   * @param string $alt
+   */
+  public function setAltFromHostField($alt) {
+    $this->alt = $alt;
+  }
+
+  /**
+   * Only available if controller was instantiated from an entity field.
+   *
+   * @return string
+   */
+  public function getTitleFromHostField() {
+    return @$this->title;
+  }
+
+  /**
+   * @param string $title
+   */
+  public function setTitleFromHostField($title) {
+    $this->title = $title;
+  }
+
+  /**
+   * Only available if controller was instantiated from an entity field.
+   *
+   * @return int
+   */
+  public function getWidthFromHostField() {
+    return @$this->width;
+  }
+
+  /**
+   * @param int $width
+   */
+  public function setWidthFromHostField($width) {
+    $this->width = $width;
+  }
+
+  /**
+   * Only available if controller was instantiated from an entity field.
+   *
+   * @return int
+   */
+  public function getHeightFromHostField() {
+    return @$this->height;
+  }
+
+  /**
+   * @param int $height
+   */
+  public function setHeightFromHostField($height) {
+    $this->height = $height;
   }
 
 }

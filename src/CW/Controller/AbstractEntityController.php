@@ -346,6 +346,38 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Other than gets the file controller it populates the field stored attributes
+   * associated to the file - such as alt, title, width and height.
+   *
+   * @param string $fieldName
+   * @param \CW\Factory\EntityControllerFactoryInterface $entityFactory
+   * @param int $idx
+   * @param string $lang
+   *
+   * @return ImageController
+   */
+  public function fieldReferencedImageCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+    $fieldItem = $this->fieldItem($fieldName, $idx, $lang);
+    $fid = @$fieldItem[FieldUtil::KEY_FILE_ID];
+    if (empty($fid)) {
+      return NULL;
+    }
+
+    /** @var ImageController $ctrl */
+    $ctrl = $entityFactory->initWithId($fid);
+
+    // Fixtures for field dependent file attributes.
+    $ctrl->setAltFromHostField(@$fieldItem['alt']);
+    $ctrl->setTitleFromHostField(@$fieldItem['title']);
+    $ctrl->setWidthFromHostField(@$fieldItem['width']);
+    $ctrl->setHeightFromHostField(@$fieldItem['height']);
+
+    return $ctrl;
+  }
+
+
+
+  /**
    * Set a single field value.
    *
    * @param string $field_name
