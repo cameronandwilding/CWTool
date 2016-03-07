@@ -8,8 +8,8 @@
 namespace CW\Form;
 
 use CW\Adapter\FieldAccessor;
-use CW\Controller\AbstractEntityController;
 use CW\Factory\EntityControllerFactory;
+use CW\Factory\EntityControllerFactoryInterface;
 use CW\Util\FieldUtil;
 
 /**
@@ -58,7 +58,7 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
       return NULL;
     }
@@ -69,7 +69,7 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactory $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
+  public function fieldAllReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
     if (!isset($this->formState[self::VALUES_KEY][$fieldName][$lang])) {
       return array();
     }
@@ -85,7 +85,7 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedFileCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!($fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang))) {
       return NULL;
     }
@@ -96,7 +96,7 @@ class NodeFormState extends FormState implements FieldAccessor {
   /**
    * {@inheritdoc}
    */
-  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactory $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
+  public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
     if (!($tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang))) {
       return NULL;
     }
