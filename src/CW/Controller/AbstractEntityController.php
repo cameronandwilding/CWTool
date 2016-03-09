@@ -374,9 +374,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
 
     return $ctrl;
   }
-
-
-
+  
   /**
    * Set a single field value.
    *
