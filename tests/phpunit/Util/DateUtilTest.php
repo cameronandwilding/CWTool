@@ -11,10 +11,10 @@ class DateUtilTest extends \CW\Test\TestCase {
    * @todo: This test is unstable and will fail when your timezone is not GMT
    */
   public function testFieldExtraction() {
-    $date = '2014-02-20';
+    $date = '2014-01-20';
     $fieldDate = [
       'value' => $date,
-      'timezone' => 'GMT',
+      'timezone' => 'CET',
     ];
 
     $ts = DateUtil::getTimestampFromISODateFieldValue($fieldDate);
