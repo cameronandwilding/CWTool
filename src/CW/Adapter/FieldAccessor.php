@@ -7,10 +7,6 @@
 
 namespace CW\Adapter;
 
-use CW\Controller\AbstractEntityController;
-use CW\Controller\FileController;
-use CW\Controller\TaxonomyTermController;
-use CW\Factory\EntityControllerFactory;
 use CW\Factory\EntityControllerFactoryInterface;
 use CW\Util\FieldUtil;
 
@@ -77,10 +73,11 @@ interface FieldAccessor {
    * Get the referenced entity controller referenced in the field.
    *
    * @param string $fieldName
-   * @param EntityControllerFactory $entityControllerFactory
+   * @param \CW\Factory\EntityControllerFactoryInterface $entityControllerFactory
+   * @param string $fieldKey
    * @param int $idx
    * @param string $lang
-   * @return AbstractEntityController|NULL
+   * @return \CW\Controller\AbstractEntityController|NULL
    */
   public function fieldReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE);
 
@@ -90,9 +87,10 @@ interface FieldAccessor {
    * generic.
    *
    * @param string $fieldName
-   * @param EntityControllerFactory $entityControllerFactory
+   * @param \CW\Factory\EntityControllerFactoryInterface $entityControllerFactory
+   * @param string $fieldKey
    * @param string $lang
-   * @return AbstractEntityController[]
+   * @return \CW\Controller\AbstractEntityController[]
    */
   public function fieldAllReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE);
 
@@ -100,10 +98,10 @@ interface FieldAccessor {
    * Get the referenced file controller.
    *
    * @param string $fieldName
-   * @param EntityControllerFactory $entityFactory
+   * @param \CW\Factory\EntityControllerFactoryInterface $entityFactory
    * @param int $idx
    * @param string $lang
-   * @return FileController|NULL
+   * @return \CW\Controller\FileController|NULL
    */
   public function fieldReferencedFileCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 
@@ -111,10 +109,10 @@ interface FieldAccessor {
    * Get the referenced taxonomy term controller.
    *
    * @param string $fieldName
-   * @param EntityControllerFactory $entityFactory
+   * @param \CW\Factory\EntityControllerFactoryInterface $entityFactory
    * @param int $idx
    * @param string $lang
-   * @return TaxonomyTermController|NULL
+   * @return \CW\Controller\TaxonomyTermController|NULL
    */
   public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE);
 

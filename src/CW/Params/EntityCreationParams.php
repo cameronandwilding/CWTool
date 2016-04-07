@@ -90,11 +90,13 @@ class EntityCreationParams {
   /**
    * Merge safe way of setting custom properties, even arrays with elements deep.
    *
-   * @param $property
-   * @param $value
+   * @param string $property
+   * @param mixed $value
+   * @return $this
    */
   public function setProperty($property, $value) {
     $this->extraAttributes = array_merge($this->extraAttributes, array($property => $value));
+    return $this;
   }
 
 }

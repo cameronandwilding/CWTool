@@ -107,4 +107,59 @@ class ArrayUtil {
     }
     return $array;
   }
+
+  /**
+   * Add a new element to a dictionary - inserting the new element after a
+   * given key.
+   *
+   * @param array $array
+   *  Original array - operates in place.
+   * @param string $key
+   *  Key to insert after.
+   * @param string $newKey
+   *  New key for the new value.
+   * @param mixed $newValue
+   *  New value to insert.
+   */
+  public static function insertAfterKey(&$array, $key, $newKey, $newValue) {
+    $newArray = [];
+
+    foreach ($array as $_key => $_item) {
+      $newArray[$_key] = $_item;
+
+      if ($_key === $key) {
+        $newArray[$newKey] = $newValue;
+      }
+    }
+
+    $array = $newArray;
+  }
+
+  /**
+   * Inserts a new value into an array after an existing element that matches
+   * a given condition callback.
+   *
+   * @param array $array
+   * @param callable $condition
+   * @param mixed $newValue
+   * @return int
+   *  Number of insertion of the new element.
+   */
+  public static function insertAfterCondition(&$array, $condition, $newValue) {
+    $newArray = [];
+    $insertionCount = 0;
+    foreach ($array as $key => $value) {
+      $newArray[] = $value;
+
+      if (call_user_func($condition, $key, $value)) {
+        $newArray[] = $newValue;
+        $insertionCount++;
+      }
+    }
+
+    $array = $newArray;
+
+    return $insertionCount;
+  }
+
 }

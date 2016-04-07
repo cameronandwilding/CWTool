@@ -374,7 +374,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
 
     return $ctrl;
   }
-
+  
   /**
    * Set a single field value.
    *
@@ -389,6 +389,36 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Append a single field value after the last field item as a new item.
+   *
+   * @param string $field_name
+   * @param mixed $value
+   * @param string $key
+   * @param string $lang
+   */
+  public function appendFieldValue($field_name, $value, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+    $this->entity()->{$field_name}[$lang][] = [$key => $value];
+  }
+
+  /**
+   * Prepend a single field value into a new item as the very first one in the item list.
+   *
+   * @param string $field_name
+   * @param mixed $value
+   * @param string $key
+   * @param string $lang
+   */
+  public function prependFieldValue($field_name, $value, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+    array_unshift($this->entity()->{$field_name}[$lang], [$key => $value]);
+  }
+
+  /**
    * Set a field item.
    *
    * @param string $field_name
@@ -398,6 +428,34 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function setFieldItem($field_name, array $value, $idx = 0, $lang = LANGUAGE_NONE) {
     $this->entity()->{$field_name}[$lang][$idx] = $value;
+  }
+
+  /**
+   * Append a field item to the end of the field item list.
+   *
+   * @param string $field_name
+   * @param array $value
+   * @param string $lang
+   */
+  public function appendFieldItem($field_name, array $value, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+    $this->entity()->{$field_name}[$lang][] = $value;
+  }
+
+  /**
+   * Prepend a field item to the beginning of the field item list.
+   *
+   * @param string $field_name
+   * @param array $value
+   * @param string $lang
+   */
+  public function prependFieldItem($field_name, array $value, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+    array_unshift($this->entity()->{$field_name}[$lang], $value);
   }
 
   /**

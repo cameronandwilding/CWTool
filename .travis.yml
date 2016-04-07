@@ -20,7 +20,6 @@ install:
 
 before_script:
   # Composer for cw_tool.
-  - composer self-update
   - composer install
 
   # Drupal 7.x installation.

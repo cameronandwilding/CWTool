@@ -7,7 +7,6 @@
 
 namespace CW\Factory;
 
-use CW\Controller\AbstractEntityController;
 use CW\Params\NodeCreationParams;
 use stdClass;
 

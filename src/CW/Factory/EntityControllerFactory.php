@@ -10,7 +10,6 @@ namespace CW\Factory;
 use CW\Model\EntityHandler;
 use CW\Util\LocalProcessIdentityMap;
 use CW\Util\LoggerObject;
-use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
