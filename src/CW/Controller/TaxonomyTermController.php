@@ -72,6 +72,17 @@ class TaxonomyTermController extends AbstractEntityController {
     }, taxonomy_get_parents($this->getEntityId()));
   }
 
+  /**
+   * @param \CW\Factory\EntityControllerFactoryInterface $factory
+   * @return []
+   */
+  public function getAllParentNames(EntityControllerFactoryInterface $factory) {
+    return array_map(function ($term) {
+      /** @var TaxonomyTermController $term */
+      return $term->getName();
+    }, $this->getAllParentCtrl($factory));
+  }
+
 }
 
 /**

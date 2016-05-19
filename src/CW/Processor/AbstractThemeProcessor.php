@@ -55,7 +55,7 @@ abstract class AbstractThemeProcessor {
    * @param string $key
    * @return mixed
    */
-  protected function getVar($key) {
+  public function getVar($key) {
     return !$this->hasVar($key) ? NULL : $this->vars[$key];
   }
 
@@ -64,7 +64,7 @@ abstract class AbstractThemeProcessor {
    *
    * @return VC
    */
-  protected function getWrappedVar() {
+  public function getWrappedVar() {
     return VC::make($this->vars);
   }
 
@@ -72,7 +72,7 @@ abstract class AbstractThemeProcessor {
    * @param string $key
    * @param mixed $value
    */
-  protected function setVar($key, $value) {
+  public function setVar($key, $value) {
     $this->vars[$key] = $value;
   }
 
@@ -81,7 +81,7 @@ abstract class AbstractThemeProcessor {
    * @param mixed $value
    * @throws ThemeException
    */
-  protected function appendVar($key, $value) {
+  public function appendVar($key, $value) {
     if (!is_array($this->vars[$key])) {
       if (isset($this->vars[$key])) {
         throw new ThemeException('Non array to array conversion at: ' . $key);
@@ -95,7 +95,7 @@ abstract class AbstractThemeProcessor {
    * @param string $key
    * @return bool
    */
-  protected function hasVar($key) {
+  public function hasVar($key) {
     return isset($this->vars[$key]);
   }
 
