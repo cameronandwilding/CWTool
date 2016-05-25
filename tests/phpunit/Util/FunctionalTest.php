@@ -60,4 +60,26 @@ class FunctionalTest extends TestCase {
     $this->assertTrue(Functional::all($noPass, function ($item) {return $item < 10;}));
   }
 
+  public function testFirstPass() {
+    $list = [1, 2, 'foo', 4, 'bar', 6];
+    $string = Functional::first($list, function ($item) {
+      return is_string($item) ? $item : NULL;
+    });
+    $this->assertEquals($string, 'foo');
+  }
+
+  public function testFirstNotPass() {
+    $list = [1, 2, 3, 4, 5, 6];
+
+    $string = Functional::first($list, function ($item) {
+      return is_string($item) ? $item : NULL;
+    }, 'boo');
+    $this->assertEquals($string, 'boo');
+
+    $string = Functional::first($list, function ($item) {
+      return is_string($item) ? $item : NULL;
+    });
+    $this->assertEquals($string, NULL);
+  }
+
 }

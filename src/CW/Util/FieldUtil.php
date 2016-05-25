@@ -20,4 +20,6 @@ class FieldUtil {
   const KEY_TAXONOMY_ID = 'tid';
   const KEY_SAFE_VALUE = 'safe_value';
   const KEY_NODEREFERENCE_ID = 'nid';
+  const KEY_URI = 'uri';
+  
 }
