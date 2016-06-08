@@ -82,4 +82,14 @@ class FunctionalTest extends TestCase {
     $this->assertEquals($string, NULL);
   }
 
+  public function testDot() {
+    $addOne = function ($val) { return $val + 1; };
+    $double = function ($val) { return $val * 2; };
+
+    $this->assertEquals(10, Functional::dot([], 10));
+    $this->assertEquals(11, Functional::dot([$addOne], 10));
+    $this->assertEquals(22, Functional::dot([$addOne, $double], 10));
+    $this->assertEquals(21, Functional::dot([$double, $addOne], 10));
+  }
+
 }

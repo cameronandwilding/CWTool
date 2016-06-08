@@ -125,4 +125,18 @@ class Functional {
     return $defaultValue;
   }
 
+  /**
+   * Mimics the functional dot: F1 . F2 . F3 .. -> F1(F2(F3(...))).
+   *
+   * @param callable[] $callbacks
+   * @param mixed $value
+   * @return mixed
+   */
+  public static function dot(array $callbacks = [], $value) {
+    foreach ($callbacks as $callback) {
+      $value = call_user_func($callback, $value);
+    }
+    return $value;
+  }
+
 }
