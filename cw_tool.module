@@ -6,6 +6,7 @@
  */
 
 use CW\Factory\EntityControllerFactory;
+use CW\Factory\UserControllerFactory;
 use CW\Form\VariableFormGenerator;
 use CW\Manager\VariableManager;
 use CW\Model\EntityHandler;
@@ -222,6 +223,13 @@ function cw_tool_image_factory() {
  */
 function cw_tool_taxonomy_term_factory() {
   return cw_tool_get_container()[CWTOOL_SERVICE_TAXONOMY_TERM_FACTORY];
+}
+
+/**
+ * @return UserControllerFactory
+ */
+function cw_tool_user_factory() {
+  return cw_tool_get_container()[CWTOOL_SERVICE_USER_FACTORY];
 }
 
 /**
