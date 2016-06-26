@@ -123,13 +123,19 @@ class ArrayUtil {
    */
   public static function insertAfterKey(&$array, $key, $newKey, $newValue) {
     $newArray = [];
+    $has_found = FALSE;
 
     foreach ($array as $_key => $_item) {
       $newArray[$_key] = $_item;
 
       if ($_key === $key) {
+        $has_found = TRUE;
         $newArray[$newKey] = $newValue;
       }
+    }
+
+    if (!$has_found) {
+      $newArray[$newKey] = $newValue;
     }
 
     $array = $newArray;
@@ -148,13 +154,20 @@ class ArrayUtil {
   public static function insertAfterCondition(&$array, $condition, $newValue) {
     $newArray = [];
     $insertionCount = 0;
+    $has_found = FALSE;
+    
     foreach ($array as $key => $value) {
       $newArray[] = $value;
 
-      if (call_user_func($condition, $key, $value)) {
+      if (!$has_found && call_user_func($condition, $key, $value)) {
+        $has_found = TRUE;
         $newArray[] = $newValue;
         $insertionCount++;
       }
+    }
+
+    if (!$has_found) {
+      $newArray[] = $newValue;
     }
 
     $array = $newArray;

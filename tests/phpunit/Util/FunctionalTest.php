@@ -92,4 +92,20 @@ class FunctionalTest extends TestCase {
     $this->assertEquals(21, Functional::dot([$double, $addOne], 10));
   }
 
+  public function testTimes() {
+    $count = 0;
+
+    Functional::times(0, function () use (&$count) { $count += 1; });
+    $this->assertEquals(0, $count);
+
+    Functional::times(10, function () use (&$count) { $count += 1; });
+    $this->assertEquals(10, $count);
+  }
+
+  public function testWalk() {
+    $count = 0;
+    Functional::walk([2, 10], function ($item) use (&$count) { $count += $item; });
+    $this->assertEquals(12, $count);
+  }
+
 }

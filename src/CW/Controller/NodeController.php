@@ -9,7 +9,6 @@
  */
 
 namespace CW\Controller;
-use CW\Factory\UserControllerFactory;
 
 /**
  * Class NodeController
@@ -77,17 +76,6 @@ class NodeController extends AbstractEntityController {
   }
 
   /**
-   * @param \CW\Factory\UserControllerFactory $userControllerFactory
-   * @return UserController|null
-   */
-  public function getAuthor(UserControllerFactory $userControllerFactory = NULL) {
-    if (!($authorUID = $this->getAuthorUID())) return NULL;
-
-    $userControllerFactory = $userControllerFactory ?: cw_tool_user_factory();
-    return $userControllerFactory->initWithId($authorUID);
-  }
-  
-  /**
    * @return string|null
    */
   public function getBody() {
@@ -113,7 +101,7 @@ class NodeController extends AbstractEntityController {
 
     return render($nodeView);
   }
-  
+
 }
 
 /**

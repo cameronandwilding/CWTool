@@ -21,7 +21,7 @@ class Functional {
    */
   public static function times($count, $callable) {
     for ($i = 0; $i < $count; $i++) {
-      call_user_func($callable);
+      call_user_func($callable, $i);
     }
   }
 
