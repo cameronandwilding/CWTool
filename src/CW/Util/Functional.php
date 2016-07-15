@@ -41,6 +41,22 @@ class Functional {
   }
 
   /**
+   * Traverse a list and execute a callback for each element - using key and
+   * value for arguments
+   *
+   * @param array $list
+   * @param callable $callable
+   *  Arguments:
+   *    - key,
+   *    - item.
+   */
+  public static function walkKeyValue($list, $callable) {
+    foreach ($list as $key => $item) {
+      call_user_func_array($callable, array($key, $item));
+    }
+  }
+
+  /**
    * Creates a cached version of the function.
    *
    * @param callable $callback

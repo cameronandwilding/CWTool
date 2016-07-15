@@ -419,43 +419,84 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * Insert a field item to the given position of the field item list.
+   * Position is corrected to be in the boundaries of the list.
+   *
+   * @param string $field_name
+   * @param mixed $value
+   * @param int $toPosition
+   * @param string $key
+   * @param string $lang
+   */
+  public function insertFieldValue($field_name, $value, $toPosition = 0, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+
+    $toPosition = max(0, $toPosition);
+    $toPosition = min(count($this->entity()->{$field_name}[$lang]), $toPosition);
+
+    array_splice($this->entity()->{$field_name}[$lang], $toPosition, 0, [[$key => $value]]);
+  }
+
+  /**
    * Set a field item.
    *
    * @param string $field_name
-   * @param array $value
+   * @param array $item
    * @param int $idx
    * @param string $lang
    */
-  public function setFieldItem($field_name, array $value, $idx = 0, $lang = LANGUAGE_NONE) {
-    $this->entity()->{$field_name}[$lang][$idx] = $value;
+  public function setFieldItem($field_name, array $item, $idx = 0, $lang = LANGUAGE_NONE) {
+    $this->entity()->{$field_name}[$lang][$idx] = $item;
   }
 
   /**
    * Append a field item to the end of the field item list.
    *
    * @param string $field_name
-   * @param array $value
+   * @param array $item
    * @param string $lang
    */
-  public function appendFieldItem($field_name, array $value, $lang = LANGUAGE_NONE) {
+  public function appendFieldItem($field_name, array $item, $lang = LANGUAGE_NONE) {
     if (empty($this->entity()->{$field_name}[$lang])) {
       $this->entity()->{$field_name}[$lang] = [];
     }
-    $this->entity()->{$field_name}[$lang][] = $value;
+    $this->entity()->{$field_name}[$lang][] = $item;
   }
 
   /**
    * Prepend a field item to the beginning of the field item list.
    *
    * @param string $field_name
-   * @param array $value
+   * @param array $item
    * @param string $lang
    */
-  public function prependFieldItem($field_name, array $value, $lang = LANGUAGE_NONE) {
+  public function prependFieldItem($field_name, array $item, $lang = LANGUAGE_NONE) {
     if (empty($this->entity()->{$field_name}[$lang])) {
       $this->entity()->{$field_name}[$lang] = [];
     }
-    array_unshift($this->entity()->{$field_name}[$lang], $value);
+    array_unshift($this->entity()->{$field_name}[$lang], $item);
+  }
+
+  /**
+   * Insert a field item to the given position of the field item list.
+   * Position is corrected to be in the boundaries of the list.
+   *
+   * @param string $field_name
+   * @param array $item
+   * @param int $toPosition
+   * @param string $lang
+   */
+  public function insertFieldItem($field_name, array $item, $toPosition = 0, $lang = LANGUAGE_NONE) {
+    if (empty($this->entity()->{$field_name}[$lang])) {
+      $this->entity()->{$field_name}[$lang] = [];
+    }
+
+    $toPosition = max(0, $toPosition);
+    $toPosition = min(count($this->entity()->{$field_name}[$lang]), $toPosition);
+
+    array_splice($this->entity()->{$field_name}[$lang], $toPosition, 0, [$item]);
   }
 
   /**
