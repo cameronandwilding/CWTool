@@ -43,8 +43,8 @@ class AbstractEntityControllerTest extends TestCase {
   protected $fullEntity;
 
   public function setUp() {
-    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
-    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
+    $this->objectHandlerMock = $this->getMockBuilder('CW\Model\DrupalEntityHandler')->getMock();
+    $this->loggerMock = $this->getMockBuilder('Psr\Log\AbstractLogger')->getMock();
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
     $this->controller = new TestController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);
@@ -389,14 +389,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'TestController',
       'foobar',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->once())
       ->method('initWithId')
@@ -411,14 +412,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'TestController',
       'foobar',
       $this->loggerMock
-    ]);
+    ])->getMock();
 
     $this->assertNull($this->controller->fieldReferencedEntityController('field_missing', $factoryMock));
   }
@@ -429,14 +431,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'TestController',
       'foobar',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->once())
       ->method('initWithId')
@@ -451,14 +454,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'CW\Controller\FileController',
       'file',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->once())
       ->method('initWithId')
@@ -473,14 +477,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'CW\Controller\FileController',
       'file',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->never())
       ->method('initWithId');
@@ -494,14 +499,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'CW\Controller\TaxonomyTermController',
       \CW\Controller\TaxonomyTermController::getClassEntityType(),
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->once())
       ->method('initWithId')
@@ -516,14 +522,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'CW\Controller\TaxonomyTermController',
       \CW\Controller\TaxonomyTermController::getClassEntityType(),
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->never())
       ->method('initWithId')
@@ -592,14 +599,15 @@ class AbstractEntityControllerTest extends TestCase {
     $this->fullEntity->field_one[self::LANGUAGE_NONE][0][FieldUtil::KEY_TARGET_ID] = 'foo';
     $this->fullEntity->field_one[self::LANGUAGE_NONE][1][FieldUtil::KEY_TARGET_ID] = 'bar';
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'TestController',
       'foobar',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->exactly(2))
       ->method('initWithId')
@@ -617,14 +625,15 @@ class AbstractEntityControllerTest extends TestCase {
       ->method('loadSingleEntity')
       ->willReturn($this->fullEntity);
 
-    $localProcessIdentityMapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $factoryMock = $this->getMock('CW\Factory\EntityControllerFactory', [], [
+    $localProcessIdentityMapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $factoryMock = $this->getMockBuilder('CW\Factory\EntityControllerFactory')
+      ->setConstructorArgs([
       $localProcessIdentityMapMock,
       $this->objectHandlerMock,
       'TestController',
       'foobar',
       $this->loggerMock
-    ]);
+    ])->getMock();
     $factoryMock
       ->expects($this->exactly(0))
       ->method('initWithId');

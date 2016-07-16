@@ -45,8 +45,8 @@ class FileControllerTest extends TestCase {
   }
 
   public function setUp() {
-    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
-    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
+    $this->objectHandlerMock = $this->getMockBuilder('CW\Model\DrupalEntityHandler')->getMock();
+    $this->loggerMock = $this->getMockBuilder('Psr\Log\AbstractLogger')->getMock();
     $this->entityType = self::randomString();
     $this->entityId = self::randomInt();
     $this->controller = new FileController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);

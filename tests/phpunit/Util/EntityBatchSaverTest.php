@@ -36,14 +36,14 @@ class EntityBatchSaverTest extends TestCase {
     parent::setUp();
 
     $identityMap = new LocalProcessIdentityMap();
-    $this->logger = $this->getMock('Psr\Log\AbstractLogger');
+    $this->logger = $this->getMockBuilder('Psr\Log\AbstractLogger')->getMock();
     $this->entityBatchSaver = new EntityBatchSaver($identityMap, $this->logger);
 
     $entityType = self::randomString();
     $entityId1 = self::randomInt();
     $entityId2 = self::randomInt();
 
-    $this->objectHandlerMock = $this->getMock('CW\Model\EntityHandler');
+    $this->objectHandlerMock = $this->getMockBuilder('CW\Model\EntityHandler')->getMock();
     $this->entities[0] = new FakeEntityController($this->logger, $this->objectHandlerMock, $entityType, $entityId1);
     $this->entities[1] = new FakeEntityController($this->logger, $this->objectHandlerMock, $entityType, $entityId2);
 

@@ -16,7 +16,7 @@ class CronTimerTest extends CW\Test\TestCase {
   protected $cronTimer;
 
   public function setUp() {
-    $this->variableAdapterMock = $this->getMock('CW\Adapter\VariableAdapter');
+    $this->variableAdapterMock = $this->getMockBuilder('CW\Adapter\VariableAdapter')->getMock();
     $this->cronTimer = new \CW\Util\CronTimer($this->variableAdapterMock);
   }
 

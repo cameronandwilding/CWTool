@@ -9,7 +9,6 @@
  */
 
 namespace CW\Controller;
-
 use CW\Factory\UserControllerFactory;
 
 /**

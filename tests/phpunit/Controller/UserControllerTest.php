@@ -41,12 +41,12 @@ class UserControllerTest extends TestCase {
   public function setUp() {
     parent::setUp();
 
-    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
-    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
+    $this->objectHandlerMock = $this->getMockBuilder('CW\Model\DrupalEntityHandler')->getMock();
+    $this->loggerMock = $this->getMockBuilder('Psr\Log\AbstractLogger')->getMock();
     $this->entityType = UserController::getClassEntityType();
     $this->entityId = self::randomInt();
 
-    $this->drupalAdapterMock = $this->getMock('CW\Adapter\DrupalUserAdapter');
+    $this->drupalAdapterMock = $this->getMockBuilder('CW\Adapter\DrupalUserAdapter')->getMock();
 
     UserController::setDrupalAdapter($this->drupalAdapterMock);
     $this->controller = new UserController($this->loggerMock, $this->objectHandlerMock, $this->entityType, $this->entityId);

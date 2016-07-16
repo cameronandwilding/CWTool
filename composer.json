@@ -3,7 +3,7 @@
   "require": {
     "itarato/var-check": "2.*@dev",
     "pimple/pimple": "~3.0",
-    "symfony/yaml": "^2.7"
+    "symfony/yaml": "^3.1"
   },
   "require-dev": {
     "psr/log": "1.0.0"

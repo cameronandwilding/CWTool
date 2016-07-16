@@ -42,8 +42,8 @@ class EntityControllerFactoryTest extends TestCase {
 
     $this->entityType = self::randomString();
     $this->localProcessIdentityMap = new LocalProcessIdentityMap();
-    $this->objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
-    $this->loggerMock = $this->getMock('Psr\Log\AbstractLogger');
+    $this->objectHandlerMock = $this->getMockBuilder('CW\Model\DrupalEntityHandler')->getMock();
+    $this->loggerMock = $this->getMockBuilder('Psr\Log\AbstractLogger')->getMock();
     $this->entityControllerFactory = new EntityControllerFactory(
       $this->localProcessIdentityMap,
       $this->objectHandlerMock,
@@ -95,8 +95,8 @@ class EntityControllerFactoryTest extends TestCase {
   }
 
   public function testWithInvalidControllerClass() {
-    $mapMock = $this->getMock('CW\Util\LocalProcessIdentityMap');
-    $objectHandlerMock = $this->getMock('CW\Model\DrupalEntityHandler');
+    $mapMock = $this->getMockBuilder('CW\Util\LocalProcessIdentityMap')->getMock();
+    $objectHandlerMock = $this->getMockBuilder('CW\Model\DrupalEntityHandler')->getMock();
     $entity_type = self::randomString();
 
     $this->setExpectedException('\InvalidArgumentException');

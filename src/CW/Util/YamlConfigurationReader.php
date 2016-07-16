@@ -23,7 +23,7 @@ class YamlConfigurationReader implements ConfigurationReaderInterface {
    * @return mixed
    */
   public function read() {
-    return Yaml::parse($this->fileName);
+    return Yaml::parse(file_get_contents($this->fileName));
   }
 
 }

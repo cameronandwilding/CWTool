@@ -105,7 +105,7 @@ class ImageController extends FileController {
   /**
    * @param string $alt
    */
-  protected function setAltFromHostField($alt) {
+  public function setAltFromHostField($alt) {
     $this->alt = $alt;
   }
 
@@ -121,7 +121,7 @@ class ImageController extends FileController {
   /**
    * @param string $title
    */
-  protected function setTitleFromHostField($title) {
+  public function setTitleFromHostField($title) {
     $this->title = $title;
   }
 
@@ -137,7 +137,7 @@ class ImageController extends FileController {
   /**
    * @param int $width
    */
-  protected function setWidthFromHostField($width) {
+  public function setWidthFromHostField($width) {
     $this->width = $width;
   }
 
@@ -153,17 +153,8 @@ class ImageController extends FileController {
   /**
    * @param int $height
    */
-  protected function setHeightFromHostField($height) {
+  public function setHeightFromHostField($height) {
     $this->height = $height;
-  }
-
-  protected function attachExtraReferencedControllerPropertiesFromParentController(array $fieldItem) {
-    parent::attachExtraReferencedControllerPropertiesFromParentController($fieldItem);
-
-    $this->setAltFromHostField(@$fieldItem['alt']);
-    $this->setTitleFromHostField(@$fieldItem['title']);
-    $this->setWidthFromHostField(@$fieldItem['width']);
-    $this->setHeightFromHostField(@$fieldItem['height']);
   }
 
 }
