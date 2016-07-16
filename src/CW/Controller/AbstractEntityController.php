@@ -506,7 +506,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
-   * Move extra propertied to a referenced controller from the parent.
+   * Move extra properties to a referenced controller from the parent.
    * Sometimes Drupal or contributed modules attach extra data to the entity
    * object for convenience - such as size and extension information for files,
    * or let's MP3 metadata to audio entity - that would not be on the original
@@ -620,12 +620,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    $tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
-    if (empty($tid)) {
-      return NULL;
-    }
-
-    return $entityFactory->initWithId($tid);
+    return $this->fieldReferencedEntityController($fieldName, $entityFactory, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
   }
 
   /**
