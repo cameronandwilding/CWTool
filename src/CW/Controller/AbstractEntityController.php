@@ -38,8 +38,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   // On the entity, created and changed timestamps are different sometimes, even
   // if the entity was not updated. We need to check the updated state (being
   // created and changed different) outside of a threshold.
-  // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD;
-  const UPDATE_TIMESTAMP_VALIDABILITY_THRESHOLD = 2;
+  // Eg.: $isUpdated = $entity->changed > $entity->created + UPDATE_TIMESTAMP_VALIDITY_THRESHOLD;
+  const UPDATE_TIMESTAMP_VALIDITY_THRESHOLD = 2;
 
   // Param const for:
   /** @see $this->entity() */
@@ -132,9 +132,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    */
   public function entity($forceReload = self::RELOAD_IGNORE) {
     if ($forceReload === self::RELOAD_FORCE || !isset($this->entity)) {
-      if (empty($this->entityId)) {
-        return NULL;
-      }
+      if (empty($this->entityId)) return NULL;
 
       $this->entity = $this->objectHandler->loadSingleEntity($this->entityType, $this->entityId);
     }
@@ -156,8 +154,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * Save data to database.
    */
   public function save() {
-    $this->logger->info('Entity has been saved {this}', array('this' => $this->__toString()));
     $this->objectHandler->save($this->entityType, $this->entity());
+    $this->logger->info('Entity has been saved {this}', array('this' => $this->__toString()));
     $this->setClean();
   }
 
@@ -273,9 +271,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldValue($fieldName, $key = FieldUtil::KEY_VALUE, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$fieldName}[$lang][$idx][$key])) {
-      return NULL;
-    }
+    if (!isset($this->entity()->{$fieldName}[$lang][$idx][$key])) return NULL;
+
     return $this->entity()->{$fieldName}[$lang][$idx][$key];
   }
 
@@ -302,11 +299,9 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @return array
    */
   public function multiFieldValues($field_name, $key = FieldUtil::KEY_VALUE, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$field_name}[$lang])) {
-      return array();
-    }
+    if (!isset($this->entity()->{$field_name}[$lang])) return [];
 
-    $values = array();
+    $values = [];
     foreach ($this->entity()->{$field_name}[$lang] as $idx => $item) {
       $values[] = $this->fieldValue($field_name, $key, $idx, $lang);
     }
@@ -317,9 +312,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldItem($fieldName, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$fieldName}[$lang][$idx])) {
-      return NULL;
-    }
+    if (!isset($this->entity()->{$fieldName}[$lang][$idx])) return NULL;
+
     return $this->entity()->{$fieldName}[$lang][$idx];
   }
 
@@ -327,9 +321,8 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldItems($fieldName, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$fieldName}[$lang])) {
-      return [];
-    }
+    if (!isset($this->entity()->{$fieldName}[$lang])) return [];
+
     return $this->entity()->{$fieldName}[$lang];
   }
 
@@ -337,42 +330,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldReferencedFileCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    $fid = $this->fieldValue($fieldName, FieldUtil::KEY_FILE_ID, $idx, $lang);
-    if (empty($fid)) {
-      return NULL;
-    }
-
-    return $entityFactory->initWithId($fid);
-  }
-
-  /**
-   * Other than gets the file controller it populates the field stored attributes
-   * associated to the file - such as alt, title, width and height.
-   *
-   * @param string $fieldName
-   * @param \CW\Factory\EntityControllerFactoryInterface $entityFactory
-   * @param int $idx
-   * @param string $lang
-   *
-   * @return ImageController
-   */
-  public function fieldReferencedImageCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    $fieldItem = $this->fieldItem($fieldName, $idx, $lang);
-    $fid = @$fieldItem[FieldUtil::KEY_FILE_ID];
-    if (empty($fid)) {
-      return NULL;
-    }
-
-    /** @var ImageController $ctrl */
-    $ctrl = $entityFactory->initWithId($fid);
-
-    // Fixtures for field dependent file attributes.
-    $ctrl->setAltFromHostField(@$fieldItem['alt']);
-    $ctrl->setTitleFromHostField(@$fieldItem['title']);
-    $ctrl->setWidthFromHostField(@$fieldItem['width']);
-    $ctrl->setHeightFromHostField(@$fieldItem['height']);
-
-    return $ctrl;
+    return $this->fieldReferencedEntityController($fieldName, $entityFactory, FieldUtil::KEY_FILE_ID, $idx, $lang);
   }
 
   /**
@@ -520,27 +478,47 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldReferencedEntityController($fieldName, EntityControllerFactoryInterface $entityControllerFactory, $fieldKey = FieldUtil::KEY_TARGET_ID, $idx = 0, $lang = LANGUAGE_NONE) {
-    if (!($targetID = $this->fieldValue($fieldName, $fieldKey, $idx, $lang))) {
-      return NULL;
+    if (
+      !($fieldItem = $this->fieldItem($fieldName, $idx, $lang)) ||
+      !($targetID = @$fieldItem[$fieldKey])
+    ) return NULL;
+
+    $ctrl = $entityControllerFactory->initWithId($targetID);
+    if ($ctrl instanceof AbstractEntityController) {
+      $ctrl->attachExtraReferencedControllerPropertiesFromParentController($fieldItem);
     }
-    return $entityControllerFactory->initWithId($targetID);
+
+    return $ctrl;
   }
 
   /**
    * {@inheritdoc}
    */
   public function fieldAllReferencedEntityController($fieldName, EntityControllerFactoryInterface $factory, $fieldKey = FieldUtil::KEY_TARGET_ID, $lang = LANGUAGE_NONE) {
-    if (!isset($this->entity()->{$fieldName}[$lang])) {
-      return array();
-    }
+    if (!isset($this->entity()->{$fieldName}[$lang])) return [];
 
-    $controllers = array();
+    $controllers = [];
     foreach (array_keys($this->entity()->{$fieldName}[$lang]) as $idx) {
       $controllers[] = $this->fieldReferencedEntityController($fieldName, $factory, $fieldKey, $idx, $lang);
     }
 
     return array_filter($controllers);
   }
+
+  /**
+   * Move extra properties to a referenced controller from the parent.
+   * Sometimes Drupal or contributed modules attach extra data to the entity
+   * object for convenience - such as size and extension information for files,
+   * or let's MP3 metadata to audio entity - that would not be on the original
+   * entity if it's only loaded through entity_load().
+   *
+   * This function needs to be overwritten to the appropriate sub-controller
+   * class in order to move the right properties.
+   *
+   * @param array $fieldItem The original field item populated by the parent
+   *                         entity load.
+   */
+  protected function attachExtraReferencedControllerPropertiesFromParentController($fieldItem) { }
 
   /**
    * Get a property of the entity object.
@@ -642,12 +620,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * {@inheritdoc}
    */
   public function fieldReferencedTaxonomyTermCtrl($fieldName, EntityControllerFactoryInterface $entityFactory, $idx = 0, $lang = LANGUAGE_NONE) {
-    $tid = $this->fieldValue($fieldName, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
-    if (empty($tid)) {
-      return NULL;
-    }
-
-    return $entityFactory->initWithId($tid);
+    return $this->fieldReferencedEntityController($fieldName, $entityFactory, FieldUtil::KEY_TAXONOMY_ID, $idx, $lang);
   }
 
   /**

@@ -317,12 +317,12 @@ function cw_tool_forms($form_id) {
  * @param string $class
  * @return mixed
  */
-function cw_tool_generate_form($form, $form_state, $class) {
+function cw_tool_generate_form($form, &$form_state, $class) {
   $funcArgs = func_get_args();
 
   call_user_func_array(array($class, 'attachSubmitAndValidation'), array(&$form));
 
-  $callArgs = array(&$form, $form_state);
+  $callArgs = array(&$form, &$form_state);
   Functional::walk($funcArgs[3], function ($item) use (&$callArgs) { array_push($callArgs, $item); });
 
   return call_user_func_array(array($class, 'build'), $callArgs);

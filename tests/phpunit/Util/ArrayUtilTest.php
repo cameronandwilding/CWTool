@@ -185,4 +185,24 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  public function testTransformWithKeys() {
+    $arr = [1, 2, 6, 10];
+    $out = ArrayUtil::transformWithKeys($arr, function ($item, $key, $secret) {
+      return ['key' . $item, [$item, $secret, $key]];
+    }, 'foobar');
+
+    $reference = [
+      'key1' => [1, 'foobar', 0],
+      'key2' => [2, 'foobar', 1],
+      'key6' => [6, 'foobar', 2],
+      'key10' => [10, 'foobar', 3],
+    ];
+
+    $this->assertEquals(array_keys($out), array_keys($reference));
+
+    foreach ($out as $key => $val) {
+      $this->assertEquals($val, $reference[$key]);
+    }
+  }
+
 }

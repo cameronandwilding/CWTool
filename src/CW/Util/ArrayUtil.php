@@ -175,4 +175,33 @@ class ArrayUtil {
     return $insertionCount;
   }
 
+  /**
+   * Array transformation resulting a new array where keys are defined too. It's
+   * a special version or array_map, _not_ in place array walk with keys.
+   *
+   * @param array $array
+   * @param callable $callback
+   *  Callback function that executes the transformation needs to return an
+   *  array with exactly 2 elements: [key, value] for the new array.
+   *  The input args for this function is:
+   *  - item from array
+   *  - key from array
+   *  - ... everything else passed to transformWithKeys()
+   * @return array
+   */
+  public static function transformWithKeys($array, $callback) {
+    $args = func_get_args();
+    array_shift($args);
+    array_shift($args);
+
+    $out = [];
+    foreach ($array as $key => $item) {
+      $currentArgs = array_merge([$item, $key], $args);
+      list($key, $value) = call_user_func_array($callback, $currentArgs);
+      $out[$key] = $value;
+    }
+
+    return $out;
+  }
+
 }
