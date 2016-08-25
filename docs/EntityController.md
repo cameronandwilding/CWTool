@@ -1,5 +1,5 @@
 Entity controllers and factories
---------------------------------
+================================
 
 
 ```
@@ -26,7 +26,7 @@ Entity controllers and factories
 └──────────────────────┘
 ```
 
-Entity controllers are created through factories in order to provide common functionalities, such as caching. The entity controller factory is usually defined in the service container, such as this for nodes:
+Entity controllers are created through factories in order to provide common functionality, such as caching. The entity controller factory is usually defined in the service container, such as this for nodes:
 
 ```
   cw.node-controller.factory:
@@ -75,4 +75,37 @@ And then you can just call the entity ref getter on the entity controller:
 ```php
 $ctrl = cw_tool_get_container()[MY_CONTROLLER_FACTORY_SERVICE];
 $tagControllers = $ctrl->fieldReferencedEntityControllersLookup(MyController::FIELD_TAG);
+```
+
+
+Special reference loaders
+-------------------------
+
+In Drupal there are fields that has additional metadata. An example is the image field, where the default data is a file ID, however you often find image dimension, extension and other info on the node object. This metadata cannot always be obtained through the basic reference getter, such as here:
+ 
+ 
+```php
+$article = cw_tool_get_container->get('my-article-factory')->initWithId(123);
+$imageController = $article->fieldReferencedEntityController('<fieldname>', <image factory>);
+```
+
+Generally or for special entities the responsibility of transferring the special properties (from the node object) is on the concrete controller class - via implementing the `attachExtraReferencedControllerPropertiesFromParentController` function. See this example from the ImageController class:
+
+```php
+class ImageController extends FileController {
+
+    ...
+  
+    protected function attachExtraReferencedControllerPropertiesFromParentController(array $fieldItem) {
+      parent::attachExtraReferencedControllerPropertiesFromParentController($fieldItem);
+  
+      $this->setAltFromHostField(@$fieldItem['alt']);
+      $this->setTitleFromHostField(@$fieldItem['title']);
+      $this->setWidthFromHostField(@$fieldItem['width']);
+      $this->setHeightFromHostField(@$fieldItem['height']);
+    }
+    
+    ...
+
+}
 ```

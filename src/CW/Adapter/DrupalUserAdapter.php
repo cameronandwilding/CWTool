@@ -6,6 +6,7 @@
  */
 
 namespace CW\Adapter;
+
 use Psr\Log\LoggerInterface;
 
 /**
