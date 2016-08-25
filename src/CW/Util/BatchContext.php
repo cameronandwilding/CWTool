@@ -28,11 +28,10 @@ class BatchContext {
     return $isFirstRun;
   }
 
-  public function __get($name) {
-    return @$this->context[self::KEY_SANDBOX][$name];
-  }
-
-  public function &getSandboxVarRef($name) {
+  public function &__get($name) {
+    if (!isset($this->context[self::KEY_SANDBOX][$name])) {
+      $this->context[self::KEY_SANDBOX][$name] = NULL;
+    }
     return $this->context[self::KEY_SANDBOX][$name];
   }
 
@@ -49,11 +48,11 @@ class BatchContext {
   }
 
   public function getFinished() {
-    return $this->context[self::KEY_FINISHED];
+    return (float) @$this->context[self::KEY_FINISHED];
   }
 
   public function isFinished() {
-    return $this->context[self::KEY_FINISHED] >= self::FINISHED_COMPLETE;
+    return @$this->context[self::KEY_FINISHED] >= self::FINISHED_COMPLETE;
   }
 
 }

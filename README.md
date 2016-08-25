@@ -22,7 +22,7 @@ Main features
 
 * dependency injection layer
 * drupal variable adapter
-* entity controllers and factories
+* [entity controllers and factories](docs/EntityController.md)
 * entity creators
 * site variable and its form handlers
 * drupal object handler (entity crud) adapter
@@ -114,6 +114,8 @@ $nodeController = cw_tool_get_container->get('my-node-controller-factory')->init
 ```
 
 **Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the generic node factory or blog node factory.)
+
+**few**
 
 
 Entity creators

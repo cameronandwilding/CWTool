@@ -1,9 +1,9 @@
 <?php
-use CW\Util\ArrayUtil;
-
 /**
  * @file
  */
+
+use CW\Util\ArrayUtil;
 
 class ArrayUtilTest extends PHPUnit_Framework_TestCase {
 
