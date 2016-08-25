@@ -54,4 +54,25 @@ $nodeController = cw_tool_get_container->get('my-node-controller-factory')->init
 
 **Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the generic node factory or blog node factory.)
 
-**few**
+
+Entity fields
+-------------
+
+
+Entity controllers (```AbstractEntityController```) and entity form values (```NodeFormState```) are implementing ```FieldAccessor```. Use it to get/set field values or referenced entities. Common field values are defaulted into function args or included in ```FieldUtil```.
+
+To define types of references, use hook ```cw_tool_field_controller_reference_map``` to match them with their associated entity factory:
+
+```php
+function hook_cw_tool_field_controller_reference_map(\CW\Params\HookFieldControllerReferenceMapCollector $collector) {
+  $collector->add('field_some_entity_reference', MY_NODE_BUNDLE_FACTORY);
+  $collector->add('field_some_node_reference', MY_NODE_BUNDLE_FACTORY, \CW\Util\FieldUtil::KEY_NODEREFERENCE_ID);
+}
+```
+
+And then you can just call the entity ref getter on the entity controller:
+
+```php
+$ctrl = cw_tool_get_container()[MY_CONTROLLER_FACTORY_SERVICE];
+$tagControllers = $ctrl->fieldReferencedEntityControllersLookup(MyController::FIELD_TAG);
+```
