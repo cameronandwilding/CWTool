@@ -12,7 +12,7 @@
         >
     <testsuites>
         <testsuite name="CWTool test suite">
-            <directory>./tests/phpunit/tests</directory>
+            <directory>./tests/src/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
