@@ -1,5 +1,6 @@
 {
   "name": "cw/tool",
+  "type": "drupal-module",
   "require": {
     "itarato/var-check": "2.*@dev"
   },
