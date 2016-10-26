@@ -67,7 +67,7 @@ env:
     # - DRUPAL_TI_BEHAT_BROWSER="firefox"
 
     # PHPUnit specific commandline arguments.
-    - DRUPAL_TI_PHPUNIT_ARGS="-c phpunit.xml"
+    - DRUPAL_TI_PHPUNIT_ARGS="-c ../phpunit.xml"
     # Specifying the phpunit-core src/ directory is useful when e.g. a vendor/
     # directory is present in the module directory, which phpunit would then
     # try to find tests in. This option is relative to $TRAVIS_BUILD_DIR.
@@ -99,8 +99,8 @@ mysql:
   encoding: utf8
 
 before_install:
+  - cd ./tests
   - composer self-update
-  - composer install
   - composer global require "lionsad/drupal_ti:1.*"
   - drupal-ti before_install
 
