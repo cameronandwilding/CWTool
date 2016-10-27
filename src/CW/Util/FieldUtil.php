@@ -21,5 +21,6 @@ class FieldUtil {
   const KEY_SAFE_VALUE = 'safe_value';
   const KEY_NODEREFERENCE_ID = 'nid';
   const KEY_URI = 'uri';
+  const KEY_RICH_TEXT_FORMAT = 'format';
   
 }

@@ -29,7 +29,7 @@ class FileUtil {
    * @return bool|\stdClass
    */
   public static function uploadManagedFile($uri, $mime = self::MIME_PNG, $destFileName = self::NAME_USE_ORIGINAL, $destScheme = 'public') {
-    $source = (object) array('uri' => $uri, 'filemime' => $mime);
+    $source = (object) ['uri' => $uri, 'filemime' => $mime];
     $destFileName = $destFileName ?: basename($uri);
     return file_copy($source, $destScheme . '://' . $destFileName, FILE_EXISTS_RENAME);
   }
