@@ -114,6 +114,14 @@ class NodeController extends AbstractEntityController {
 
     return render($nodeView);
   }
+
+  /**
+   * If exists in database.
+   * @return bool
+   */
+  public function isExist() {
+    return (bool) db_query('SELECT COUNT(1) FROM node WHERE nid = :nid', [':nid' => $this->getEntityId()])->fetchField();
+  }
   
 }
 

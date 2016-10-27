@@ -410,6 +410,15 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
   }
 
   /**
+   * @param string $fieldName
+   * @param array $items
+   * @param string $lang
+   */
+  public function setField($fieldName, array $items, $lang = LANGUAGE_NONE) {
+    $this->entity()->{$fieldName}[$lang] = $items;
+  }
+
+  /**
    * Append a field item to the end of the field item list.
    *
    * @param string $field_name
