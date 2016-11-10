@@ -205,4 +205,12 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     }
   }
 
+  public function testRangeNoCallback() {
+    $this->assertEquals([3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8], ArrayUtil::range(3, 8));
+  }
+
+  public function testRangeWithCallback() {
+    $this->assertEquals([3 => 6, 4 => 8, 5 => 10, 6 => 12, 7 => 14, 8 => 16], ArrayUtil::range(3, 8, function ($e) { return $e * 2; }));
+  }
+
 }

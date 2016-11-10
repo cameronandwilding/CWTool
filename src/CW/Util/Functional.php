@@ -155,4 +155,19 @@ class Functional {
     return $value;
   }
 
+  /**
+   * Creates an instance callable callback.
+   *
+   * @param string $methodName
+   * @return \Closure
+   */
+  public static function selfCallFn($methodName) {
+    $args = func_get_args();
+    array_shift($args);
+
+    return function ($instance) use ($methodName, $args) {
+      return call_user_func_array([$instance, $methodName], $args);
+    };
+  }
+
 }

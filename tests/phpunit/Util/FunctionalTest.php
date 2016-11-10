@@ -3,6 +3,7 @@
  * @file
  */
 use CW\Test\TestCase;
+use CW\Util\ArrayUtil;
 use CW\Util\Functional;
 
 /**
@@ -108,4 +109,21 @@ class FunctionalTest extends TestCase {
     $this->assertEquals(12, $count);
   }
 
+  public function testSelfCallFn() {
+    $nums = ArrayUtil::range(-2, 2, function ($n) { return new FunctionalTest__SimpleClassDummy($n); });
+    $this->assertEquals([
+      -2 => -20,
+      -1 => -10,
+      0 => 0,
+      1 => 10,
+      2 => 20,
+    ], array_map(Functional::selfCallFn('getMultiple', 10), $nums));
+  }
+
+}
+
+class FunctionalTest__SimpleClassDummy {
+  public $n;
+  public function __construct($n) { $this->n = $n; }
+  public function getMultiple($mul) { return $this->n * $mul; }
 }

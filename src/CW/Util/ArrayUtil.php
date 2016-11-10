@@ -204,4 +204,12 @@ class ArrayUtil {
     return $out;
   }
 
+  public static function range($begin, $end, $callback = NULL) {
+    $out = [];
+    for ($i = $begin; $i <= $end; $i++) {
+      $out[$i] = $callback ? call_user_func($callback, $i) : $i;
+    }
+    return $out;
+  }
+
 }
