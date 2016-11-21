@@ -120,6 +120,19 @@ class FunctionalTest extends TestCase {
     ], array_map(Functional::selfCallFn('getMultiple', 10), $nums));
   }
 
+  public function testIdentity() {
+    $fnID = Functional::id();
+    $this->assertEquals(0, $fnID(0));
+    $this->assertEquals(1, $fnID(1));
+    $this->assertEquals(123, $fnID(123));
+    $this->assertEquals("", $fnID(""));
+    $this->assertEquals("hello", $fnID("hello"));
+    $this->assertEquals([1, 'foo' => 'bar'], $fnID([1, 'foo' => 'bar']));
+
+    $o = (object) ['foo' => [1, 2, 3], 'bar' => 'baz'];
+    $this->assertEquals($o, $fnID($o));
+  }
+
 }
 
 class FunctionalTest__SimpleClassDummy {

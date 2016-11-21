@@ -83,6 +83,23 @@ class TaxonomyTermController extends AbstractEntityController {
     }, $this->getAllParentCtrl($factory));
   }
 
+  /**
+   * Get weight or PHP_INT_MAX if does not exist.
+   *
+   * @return int
+   */
+  public function getWeight() {
+    $entity = $this->entity();
+    return isset($entity->weight) && is_numeric($entity->weight) ? (int) $entity->weight : PHP_INT_MAX;
+  }
+
+  /**
+   * @return object
+   */
+  public static function getVocabulary() {
+    return taxonomy_vocabulary_machine_name_load(static::getClassEntityBundle());
+  }
+
 }
 
 /**

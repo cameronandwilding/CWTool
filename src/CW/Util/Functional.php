@@ -170,4 +170,12 @@ class Functional {
     };
   }
 
+  /**
+   * Provides the identity function that always returns whatever it is passed to.
+   * @return \Closure
+   */
+  public static function id() {
+    return function ($value = NULL) { return $value; };
+  }
+
 }
