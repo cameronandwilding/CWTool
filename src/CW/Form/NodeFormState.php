@@ -16,8 +16,6 @@ use CW\Util\FieldUtil;
  * @package CW\Form
  *
  * Form state accessor of a node form.
- *
- * @todo make a FieldAccessor interface
  */
 class NodeFormState extends FormState implements FieldAccessor {
 

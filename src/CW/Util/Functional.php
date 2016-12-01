@@ -178,4 +178,15 @@ class Functional {
     return function ($value = NULL) { return $value; };
   }
 
+  public static function curry($callback) {
+    $staticArgs = func_get_args();
+    array_shift($staticArgs); // Remove the callback.
+
+    return function () use ($callback, $staticArgs) {
+      $extraArgs = func_get_args();
+      $args = array_merge($staticArgs, $extraArgs);
+      return call_user_func_array($callback, $args);
+    };
+  }
+
 }

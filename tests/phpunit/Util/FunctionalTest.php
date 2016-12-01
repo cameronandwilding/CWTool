@@ -133,6 +133,21 @@ class FunctionalTest extends TestCase {
     $this->assertEquals($o, $fnID($o));
   }
 
+  public function testCurry() {
+    $add = function ($a, $b) {
+      return $a + $b;
+    };
+
+    $addOrig = Functional::curry($add);
+    $this->assertEquals(10, $addOrig(2, 8));
+
+    $add10 = Functional::curry($add, 10);
+    $this->assertEquals(14, $add10(4));
+
+    $staticSum = Functional::curry($add, 10, 12);
+    $this->assertEquals(22, $staticSum());
+  }
+
 }
 
 class FunctionalTest__SimpleClassDummy {

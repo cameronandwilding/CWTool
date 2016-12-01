@@ -14,6 +14,7 @@ namespace CW\Drush\Command;
  *
  * @todo think about adding an interface
  * @todo inject Drush specific operations for better testability
+ * @todo make it not node dependent (options for the Drush command)
  */
 class CommandScaffoldEntityController {
 
