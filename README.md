@@ -50,6 +50,31 @@ use Drupal\cw_tool\Controller\AbstractEntityController;
 class ArticleController extends AbstractEntityController { }
 ```
 
+Entity Creator Factories
+------------------------
+
+Entities can be created through the entity creator class. There should be a separate param class for the entity creation parameters.
+
+There should be a separate service per entity type where the argument is the Drupal entity class.
+
+*Sample: Node creator*
+
+Create an entity creator factory in your module's \*.services.yml:
+
+```YML
+services:
+  my_module.entity_creator.node:
+    class: Drupal\cw_tool\Factory\EntityCreator
+    arguments:
+      - 'Drupal\node\Entity\Node'
+```
+
+Then you can call:
+
+    \Drupal::service('my_module.entity_creator.node')->create($node_params);
+
+The node params should be a class that implements *Drupal\cw_tool\Params\EntityCreationParams* to provide the required values as per the entity type being created.
+
 
 Template Processors
 -------------------
