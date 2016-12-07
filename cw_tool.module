@@ -359,3 +359,14 @@ function cw_tool_library() {
 
   return $libraries;
 }
+
+/**
+ * Check if the form ID is associated to the form class.
+ *
+ * @param string $class
+ * @param string $form_id
+ * @return bool
+ */
+function cw_tool_is_form_id_of_form_class($class, $form_id) {
+  return strpos($form_id, $class) !== FALSE;
+}

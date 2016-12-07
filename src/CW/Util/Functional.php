@@ -142,7 +142,7 @@ class Functional {
   }
 
   /**
-   * Mimics the functional dot: F1 . F2 . F3 .. -> F1(F2(F3(...))).
+   * Mimics the functional dot: F1 . F2 ... Fn-1 . Fn -> Fn(Fn-1(...F2(F1())...)).
    *
    * @param callable[] $callbacks
    * @param mixed $value
@@ -186,6 +186,24 @@ class Functional {
       $extraArgs = func_get_args();
       $args = array_merge($staticArgs, $extraArgs);
       return call_user_func_array($callback, $args);
+    };
+  }
+
+  /**
+   * Generates a negating callback.
+   *
+   * @param callable $callable
+   * @return \Closure
+   */
+  public static function fnNot($callable) {
+    $staticArgs = func_get_args();
+    array_shift($staticArgs);
+
+    return function () use ($callable, $staticArgs) {
+      $dynArgs = func_get_args();
+      $args = array_merge($staticArgs, $dynArgs);
+
+      return !call_user_func_array($callable, $args);
     };
   }
 

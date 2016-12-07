@@ -148,6 +148,32 @@ class FunctionalTest extends TestCase {
     $this->assertEquals(22, $staticSum());
   }
 
+  public function testNotSimple() {
+    $fnNotString = Functional::fnNot('is_string');
+
+    $this->assertTrue($fnNotString(1));
+    $this->assertTrue($fnNotString(NULL));
+    $this->assertTrue($fnNotString(FALSE));
+    $this->assertTrue($fnNotString(TRUE));
+
+    $this->assertFalse($fnNotString("hello"));
+    $this->assertFalse($fnNotString(''));
+  }
+
+  public function testNotComplex() {
+    $fnIsMod = function ($mod, $n) {
+      return $n % $mod === 0;
+    };
+
+    $fnNotIsMod10 = Functional::fnNot($fnIsMod, 10);
+
+    $this->assertEquals(TRUE, $fnNotIsMod10(1));
+    $this->assertEquals(TRUE, $fnNotIsMod10(3));
+    $this->assertEquals(FALSE, $fnNotIsMod10(10));
+    $this->assertEquals(TRUE, $fnNotIsMod10(1043));
+    $this->assertEquals(FALSE, $fnNotIsMod10(35298320));
+  }
+
 }
 
 class FunctionalTest__SimpleClassDummy {
