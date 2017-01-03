@@ -36,9 +36,6 @@ before_script:
   - cp ./modules/cwtool/tests/conf/phpunit.xml.core ./core/phpunit.xml
 
 script:
-  # Unit tests.
-  - phpunit -c phpunit.xml
-
   # Drupal web tests.
   - cd ./core
   # Run web server.
