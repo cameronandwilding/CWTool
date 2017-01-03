@@ -1,0 +1,45 @@
+sudo: false
+
+language: php
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+php:
+  - 5.6
+
+install:
+  # Set up Composer.
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer self-update
+
+  # Get Drush 7.x.
+  - composer global require drush/drush:8.*
+
+before_script:
+  # Composer for cw_tool.
+  - composer self-update
+  - composer install
+
+  # Drupal 7.x installation.
+  - mysql -e 'create database drupal'
+  - cd ..
+  - drush dl drupal -y
+  - cd drupal-*
+  - drush si minimal --db-url=mysql://root@localhost/drupal -y
+  - composer install --dev
+
+  # Set up modules.
+  - ln -s /home/travis/build/cameronandwilding/CWTool ./modules/cwtool
+  - cp ./modules/cwtool/tests/conf/phpunit.xml.core ./core/phpunit.xml
+
+script:
+  # Unit tests.
+  - phpunit -c phpunit.xml
+
+  # Drupal web tests.
+  - cd ./core
+  # Run web server.
+  - ../vendor/bin/phpunit ../modules/cwtool/tests/src/Unit/Controller/AbstractEntityControllerTest.php

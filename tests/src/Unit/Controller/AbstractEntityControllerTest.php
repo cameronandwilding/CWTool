@@ -5,8 +5,8 @@
 
 namespace Drupal\Tests\cw_tool\Unit\Controller;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\cw_tool\Fixtures\Controller\MinimalEntityController;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * Class AbstractEntityControllerTest
@@ -16,7 +16,7 @@ use Drupal\Tests\UnitTestCase;
  *
  * @group cw_tool
  */
-class AbstractEntityControllerTest extends UnitTestCase {
+class AbstractEntityControllerTest extends KernelTestBase {
 
   /**
    * @var \PHPUnit_Framework_MockObject_MockObject
@@ -53,6 +53,7 @@ class AbstractEntityControllerTest extends UnitTestCase {
       ->willReturn($this->entityStorageMock);
 
     $fakeEntity = (object) [
+      'sizzle' => 'dizzle',
     ];
 
     $id = 'baz';
