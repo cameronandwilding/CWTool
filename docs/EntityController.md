@@ -2,6 +2,20 @@ Entity controllers and factories
 ================================
 
 
+# Scenario
+
+One of the most common operation in a Drupal application is to manipulate node or user objects:
+
+'''php
+$node = node_load(123);
+$node->field_second_cover_image[LANGUAGE_NONE][0]['uri'] = $newUri;
+node_save($node);
+'''
+
+This pattern is prone to errors and easy to make an unmaintainable (mostly redundant) pile of code with it. A better solution is to use controllers for entities - one controller representing one entity bundle. The CWTool entity controller not only allows controllers to collect all application knowledge in it, but it does provide a conventient way to manipulate the entity itself.
+
+Before we see an example a quick word on how controllers are accessed in code. Controllers have a few features that helps their job around entities (such as caching, logging, etc). In order not to bother with it each time you instantiate a controller they are always provided by a controller factory. These factories are services and being one they need to be defined in the service container. The following diagram shows that the service container provides the controller factory which provides the controller:
+
 ```
 ┌──────────────────────┐
 │                      │
@@ -13,7 +27,7 @@ Entity controllers and factories
             ▼
 ┌──────────────────────┐   ┌───▶ Logger
 │                      │   ├───▶ Controller
-│ Controller factory   ├───┼───▶ IdentityMap
+│ Controller factory   ├───┼───▶ Identity map
 │                      │   └───▶ Entity type information
 └──────────────────────┘
             │
@@ -26,34 +40,71 @@ Entity controllers and factories
 └──────────────────────┘
 ```
 
-Entity controllers are created through factories in order to provide common functionality, such as caching. The entity controller factory is usually defined in the service container, such as this for nodes:
 
+# Example
+
+To have an entity controller you need first the controller class:
+
+```php
+// somewhere in mymodule/src/Controller/Node/MyNode.php
+
+class MyNode extends CW\Controller\NodeController {
+
+  // Class node bundle.
+  const BUNDLE = 'mynode';
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getClassEntityBundle() {
+    return self::BUNDLE;
+  }
+
+}
 ```
-  cw.node-controller.factory:
-    class: CW\Factory\EntityControllerFactory
-    arguments:
-      - @cw.identity-map
-      - @cw.object-handler.drupal
-      - 'CW\Controller\NodeController'
-      - 'node'
-      - @cw.logger
+
+Then define the factory for this controller for the service container:
+
+```php
+function mymodule_cw_tool_service_container_definition_alter(Pimple\Container $container) {
+  $container['my-node-factory'] = function (Container $c) {
+    return new EntityControllerFactory(
+      $c[CWTOOL_SERVICE_IDENTITY_MAP],
+      $c[CWTOOL_SERVICE_OBJECT_HANDLER],
+      'My\Controller\Node\MyNode',
+      'node',
+      $c[CWTOOL_SERVICE_LOGGER]
+    );
+  };
+}
 ```
 
 An entity controller factory must define the controller class and the entity type. Accessing the factory is through the service container:
 
 ```php
-cw_tool_get_container->get('my-controller-factory');
+cw_tool_get_container()['my-controller-factory'];
+
+// Or even better to create a quick accessor:
+
+/**
+ * \CW\Factory\EntityControllerFactory
+ */
+function mymodule_mynode_factory() {
+  return cw_tool_get_container()['my-controller-factory'];
+}
 ```
 
 And then accessing the concrete entity is either passing the ID or the whole object:
 
 ```php
-$userController = cw_tool_get_container->get('my-user-controller-factory')->initWithId(123);
-$nodeController = cw_tool_get_container->get('my-node-controller-factory')->initWithEntity($node);
+$userController = cw_tool_get_container()['my-user-controller-factory']->initWithId(123);
+// or simpler:
+$nodeController = mymodule_mynode_factory()->initWithEntity($node);
 ```
 
 **Warning**: always load controllers with their dedicated factory, because the cache will save the first load. (Eg: don't load articles with the generic node factory or blog node factory.)
 
+A good practice to have an abstraction for getting all the application related entity controllers from one place that can decide the appropriate controller factory and do error handling if needed.
 
 Entity fields
 -------------
@@ -85,7 +136,7 @@ In Drupal there are fields that has additional metadata. An example is the image
  
  
 ```php
-$article = cw_tool_get_container->get('my-article-factory')->initWithId(123);
+$article = cw_tool_get_container()['my-article-factory']->initWithId(123);
 $imageController = $article->fieldReferencedEntityController('<fieldname>', <image factory>);
 ```
 
