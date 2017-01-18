@@ -1,6 +1,10 @@
-Theme
------
+Theming
+=======
 
+
+# Theme classes
+
+Althoug Drupal's theme hook can collect the defined theme-abel elements it is still recommended to group the related elements together into theme classes. This is to make sure that hooks are not getting overbloated and cohesive logic is at one place.
 
 To create a new theme subclass ```CW\Theme\Theme```:
 
@@ -54,11 +58,11 @@ $out = $myTheme->render();
 ```
 
 
-Template preprocessors
-----------------------
+# Template preprocessors
 
+The default way to interact with template content is to define template hooks and there manipulate the variables array. CWTool offers Processor classes to separate code for these processors.
 
-It is recommended to subclass ```AbstractThemeProcessor``` for all separable (pre)processing tasks. The subclass is responsible for deciding if it's applicable (eg.: ArticlePreprocessor should be only for article node variable preprocessing).
+It is recommended to subclass ```AbstractThemeProcessor``` for all separable (pre)processing tasks. In case of nodes CWTool has already a dedicated class: `AbstractNodeProcessor`. The subclass is responsible for deciding if it's applicable (eg.: ArticlePreprocessor should be only for article node variable preprocessing).
  
  
 ```php
@@ -71,10 +75,13 @@ class MyArticleNodePreprocessor extends CW\Processor\AbstractNodeProcessor {
         return $this->getVar('node')->type == MyArticleController::BUNDLE;
     }
 }
+```
 
+And the way it can be referred from the processor hooks:
+
+```php
 function my_theme_node_preprocess(&$vars) {
     MyArticleNodePreprocessor::process($vars);
     MyBlogNodePreprocessor::process($vars);
 }
 ```
-
