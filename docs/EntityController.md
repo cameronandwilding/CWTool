@@ -106,11 +106,15 @@ $nodeController = mymodule_mynode_factory()->initWithEntity($node);
 
 A good practice to have an abstraction for getting all the application related entity controllers from one place that can decide the appropriate controller factory and do error handling if needed.
 
+
 Entity fields
 -------------
 
-
 Entity controllers (```AbstractEntityController```) and entity form values (```NodeFormState```) are implementing ```FieldAccessor```. Use it to get/set field values or referenced entities. Common field values are defaulted into function args or included in ```FieldUtil```.
+
+
+Mapping reference fields to factories
+-------------------------------------
 
 To define types of references, use hook ```cw_tool_field_controller_reference_map``` to match them with their associated entity factory:
 
@@ -127,6 +131,8 @@ And then you can just call the entity ref getter on the entity controller:
 $ctrl = cw_tool_get_container()[MY_CONTROLLER_FACTORY_SERVICE];
 $tagControllers = $ctrl->fieldReferencedEntityControllersLookup(MyController::FIELD_TAG);
 ```
+
+Not that at this point we don't need to use the controller factory or define the field key that holds the entity id.
 
 
 Special reference loaders
