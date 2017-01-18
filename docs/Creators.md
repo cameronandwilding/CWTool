@@ -53,14 +53,14 @@ Object (and entity) creator configurations and executors
 Very simple config with one user and two content description:
 
 ```php
-$confReader = new \CW\Util\YamlConfigurationReader('~/Desktop/test_content.yaml');
+$confReader = new \CW\Util\YamlConfigurationReader(__DIR__ . '/assets/test_content.yaml');
 $utilities = \CW\Util\BasicUtilityCollection::createInstance();
 
 $executionManager = new \CW\Manager\CreatorConfigurationExecutorManager($confReader, $utilities);
 
 $result = $executionManager->generate();
 
-var_dump($result['my_second_article']);
+var_dump($result['node_two']);
 ```
 
 Example configuration file in Yaml format:
@@ -77,7 +77,7 @@ items:
           3: administrator
     creator:
       class: CW\Factory\UserCreator
-      args: [@param]
+      args: ["@param"]
     properties:
       mail: %randomString
       pass: cakes
@@ -89,7 +89,7 @@ items:
       args: ['article']
     creator:
       class: CW\Factory\NodeCreator
-      args: [@param]
+      args: ["@param"]
       
   node_two:
     executor: CW\Factory\EntityCreatorConfigurationExecutor
@@ -98,7 +98,7 @@ items:
       args: ['article', "Test node title", "und", $user_one.uid]
     creator:
       class: CW\Factory\NodeCreator
-      args: [@param]
+      args: ["@param"]
     properties:
       status: 0
     fields:
