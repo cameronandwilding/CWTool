@@ -31,6 +31,7 @@ Main features
 * Utilities:
     * [Arrays](docs/ArrayUtil.md)
     * [Functionals](docs/FunctionalUtil.md)
+    * [Page request](docs/Request.md)
     
 
 Drush commands
