@@ -1,7 +1,8 @@
 CW Tool
 =======
 
-[![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v3)](https://travis-ci.org/cameronandwilding/CWTool)
+- Drupal 7: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v3.1)](https://travis-ci.org/cameronandwilding/CWTool)
+- Drupal 8: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v8.x-1.0)](https://travis-ci.org/cameronandwilding/CWTool)
 
 Install
 -------
