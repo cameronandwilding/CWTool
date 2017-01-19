@@ -174,6 +174,22 @@ class FunctionalTest extends TestCase {
     $this->assertEquals(FALSE, $fnNotIsMod10(35298320));
   }
 
+  public function testWalkKeyValue() {
+    $arr = [
+      1 => 2,
+      3 => 4,
+      5 => 6,
+    ];
+
+    $count = 0;
+
+    Functional::walkKeyValue($arr, function ($key, $item) use (&$count) {
+      $count += $key + $item * 10;
+    });
+
+    $this->assertEquals(129, $count);
+  }
+
 }
 
 class FunctionalTest__SimpleClassDummy {
