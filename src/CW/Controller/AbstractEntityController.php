@@ -527,7 +527,7 @@ abstract class AbstractEntityController extends LoggerObject implements FieldAcc
    * @param array $fieldItem The original field item populated by the parent
    *                         entity load.
    */
-  protected function attachExtraReferencedControllerPropertiesFromParentController($fieldItem) { }
+  protected function attachExtraReferencedControllerPropertiesFromParentController(array $fieldItem) { }
 
   /**
    * Get a property of the entity object.

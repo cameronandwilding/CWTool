@@ -28,7 +28,8 @@ Main features
 * [Forms](docs/Forms.md)
 * [Theme and template management](docs/Theme.md)
 * [Generic model interface](docs/Model.md)
-* Utilities
+* Utilities:
+    * [Arrays](docs/ArrayUtil.md)
     
 
 Drush commands

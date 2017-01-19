@@ -9,6 +9,7 @@ namespace CW\Util;
 
 /**
  * Class ArrayUtil
+ *
  * @package CW\Util
  */
 class ArrayUtil {
