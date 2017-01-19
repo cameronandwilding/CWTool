@@ -30,6 +30,7 @@ Main features
 * [Generic model interface](docs/Model.md)
 * Utilities:
     * [Arrays](docs/ArrayUtil.md)
+    * [Functionals](docs/FunctionalUtil.md)
     
 
 Drush commands
