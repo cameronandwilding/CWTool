@@ -7,13 +7,27 @@
 
 namespace CW\Adapter;
 
+use CW\Structure\Singleton;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class DrupalUserAdapter
+ *
+ * Service to do common session related user operations.
+ *
+ * Example 1:
+ * Log a user account in:
+ *
+ * @code
+ * $userAdapter = DrupalUserAdapter::getInstance();
+ * $userAdapter->login(user_load(123), cw_tool_get_container()[CWTOOL_SERVICE_LOGGER]);
+ * @endcode
+ *
  * @package CW\Adapter
  */
 class DrupalUserAdapter {
+
+  use Singleton;
 
   /**
    * @return string
