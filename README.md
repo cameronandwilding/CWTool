@@ -20,6 +20,18 @@ And possibly a +1 purpose of CWTool is to provide dependency injection to the ap
 The utility part of CWTool is a pure helper function library to speed up development time by reducing redundant and error prone code. There are various utilities for strings, arrays, dates, functional style code, etc. 
 
 
+# Common use of CWTool in a generic Drupal (7) application
+
+- install module (with dependencies)
+- make a dedicated app module (with composer + PSR4 autoloading)
+- implement the [service container hook](docs/DependencyInjection.md) for DI
+- use the [Drush tool](src/CW/Drush/DrushDefinition.php) to generate all the node, user and taxonomy controllers and put it into `src/Controller/<ENTITYTYPE>/<CONTROLLER>.php`
+- create the necessary template processors and create [processor classes](docs/Theme.md) for each
+- implement the [variable collector hook](docs/Variables.md) and add all app variables
+
+For utilities the best is to go through of the documentation, tests and source code to see what is available. If you don't find what you need: add it, commit it and write a test for it. 
+
+
 Install
 -------
 
