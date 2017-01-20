@@ -28,6 +28,7 @@ Main features
 * [Forms](docs/Forms.md)
 * [Theme and template management](docs/Theme.md)
 * [Generic model interface](docs/Model.md)
+* [Blocks](docs/Block.md)
 * Utilities:
     * [Arrays](docs/ArrayUtil.md)
     * [Functionals](docs/FunctionalUtil.md)
