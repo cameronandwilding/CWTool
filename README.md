@@ -4,6 +4,22 @@ CW Tool
 - Drupal 7: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v3.1)](https://travis-ci.org/cameronandwilding/CWTool)
 - Drupal 8: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=8.x-1.0)](https://travis-ci.org/cameronandwilding/CWTool)
 
+
+# What does it do?
+
+CWTool has 2 main purpose. First it is a structuring framework over the Drupal API. Second it is a helper library for PHP and Drupal.
+
+Why Drupal needs a structuring framework? Drupal (especially the 7th version) uses associated arrays everywhere, and even the more object oriented parts of it is mostly a bunch of loosely coupled weak objects. As an example nodes are plain PHP objects containing numerous associated arrays. Work with node objects are dangerous and not sustainable. Wrapping them into controllers and models however gives you well defined business layer and safety.
+ 
+Another example is forms. In a old fashioned Drupal project forms are defined and altered in hooks and plain functions without much organization. Form classes and form extenders can help creating cohesive classes and reducing redundant code to the minimum.
+
+Other than providing classes for building up a business domain CWTool intend to provide the Drupal API through adapters to increase testability of the business layer. For example entity API and variable handling is via adaptors, which means the Drupal implementation is just one version and you can override it anytime.
+
+And possibly a +1 purpose of CWTool is to provide dependency injection to the application via a service container. Using services from DI allows the app (and developers) to switch and replace services (such as logging, variable handling, object loading, caching - to name a few) without much hassle.
+
+The utility part of CWTool is a pure helper function library to speed up development time by reducing redundant and error prone code. There are various utilities for strings, arrays, dates, functional style code, etc. 
+
+
 Install
 -------
 
