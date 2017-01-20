@@ -5,6 +5,8 @@
 
 namespace CW\Drush\Command;
 
+use CW\Util\ArrayUtil;
+
 /**
  * Class CommandScaffoldEntityController
  *
@@ -40,6 +42,12 @@ class CommandScaffoldEntityController {
    * @return string
    */
   private static function getTemplate($fieldsRaw, $entityType, $bundle, $namespace = NULL) {
+    $controllerClassName = ArrayUtil::mapTranslate([
+      'user' => 'User',
+      'file' => 'File',
+      'taxonomy_term' => 'TaxonomyTerm',
+      'field_collection' => 'FieldCollection'
+    ], $entityType, 'Node');
     $namespaceRaw = NULL;
     $packageRaw = NULL;
     if ($namespace) {
@@ -54,14 +62,14 @@ class CommandScaffoldEntityController {
  * @file
  */
 $namespaceRaw
-use CW\Controller\NodeController;
+use CW\Controller\\${controllerClassName}Controller;
 
 /**
  * Class $className
  * $packageRaw
  * $className entity controller.
  */
-class $className extends NodeController {
+class $className extends ${controllerClassName}Controller {
 
   // Class $entityType bundle.
   const BUNDLE = '$bundle';

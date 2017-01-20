@@ -27,7 +27,7 @@ class DrushDefinition {
       self::COMMAND_SCAFFOLD_ENTITY_CONTROLLER => [
         'description' => 'Creates a boilerplate entity controller.',
         'arguments' => [
-          'entity_type' => 'Entity type',
+          'entity_type' => 'Entity type (node, user, file, taxonomy_term, field_collection)',
           'bundle' => 'Bundle',
         ],
         'options' => [
