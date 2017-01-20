@@ -20,6 +20,7 @@ use CW\Params\EntityCreationParams;
  * - fields (optional): list of field definitions
  *
  * Field definition can be simple if only the "value" subkey needs to be filled:
+ *
  * {@code}
  * field_first_name: Joe
  * {@endcode}

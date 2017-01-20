@@ -29,6 +29,8 @@ Main features
 * [Theme and template management](docs/Theme.md)
 * [Generic model interface](docs/Model.md)
 * [Blocks](docs/Block.md)
+* Structural aid:
+    * [Self factory](../src/CW/Factory/SelfFactory.php)
 * Utilities:
     * [Arrays](docs/ArrayUtil.md)
     * [Functionals](docs/FunctionalUtil.md)
