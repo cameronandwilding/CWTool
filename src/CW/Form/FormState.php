@@ -52,6 +52,7 @@ class FormState {
    * Returns the VarCheck wrapped values for easy access.
    *
    * @return \itarato\VarCheck\VC
+   * @todo fix typo
    */
   public function getWrappedVales() {
     return VC::make($this->formState[self::VALUES_KEY]);

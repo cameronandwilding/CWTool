@@ -56,3 +56,35 @@ class PurchaseForm extends CW\Form\FormBuilder {
 $form = PurchaseForm::get($purchasedProduct, $currentUser);
 $html = drupal_render($form);
 ```
+
+
+Form status value helpers
+-------------------------
+
+Working with the `form_state` array is a bit of a hassle. To have a more organized handling of form values you can use the `FormState` and `NodeFormState` classes to wrap the `form_state` variable into.
+
+
+# Example for a generic form
+
+```php
+function some_form_submit($form, &$form_state) {
+  $result = new FormState($form_state);
+  $var1 = $result->val('var1');
+  $selection = $result->val('selection');
+  
+  // Or using the nested accessor:
+  $username = $result->getWrappedVales()->user->info->name->_value();
+}
+```
+
+# Example for node forms
+
+The `NodeFormState` subclass has node specific accessors: 
+
+```php
+function some_node_form($form, &$form_state) {
+  $result = new NodeFormState($form_state);
+  
+  $body = $result->fieldValue('body');
+}
+```
