@@ -109,7 +109,25 @@ class FunctionalTest extends TestCase {
     $this->assertEquals(12, $count);
   }
 
-  public function testSelfCallFn() {
+  public function testSelfCallFnMethodWithoutArgument() {
+    $nums = ArrayUtil::range(-2, 2, function ($n) { return new FunctionalTest__SimpleClassDummy($n); });
+    $this->assertEquals([
+      -2 => -4,
+      -1 => -2,
+      0 => 0,
+      1 => 2,
+      2 => 4,
+    ], array_map(Functional::selfCallFn('getDouble'), $nums));
+  }
+
+  public function testSelfCallFnProperty() {
+    $names = ['Steve', 'John', 'Phil'];
+    $objects = [(object) ['name' => 'Steve'], (object) ['name' => 'John'], (object) ['name' => 'Phil']];
+    $namesExtracted = array_map(Functional::selfCallFn('name'), $objects);
+    $this->assertEquals($namesExtracted, $names);
+  }
+
+  public function testSelfCallFnMethodWithArgument() {
     $nums = ArrayUtil::range(-2, 2, function ($n) { return new FunctionalTest__SimpleClassDummy($n); });
     $this->assertEquals([
       -2 => -20,
@@ -118,6 +136,26 @@ class FunctionalTest extends TestCase {
       1 => 10,
       2 => 20,
     ], array_map(Functional::selfCallFn('getMultiple', 10), $nums));
+  }
+
+  public function testSelfCallFnMethodArray() {
+    $names = ['Steve', 'John', 'Phil'];
+    $arr = [
+      ['name' => 'Steve', 'bar' => '<S>', 12 => 3],
+      ['name' => 'John', 'bar' => '<J>'],
+      ['name' => 'Phil', 'bar' => '<P>', 0 => []],
+    ];
+    $this->assertEquals(array_map(Functional::selfCallFn('name'), $arr), $names);
+  }
+
+  public function testSelfCallFnMissingAttribute() {
+    $fn = Functional::selfCallFn('name');
+
+    $obj = new stdClass();
+    $this->assertEquals($fn($obj), $obj);
+
+    $str = "123";
+    $this->assertEquals($fn($str), $str);
   }
 
   public function testIdentity() {
@@ -196,4 +234,5 @@ class FunctionalTest__SimpleClassDummy {
   public $n;
   public function __construct($n) { $this->n = $n; }
   public function getMultiple($mul) { return $this->n * $mul; }
+  public function getDouble() { return $this->n * 2; }
 }

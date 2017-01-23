@@ -158,15 +158,27 @@ class Functional {
   /**
    * Creates an instance callable callback.
    *
-   * @param string $methodName
+   * @param string $callAttr
+   *  Function name or property
    * @return \Closure
    */
-  public static function selfCallFn($methodName) {
+  public static function selfCallFn($callAttr) {
     $args = func_get_args();
     array_shift($args);
 
-    return function ($instance) use ($methodName, $args) {
-      return call_user_func_array([$instance, $methodName], $args);
+    return function ($instance) use ($callAttr, $args) {
+      if (is_object($instance)) {
+        if (method_exists($instance, $callAttr)) {
+          return call_user_func_array([$instance, $callAttr], $args);
+        }
+        else if (property_exists($instance, $callAttr)) {
+          return $instance->{$callAttr};
+        }
+      }
+      else if (is_array($instance)) {
+        return $instance[$callAttr];
+      }
+      return $instance;
     };
   }
 

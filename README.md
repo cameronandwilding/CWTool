@@ -1,5 +1,5 @@
-CW Tool
-=======
+CW Tool (Drupal structuring and utility framework)
+==================================================
 
 - Drupal 7: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=v3.1)](https://travis-ci.org/cameronandwilding/CWTool)
 - Drupal 8: [![Build Status](https://travis-ci.org/cameronandwilding/CWTool.png?branch=8.x-1.0)](https://travis-ci.org/cameronandwilding/CWTool)
@@ -74,7 +74,7 @@ Drush commands
 Creates boilerplate PHP class code for bootstrapping.
 
 ```bash
-drush cwt-sc-ctrl node blog --namespace=My\Corp
+drush cwt-sc-ctrl node blog --namespace=My\\Namespace
 ```
 
 
@@ -102,20 +102,16 @@ When new class needed to wrap a functionality, a new service is preferred. Usual
 
 Avoid using arrays as argument. Make a parameter object instead.
 
+**Always use the structuring classes where available**
+ 
+- for new forms use `FormBulider`
+- for template (pre)processors use `AbstractThemeProcessor`
+- for blocks use `Block`
+- for form states use `FormState` or `NodeFormState`
 
-Helper functions
-----------------
+**Avoid code in hooks**
 
-
-Helper tools for generic Drupal7 development (simple functions in the includes):
-
-* update hook helpers
-    * menu related updates
-    * Field API crud
-    * features
-* field collection helpers
-* taxonomy
-* etc
+Only keep proxy calls in hooks to the appropriate classes, but no logic at all.
 
 
 Documentation
