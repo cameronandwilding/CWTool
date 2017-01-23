@@ -9,6 +9,9 @@ namespace CW\Util;
 
 /**
  * Class SimpleList
+ *
+ * To be used as a parameter where a list is built.
+ *
  * @package CW\Util
  */
 class SimpleList {

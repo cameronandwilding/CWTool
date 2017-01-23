@@ -14,6 +14,21 @@ use CW\Adapter\VariableAdapter;
  * @package CW\Util
  *
  * Cron timer is responsible for verifying if a cron task is due to run.
+ *
+ * Example:
+ *
+ * @code
+ * function mymodule_cron() {
+ *    $cronTimer = cw_tool_get_container()[CWTOOL_SERVICE_CRON_TIMER];
+ *
+ *    // Make sure backup script runs max once every 10 min.
+ *    if ($crontTimer->isTimePassedSinceLastRun('backup', 600)) {
+ *      if (mymodule_backup()) {
+ *        $cronTimer->registerRun('backup');
+ *      }
+ *    }
+ * }
+ * @endcode
  */
 class CronTimer {
 
