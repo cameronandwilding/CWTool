@@ -1,0 +1,19 @@
+base:
+  version: 1.x
+  js:
+    javascript/cw_tool.js: {}
+
+path:
+  version: 1.x
+  js:
+    javascript/cw_tool.path.js: {}
+  dependencies:
+    - cw_tool/base
+
+referrer:
+  version: 1.x
+  js:
+    javascript/cw_tool.referrer.js: {}
+  dependencies:
+    - cw_tool/base
+    - cw_tool/path
