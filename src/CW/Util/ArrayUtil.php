@@ -213,4 +213,67 @@ class ArrayUtil {
     return $out;
   }
 
+  /**
+   * Groups keys by value. Values expected to be numeric or string. Other values
+   * will be omitted.
+   *
+   * Example:
+   * There is an array, where keys are node IDs and values are colors (maybe
+   * representing the node):
+   *
+   * @code
+   * $colors = [
+   *  1 => 'blue',
+   *  2 => 'green',
+   *  3 => 'blue',
+   *  4 => 'red',
+   * ]
+   * @endcode
+   *
+   * Groupping nodes by color can be done:
+   *
+   * @code
+   * ArrayUtil::groupByValue($colors);
+   * @endcode
+   *
+   * Yields:
+   *
+   * @code
+   * [
+   *  'blue' => [1, 3],
+   *  'green' => [2],
+   *  'red' => [4],
+   * ]
+   * @endcode
+   *
+   * @param array $arr
+   * @return array
+   */
+  public static function groupByValue(array $arr) {
+    $groupped = [];
+
+    foreach ($arr as $key => $item) {
+      if (is_array($item) || is_object($item)) continue;
+
+      if (!isset($groupped[$item])) {
+        $groupped[$item] = [];
+      }
+      $groupped[$item][] = $key;
+    }
+
+    return $groupped;
+  }
+
+  /**
+   * For arrays where the values are also arrays it sorts the values.
+   *
+   * @param array $arr
+   * @param string $sortFn Callable sort function.
+   */
+  public static function sortInnerValues(&$arr, $sortFn = 'sort') {
+    foreach ($arr as $key => $item) {
+      $sortFn($arr[$key]);
+    }
+  }
+
 }

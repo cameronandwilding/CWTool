@@ -213,4 +213,38 @@ class ArrayUtilTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals([3 => 6, 4 => 8, 5 => 10, 6 => 12, 7 => 14, 8 => 16], ArrayUtil::range(3, 8, function ($e) { return $e * 2; }));
   }
 
+  public function testGroupByValue() {
+    $in = [
+      11 => 'foo',
+      32 => 'foo',
+      28 => 'foo',
+      54 => 'bar',
+      94 => 'bar',
+      19 => new stdClass(),
+    ];
+
+    $expeced = [
+      'foo' => [11, 32, 28],
+      'bar' => [54, 94],
+    ];
+
+    $groupped = ArrayUtil::groupByValue($in);
+    $this->assertEquals($expeced, $groupped);
+  }
+
+  public function testSortInnerValues() {
+    $in = [
+      3 => [1, 2, 3],
+      6 => [3, 2, 1],
+      'foo' => [1, 3, 2],
+    ];
+    $expected = [
+      3 => [1, 2, 3],
+      6 => [1, 2, 3],
+      'foo' => [1, 2, 3],
+    ];
+    ArrayUtil::sortInnerValues($in);
+    $this->assertEquals($expected, $in);
+  }
+
 }

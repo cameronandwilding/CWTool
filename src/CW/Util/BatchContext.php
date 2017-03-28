@@ -39,6 +39,10 @@ class BatchContext {
     $this->context[self::KEY_SANDBOX][$name] = $value;
   }
 
+  public function __unset($name) {
+    unset($this->context[self::KEY_SANDBOX][$name]);
+  }
+
   public function setFinished($finished) {
     $this->context[self::KEY_FINISHED] = $finished;
   }
