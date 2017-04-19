@@ -60,6 +60,13 @@ class AbstractEntityController {
   }
 
   /**
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   */
+  public function setEntity(EntityInterface $entity) {
+    $this->entity = $entity;
+  }
+
+  /**
    * @return string
    */
   public function getEntityType() {
