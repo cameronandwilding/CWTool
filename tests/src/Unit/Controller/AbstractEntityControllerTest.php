@@ -5,7 +5,7 @@
 
 namespace Drupal\Tests\cw_tool\Unit\Controller;
 
-use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\UnitTestCase;
 use Drupal\Tests\cw_tool\Fixtures\Controller\MinimalEntityController;
 
 /**
@@ -16,7 +16,7 @@ use Drupal\Tests\cw_tool\Fixtures\Controller\MinimalEntityController;
  *
  * @group cw_tool
  */
-class AbstractEntityControllerTest extends KernelTestBase {
+class AbstractEntityControllerTest extends UnitTestCase {
 
   /**
    * @var \PHPUnit_Framework_MockObject_MockObject
@@ -29,6 +29,7 @@ class AbstractEntityControllerTest extends KernelTestBase {
   private $entityStorageMock;
 
   public function setUp() {
+    include_once __DIR__ . '/../../Fixtures/Controller/MinimalEntityController.php';
     $this->entityManagerMock = $this->getMock('Drupal\Core\Entity\EntityManagerInterface');
     $this->entityStorageMock = $this->getMock('Drupal\Core\Entity\EntityStorageInterface');
     parent::setUp();
